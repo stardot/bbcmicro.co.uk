@@ -1,0 +1,28 @@
+Spreadsheet Changes:
+
+Filled in the Players Min/Players Max/Joysticks fields that weren't done.
+
+Changed the authors of Acornsoft Draughts & Reversi to "Nick Reeves".
+Changed the publisher of "Games of Strategy" from "BBC Soft (Acornsoft)" to "BBC Soft, Acornsoft"
+Changed the publisher of Killer Gorilla on DiscA05 to "Micro Power (Program Power), Superior Software"
+Changed the title of "Black Queen Bridge" to "Black Queen"
+Changed the title of "Bumble-Bee" on disc A07 to "Bumble Bee"
+
+Replacement SSD for Disc033-BomberBaron.ssd
+Replacement SSD for Disc033-SpitfireFlightSimulator.ssd
+Replacement SSD for Disc033-StarMazeII.ssd
+Replacement SSD for Disc034-Gulp.ssd
+Replacement SSD for Disc034-IntergalacticTrader.ssd
+Replacement SSD for Disc036-3DTanx.ssd
+Replacement SSD for Disc036-EmpireStrikesBack.ssd
+Replacement SSD for Disc036-LeagueChallengeSTT.ssd
+
+These are due to Mick re-posting them after finding the instruction inlays.
+
+Replacement SSD for Disc999-EscapeFromCastleDracula.ssd, which is now renamed Disc999-EscapeFromCastleDraculaSTD.ssd as it saves to disc.
+
+I have included a zip file with 43 images that me and Chet "improved" by adding instructions to etc.
+I previously sent these, but cannot remember if they will have been over-written when I sent the complete set of games recently after Mick did all his changes??
+Just overwrite any images with these ones please.
+
+Lee.

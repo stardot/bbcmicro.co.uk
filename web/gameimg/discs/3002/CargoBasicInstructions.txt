@@ -1,0 +1,25 @@
+@ = Display instruction pages
+
+On the screen when it asks "Select Mode"
+
+F2 = Programming Mode. Press F to finish this when you've finished! Arrow keys may work to edit/amend instructions.
+
+F4 = Exec Mode. Press this to carry out the instructions set in Programming Mode.
+
+F6 = Single Step Mode. Almost the same as Exec Mode (do not confuse this with Immediate Mode!) , you just have to press a key to move between each pre-programmed instruction rather than with 'Exec Mode' where it does them all in one go for you.
+
+F8 = Edit Mode. Allows editing of instructions programmed in F2/Programming Mode.
+
+F10 = Immediate Mode. Very easy, typing in each instruction and it immediately obeys them
+
+The best way to think of this is: F4 is just like running a program as normal where as F6 is the same with TRACE ON enabled, so it 'steps' through each instruction with a "wait for a key-press" between each instruction.
+
+
+Pressing F will usually exit/finish each mode and allow you to select a different one. Pressing Q will usually return to the main choice page (asking if you wanted sound etc) , if you go this far then you may lose any programmed instructions.
+
+
+U x ... D x ... L x ... R x ... , moves the crane 'x' steps in the appropriate direction, such as D 8 will move it down 8 blocks.
+
+O ... C ... Open and close the crane jaws. To pick up a crate, position the crane immediately above it (no space between) then C to close, then move up and it will be picked up.
+
+H ... Go 'Home' , moves the crane back to the top left
