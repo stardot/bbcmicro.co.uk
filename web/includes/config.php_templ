@@ -1,0 +1,43 @@
+<?php
+
+# Constant for now, might be data-driven (e.g. if
+# same code used for Electron or Atom archives)
+$site_name="Complete BBC Micro Games Archive";
+
+define('DB_HOST','');
+define('DB_NAME','');
+define('DB_USER','');
+define('DB_PASS','');
+
+define('ADMIN_DB_HOST',DB_HOST);
+define('ADMIN_DB_NAME',DB_NAME);
+define('ADMIN_DB_USER',DB_USER);
+define('ADMIN_DB_PASS',DB_PASS);
+
+define('CONTACT_EMAIL','');
+
+if ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+    || $_SERVER['SERVER_PORT'] == 443) {
+  $protocol = 'https';
+} else {
+  $protocol = 'http';
+}
+
+# (Mostly) For use with jsbeeb
+#define('WS_ROOT','http://localhost/');
+define('WS_ROOT', $protocol . '://bbcmicro.co.uk');
+define('JB_LOC', WS_ROOT . '/jsbeeb/play.php');
+
+#Items per page on the grid. Ideally has factors of 3,4
+define('GD_IPP',36);
+
+# Used to debug the SQL and state on the main grid page.
+define('GD_DEBUG',False); 
+#define('DEBUG',True); 
+
+#Allow files to be overwritten?
+define('ST_ALLOW_OVERWRITE',True);
+
+#Allow files?
+define('ST_FILES',False);
+?>
