@@ -14,7 +14,7 @@ if (isset($_POST) && $_POST) {
 	if (isset($_POST['user']) && isset($_POST['pass'])) {
 		$s='select * from users where username = ?';
 		$sth = $dbh->prepare($s,array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
-		$sth->bindParam(1, $_POST['user'], PDO::PARAM_INT);
+		$sth->bindParam(1, $_POST['user'], PDO::PARAM_STR);
 		if ($sth->execute()) {
 			$r=$sth->fetch(PDO::FETCH_ASSOC);
 			$sth->closeCursor();
