@@ -7,6 +7,7 @@ require_once('includes/admin_menu.php');
 show_admin_menu();
 
 $id=null;
+$msg='';
 # GET params means want to edit a name ...
 if (isset($_GET['id']) && is_numeric($_GET['id'])) {
   $id=intval($_GET['id']);
