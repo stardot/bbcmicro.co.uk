@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <?php
+require_once('../includes/config.php');
+require_once('../includes/db_connect.php');
 require_once('../includes/menu.php');
 $bgcolour = "#333";
 if (isset($_GET['bg'])) {
@@ -13,6 +15,17 @@ if (isset($_GET['bg'])) {
    default:
      $bgcolour = "#333";
  }
+}
+if (isset($_GET['disc'])) {
+  $discid = preg_replace('/^.+gameimg\/discs\/(\d+)\/.+$/', '$1', $_GET['disc']);
+  if (is_numeric($discid)) {
+    $sql = "select g.id, g.title_article, g.title, g.parent, g.year, g.notes, g.joystick, g.players_min, g.players_max, g.save, g.hardware, g.version, g.electron, g.series, g.series_no, n.name as genre, r.id as relid, r.name as reltype, g.compat_a, g.compat_b, g.compat_master from games g left join genres n on n.id = g.genre left join reltype r on r.id = g.reltype where g.id  = ?";
+    $sth = $db->prepare($sql,array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+    $sth->bindParam(1, $discid, PDO::PARAM_INT);
+    if ($sth->execute()) {
+      $game = $sth->fetch();
+    }
+  }
 }
 ?>
 <html lang="en">
@@ -82,6 +95,18 @@ Your browser has suspended audio -- mouse click or key press for sound.
    <div id="cub-monitor">
        <canvas id="screen" width="896" height="600"></canvas>
     </div>
+
+<?php
+  if ($game) {
+    if (strlen($game["title_article"]) > 0) {
+      $ta=$game["title_article"].' ';
+    } else {
+      $ta='';
+    }
+    echo "<style>.gameDetails { text-align:center; color: #fff } .gameDetails a { color: #9d9d9d } .gameDetails a:hover { color: #fff; text-decoration: none }</style>";
+    echo "<p class='gameDetails'>" . $ta . $game["title"] . " (" . $game["year"] . ") - <a href=\"/game.php?id=" . $game["id"] . "\">See game details</a></p>";
+  }
+?>
 
     <div id="leds" style="display:none">
         <table>
