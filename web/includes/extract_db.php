@@ -14,6 +14,29 @@ function get_fn($otitle,$file,$id) {
   return $fn;
 }
 
+function get_disc_fn($dname) {
+  if (!$dname || $dname=='') {
+    return "0/noname";
+  }
+  $discname=preg_split('/\-/',$dname)[0];
+  $discname=str_replace('Disc','',$discname);
+  if (!$discname || $discname == '') {
+    $discname="Other";
+  }
+//  $gamename=preg_split('/\-/',$dname)[1];
+//  $tf=substr($gamename,0,1);
+//  if (!$tf) {
+//    $tf = 'None';
+//  } elseif (is_numeric($tf)) {
+//    $tf = '0';
+//  } else {
+//    $tf = strtoupper($tf);
+//  }
+//  $fn=$tf . '/' . $dname;
+  $fn=$discname . '/' . $dname;
+  return $fn;
+}
+
 function get_data ($arch='N') {
 global $db;
 $sql="select g.parent, g.id, g.title_article, g.title, g.year, g.genre, g.reltype, g.players_max, g.players_min, g.joystick, i.filename, r.name, g.save, g.hardware, g.electron, g.version, g.series, g.series_no, g.notes, g.compat_a, g.compat_b, g.compat_master from games g left join images i on g.id = i.gameid left join genres r on g.genre = r.id order by g.id";
