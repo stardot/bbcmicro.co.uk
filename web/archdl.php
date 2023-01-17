@@ -39,10 +39,12 @@ if ($sth->execute()) {
 $cwd=getcwd();
 $zipf=$cwd . '/' . 'tmp/'.$files;
 $zipd=$cwd . '/' . 'tmp/'.$discs;
+$zips=$cwd . '/' . 'tmp/'.$scrs;
+
 $stat=stat($zipf);
 
 if ($stat && (strtotime($ags[0]['dt']) < $stat['mtime'])) {
-   echo "Using cached file<br/>";
+   echo "Using cached files<br/>";
 } else {
   $zip = new ZipArchive;
   $rc=$zip->open($zipf, Ziparchive::CREATE | ZipArchive::OVERWRITE);
@@ -84,9 +86,8 @@ if ($stat && (strtotime($ags[0]['dt']) < $stat['mtime'])) {
     echo "<br/>Error" . $rc . '<br/>';
   }
 
-  $zipf=$cwd . '/' . 'tmp/'.$scrs;
   $zip = new ZipArchive;
-  $rc=$zip->open($zipf, Ziparchive::CREATE | ZipArchive::OVERWRITE);
+  $rc=$zip->open($zips, Ziparchive::CREATE | ZipArchive::OVERWRITE);
 
   if ($rc === TRUE) {
     echo "Creating screenshot zip file...<br/>";
@@ -102,9 +103,26 @@ if ($stat && (strtotime($ags[0]['dt']) < $stat['mtime'])) {
   }
 
 }
-echo "<a href='tmp/".$files."'>All files(zip)</a><br>";
-echo "<a href='tmp/".$discs."'>All files with original disc names(zip)</a><br>";
-echo "<a href='tmp/".$scrs."'>All screenshots(zip)</a><br>";
+
+date_default_timezone_set('Europe/London');
+
+echo "<ul>";
+echo "<li><a href='tmp/".$files."'>All files(zip)</a> - ";
+$stat=stat($zipf);
+echo date("d/m/y H:i:s", $stat['mtime']);
+echo "</li>";
+
+echo "<li><a href='tmp/".$discs."'>All files with original disc names(zip)</a> - ";
+$stat=stat($zipd);
+echo date("d/m/y H:i:s", $stat['mtime']);
+echo "</li>";
+
+echo "<li><a href='tmp/".$scrs."'>All screenshots(zip)</a> - ";
+$stat=stat($zips);
+echo date("d/m/y H:i:s", $stat['mtime']);
+echo "</li>";
+echo "</ul>";
+
 echo "</p></body></html>";
 
 ?>
