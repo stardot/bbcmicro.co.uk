@@ -52,9 +52,21 @@ if ($sth->execute()) {
   $img=array();
 }
 
-
 $ssd = get_discloc($img["filename"],$img['subdir']);
 $ssd_info = pathinfo($ssd);
+
+$sql = "select * from game_keys where gameid  = ? order by rel_order";
+$sth = $db->prepare($sql,array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+$sth->bindParam(1, $id, PDO::PARAM_INT);
+if ($sth->execute()) {
+  $keys = $sth->fetchAll();
+} else {
+  echo "Error:";
+  echo "\n";
+  $sth->debugDumpParams ();
+  $keys=array();
+}
+
 $jsbeeb=JB_LOC;
 $root=WS_ROOT;
 
@@ -281,8 +293,19 @@ if ( ! empty($compilations)) {
           <h2>Screenshot</h2>
           <p><img src="<?php echo $scrshot;?>" class="img-responsive"></p><p>&nbsp;</p>
 <?php
-   if ($game["notes"]!=Null ) {
-      echo "<h2>Notes</h2><p>".$game["notes"]."</p>";
+   if ($game["notes"]!=Null || count($keys) > 0) {
+      echo "<h2>Notes</h2>";
+
+      if (count($keys) > 0) {
+        echo "<p>Key controls for in-browser play:</p>";
+        echo "<ul>";
+        foreach ($keys as $key) {
+          echo "<li><strong>" . $key["keyname"] . "</strong>&mdash;" . $key["keydescription"] . "</li>";
+        }
+        echo "</ul>";
+      }
+
+      echo "<p>".$game["notes"]."</p>";
    }
 
    switch ($game['joystick']) {

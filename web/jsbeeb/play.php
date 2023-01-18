@@ -26,6 +26,17 @@ if (isset($_GET['disc'])) {
       $game = $sth->fetch();
     }
   }
+  $sql = "select * from game_keys where gameid  = ? order by rel_order";
+  $sth = $db->prepare($sql,array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+  $sth->bindParam(1, $discid, PDO::PARAM_INT);
+  if ($sth->execute()) {
+    $keys = $sth->fetchAll();
+  } else {
+    echo "Error:";
+    echo "\n";
+    $sth->debugDumpParams ();
+    $keys=array();
+  }
 }
 ?>
 <html lang="en">
@@ -105,6 +116,13 @@ Your browser has suspended audio -- mouse click or key press for sound.
     }
     echo "<style>.gameDetails { text-align:center; color: #fff } .gameDetails a { color: #9d9d9d } .gameDetails a:hover { color: #fff; text-decoration: none }</style>";
     echo "<p class='gameDetails'>" . $ta . $game["title"] . " (" . $game["year"] . ") - <a href=\"/game.php?id=" . $game["id"] . "\">See game details</a></p>";
+
+    if ($keys && count($keys) > 0) {
+      echo "<p class='gameDetails'>Key controls:&nbsp;";
+      foreach ($keys as $key) {
+        echo " <strong>" . $key["keyname"] . "</strong>&mdash;" . $key["keydescription"] . "&nbsp; ";
+      }
+    }
   }
 ?>
 
