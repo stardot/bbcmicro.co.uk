@@ -13,8 +13,8 @@ if ($sth->execute()) {
 	echo '<p>'.$sth->rowCount()." key control entries. <a href='admin_keycontrols_details.php?id=0'>New key control entry</a></p><hr>";
 	if ($sth->rowCount()) {
 		echo "<table>\n";
-		echo "<tr><td><b>Game ID</b></td><td><b>Key number</b></td><td><b>Game title</b></td>";
-		echo "<td><b>Key name</b></td><td><b>Key description</b></td>";
+		echo "<tr><td><b>Game ID</b></td><td><b>Key order</b></td><td><b>Game title</b></td>";
+		echo "<td><b>Key name</b></td><td><b>Key function</b></td>";
 		echo "<td><b>JSBeeb game key</b></td><td><b>JSBeeb browser key</b></td><td> </td></tr>\n";
 		while ($r=$sth->fetch()) {
 			echo "<tr><td>".$r['gameid']."</td><td>".$r['rel_order']."</td><td><a href=admin_keycontrols_details.php?id=".$r['keyid'].">".$r['title']."</a></td>";
