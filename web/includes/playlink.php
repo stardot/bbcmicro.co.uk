@@ -15,7 +15,7 @@ function get_scrshot($file,$subdir) {
   return $imgfile;
 }
 
-function get_playlink($image,$jsbeeb,$wsroot) {
+function get_playlink($image,$jsbeeb,$wsroot,$keys) {
   $jsbdisc=$jsbeeb . '?autoboot&disc=';
   $jsbtape=$jsbeeb . '?autochain&tape=';
   $url = Null;
@@ -27,6 +27,9 @@ function get_playlink($image,$jsbeeb,$wsroot) {
         $url = $jsbtape . $wsroot . '/' . $ssd;
       } else {
         $url = $jsbdisc . $wsroot . '/' . $ssd;
+      }
+      foreach ($keys as $key) {
+        $url .= "&KEY." . $key["jsbeebbrowserkey"] . "=" . $key["jsbeebgamekey"];
       }
     }
   } else {

@@ -70,7 +70,7 @@ if ($sth->execute()) {
 $jsbeeb=JB_LOC;
 $root=WS_ROOT;
 
-$playlink=get_playlink($img,$jsbeeb,$root);
+$playlink=get_playlink($img,$jsbeeb,$root,$keys);
 
 $imglink="";
 if ($img['probs'] != 'N' and $playlink != NULL ) {

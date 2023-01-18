@@ -64,7 +64,7 @@ function atoz_line($current='',$chars,$margin) {
   echo "</div>";
 }
 
-function gameitem( $id, $ta, $name, $image, $img, $publisher, $year, $pubid) {
+function gameitem( $id, $ta, $name, $image, $img, $publisher, $year, $pubid, $keys) {
    global $sid;
 
    $jsbeeb=JB_LOC;
@@ -85,7 +85,7 @@ function gameitem( $id, $ta, $name, $image, $img, $publisher, $year, $pubid) {
        <div class="row-pub"><?php echo $publisher ?></div>
        <div class="row-dt"><a href="?search=<?php echo urlencode($year) ?>&on_Y=on"><?php echo $year; ?></a></div>
 <?php
-  $playlink=get_playlink($img,$jsbeeb,$root);
+  $playlink=get_playlink($img,$jsbeeb,$root,$keys);
   if ($ssd != null && file_exists($ssd)) { ?>
        <p><a href="<?php echo $ssd ?>" type="button" onmousedown="log(<?php echo $id; ?>);" class="btn btn-default">Download</a><?php
   }
@@ -340,9 +340,11 @@ function grid($state) {
   $scrsql = 'select filename, subdir from screenshots where gameid = :gameid order by main, id limit 1';
   $dscsql = 'select filename, subdir, customurl, probs from images where gameid = :gameid order by main, id limit 1';
   $pubsql = 'select id,name from publishers where id in (select pubid from games_publishers where gameid = :gameid)';
+  $keysql = "select jsbeebbrowserkey,jsbeebgamekey from game_keys where gameid = :gameid order by rel_order";
   $scrpdo = $db->prepare($scrsql,array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
   $dscpdo = $db->prepare($dscsql,array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
   $pubpdo = $db->prepare($pubsql,array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+  $keypdo = $db->prepare($keysql,array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
 
   $chars=array();
 
@@ -376,6 +378,7 @@ function grid($state) {
       $scrpdo->bindParam(':gameid',$game["id"], PDO::PARAM_INT);
       $dscpdo->bindParam(':gameid',$game["id"], PDO::PARAM_INT);
       $pubpdo->bindParam(':gameid',$game["id"], PDO::PARAM_INT);
+      $keypdo->bindParam(':gameid',$game["id"], PDO::PARAM_INT);
       if ($scrpdo->execute()) {
         $img=$scrpdo->fetch(PDO::FETCH_ASSOC);
         $shot = get_scrshot($img['filename'],$img['subdir']);
@@ -400,9 +403,16 @@ function grid($state) {
         echo "Error:";
         $sim->debugDumpParams ();
       }
+      if ($keypdo->execute()) {
+        $keys=$keypdo->fetchAll();
+      } else {
+        echo "Error:";
+        $sim->debugDumpParams ();
+        $keys=array();
+      }
       $pubs=trim($pubs,', ');
 
-      gameitem($game["id"],htmlspecialchars($game["title_article"]),htmlspecialchars($game["title"]), $shot, $dnl ,$pubs,$game["year"],$pub["id"]);
+      gameitem($game["id"],htmlspecialchars($game["title_article"]),htmlspecialchars($game["title"]), $shot, $dnl ,$pubs,$game["year"],$pub["id"],$keys);
     }
   } else {
     echo '    <div class="row" style="display:flex; flex-wrap: wrap;">'."\n<h2>No games found!</h2>";
