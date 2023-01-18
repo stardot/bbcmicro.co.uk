@@ -1,56 +1,34 @@
--- MySQL dump 10.13  Distrib 5.5.61, for FreeBSD11.1 (amd64)
---
--- Host: localhost    Database: gamesarchive
--- ------------------------------------------------------
--- Server version	5.5.61
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-
 --
 -- Table structure for table `authors`
 --
 
 DROP TABLE IF EXISTS `authors`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+
 CREATE TABLE `authors` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `alias` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2074 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `compilations`
 --
 
 DROP TABLE IF EXISTS `compilations`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+
 CREATE TABLE `compilations` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=253 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `game_downloads`
 --
 
 DROP TABLE IF EXISTS `game_downloads`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+
 CREATE TABLE `game_downloads` (
   `id` int(11) NOT NULL,
   `year` int(11) NOT NULL,
@@ -58,15 +36,13 @@ CREATE TABLE `game_downloads` (
   `gamepages` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`,`year`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `game_genre`
 --
 
 DROP TABLE IF EXISTS `game_genre`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+
 CREATE TABLE `game_genre` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `gameid` int(11) NOT NULL,
@@ -75,15 +51,13 @@ CREATE TABLE `game_genre` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `gameid` (`gameid`,`genreid`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10576 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `games`
 --
 
 DROP TABLE IF EXISTS `games`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+
 CREATE TABLE `games` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `parent` int(11) DEFAULT NULL,
@@ -115,15 +89,13 @@ CREATE TABLE `games` (
   KEY `reltype` (`reltype`),
   CONSTRAINT `reltype` FOREIGN KEY (`reltype`) REFERENCES `reltype` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4286 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `games_authors`
 --
 
 DROP TABLE IF EXISTS `games_authors`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+
 CREATE TABLE `games_authors` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `games_id` int(11) NOT NULL DEFAULT '0',
@@ -132,15 +104,13 @@ CREATE TABLE `games_authors` (
   KEY `games_id` (`games_id`),
   KEY `authors_id` (`authors_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7467 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `games_compilations`
 --
 
 DROP TABLE IF EXISTS `games_compilations`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+
 CREATE TABLE `games_compilations` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `games_id` int(11) NOT NULL,
@@ -149,15 +119,13 @@ CREATE TABLE `games_compilations` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `games_id` (`games_id`,`compilations_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1288 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `games_publishers`
 --
 
 DROP TABLE IF EXISTS `games_publishers`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+
 CREATE TABLE `games_publishers` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `gameid` int(11) NOT NULL,
@@ -167,29 +135,25 @@ CREATE TABLE `games_publishers` (
   KEY `gameid` (`gameid`),
   KEY `pubid` (`pubid`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6182 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `genres`
 --
 
 DROP TABLE IF EXISTS `genres`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+
 CREATE TABLE `genres` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=696 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `images`
 --
 
 DROP TABLE IF EXISTS `images`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+
 CREATE TABLE `images` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `gameid` int(11) DEFAULT NULL,
@@ -202,15 +166,13 @@ CREATE TABLE `images` (
   KEY `gameid` (`gameid`),
   KEY `main` (`main`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4171 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `importgames`
 --
 
 DROP TABLE IF EXISTS `importgames`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+
 CREATE TABLE `importgames` (
   `disc` varchar(10) NOT NULL,
   `title` varchar(255) NOT NULL,
@@ -235,29 +197,25 @@ CREATE TABLE `importgames` (
   `version` varchar(255) DEFAULT NULL,
   `source` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `publishers`
 --
 
 DROP TABLE IF EXISTS `publishers`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+
 CREATE TABLE `publishers` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=754 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `reltype`
 --
 
 DROP TABLE IF EXISTS `reltype`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+
 CREATE TABLE `reltype` (
   `id` char(1) NOT NULL DEFAULT '',
   `name` varchar(255) DEFAULT NULL,
@@ -265,15 +223,13 @@ CREATE TABLE `reltype` (
   `rel_order` int(13) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `screenshots`
 --
 
 DROP TABLE IF EXISTS `screenshots`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+
 CREATE TABLE `screenshots` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `gameid` int(11) DEFAULT NULL,
@@ -283,15 +239,13 @@ CREATE TABLE `screenshots` (
   PRIMARY KEY (`id`),
   KEY `gameid` (`gameid`,`main`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4997 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `users`
 --
 
 DROP TABLE IF EXISTS `users`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+
 CREATE TABLE `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `username` varchar(20) NOT NULL,
@@ -303,16 +257,20 @@ CREATE TABLE `users` (
   `lastupdated` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+--
+-- Table structure for table `game_keys`
+--
 
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+DROP TABLE IF EXISTS `game_keys`;
 
--- Dump completed on 2023-01-14 13:28:37
+CREATE TABLE `game_keys` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `gameid` int NOT NULL,
+  `jsbeebbrowserkey` varchar(30) NOT NULL,
+  `jsbeebgamekey` varchar(30) NOT NULL,
+  `keydescription` varchar(255) NOT NULL,
+  `keyname` varchar(30) NOT NULL,
+  `rel_order` int NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
