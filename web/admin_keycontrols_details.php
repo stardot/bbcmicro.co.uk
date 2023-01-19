@@ -8,68 +8,13 @@ show_admin_menu();
 
 $id=null;
 $msg='';
-# GET params means want to edit a name ...
+# GET params means want to edit an entry, so fetch it
 if (isset($_GET['id']) && is_numeric($_GET['id'])) {
-  $id=intval($_GET['id']);
-} else {
-  # POST params mean an update
-  if (isset($_POST) && $_POST) {
-    $r['id']=$_POST['id'];
-    $gameid=$_POST['gameid'];
-    $rel_order=$_POST['rel_order'];
-    $keyname=$_POST['keyname'];
-    $keydescription=$_POST['keydescription'];
-    $jsbeebgamekey=$_POST['jsbeebgamekey'];
-    $jsbeebbrowserkey=$_POST['jsbeebbrowserkey'];
-    if (isset($_POST['id']) && is_numeric($_POST['id'])) {
-      $id=intval($_POST['id']);
-    } else {
-      $id=null;
-    }
-    if ( strlen($keyname) < 1 ) {
-        $msg = "Key name can't be blank";
-    } else {
-      if ( $id == null ) {
-        $s="insert into game_keys (gameid, rel_order, keyname, keydescription, jsbeebgamekey, jsbeebbrowserkey) values (?, ?, ?, ?, ?, ?)";
-        $sth = $dbh->prepare($s,array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
-        $sth->bindParam(1, $gameid, PDO::PARAM_INT);
-        $sth->bindParam(2, $rel_order, PDO::PARAM_INT);
-        $sth->bindParam(3, $keyname, PDO::PARAM_STR);
-        $sth->bindParam(4, $keydescription, PDO::PARAM_STR);
-        $sth->bindParam(5, $jsbeebgamekey, PDO::PARAM_STR);
-        $sth->bindParam(6, $jsbeebbrowserkey, PDO::PARAM_STR);
-	      if ( $sth->execute() ) {
-          $id=$dbh->lastInsertId();
-          $msg="New key control added: ".$id.".";
-        } else {
-          $msg="Error adding key control";
-        }
-      } else {
-        $s="update game_keys set gameid=?, rel_order=?, keyname=?, keydescription=?, jsbeebgamekey=?, jsbeebbrowserkey=? where id = ?";
-        $sth = $dbh->prepare($s,array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
-        $sth->bindParam(1, $gameid, PDO::PARAM_INT);
-        $sth->bindParam(2, $rel_order, PDO::PARAM_INT);
-        $sth->bindParam(3, $keyname, PDO::PARAM_STR);
-        $sth->bindParam(4, $keydescription, PDO::PARAM_STR);
-        $sth->bindParam(5, $jsbeebgamekey, PDO::PARAM_STR);
-        $sth->bindParam(6, $jsbeebbrowserkey, PDO::PARAM_STR);
-        $sth->bindParam(7, $id, PDO::PARAM_INT);
-        $sth->execute();
-	      if ( $sth->execute() ) {
-          $msg="Key control updated.";
-        } else {
-          $msg="Error updating key control";
-        }
-      }
-    }
-  }
-}
-
-if ($id > 0) {
+  $id=$_GET['id'];
   $s="select * from game_keys where id = ?";
 
   $sth = $dbh->prepare($s,array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
-  $sth->bindParam(1, $id, PDO::PARAM_INT);
+  $sth->bindParam(1, $id, PDO::PARAM_STR);
 
   if ($sth->execute()) {
     $r=$sth->fetch(PDO::FETCH_ASSOC);
@@ -80,14 +25,67 @@ if ($id > 0) {
     exit(3);
   }
 } else {
-  $r['id']='';
-  $r['gameid']='';
-  $r['rel_order']='';
-  $r['keyname']='';
-  $r['keydescription']='';
-  $r['jsbeebgamekey']='';
-  $r['jsbeebbrowserkey']='';
-  $msg="New key control.";
+  # POST params mean an update
+  if (isset($_POST) && $_POST) {
+    $r['id']=$_POST['id'];
+    $r['gameid']=$_POST['gameid'];
+    $r['rel_order']=$_POST['rel_order'];
+    $r['keyname']=$_POST['keyname'];
+    $r['keydescription']=$_POST['keydescription'];
+    $r['jsbeebgamekey']=$_POST['jsbeebgamekey'];
+    $r['jsbeebbrowserkey']=$_POST['jsbeebbrowserkey'];
+    if ( strlen($r['gameid']) < 1 ) {
+        $msg = "Game ID can't be blank";
+    } elseif ( strlen($r['rel_order']) < 1 ) {
+        $msg = "Key order can't be blank";
+    } elseif ( strlen($r['keyname']) < 1 ) {
+        $msg = "Key name can't be blank";
+    } elseif ( strlen($r['keydescription']) < 1 ) {
+        $msg = "Key function can't be blank";
+    } else {
+      if ( $r['id'] == null || $r['id'] == '' ) {
+        $s="insert into game_keys (gameid, rel_order, keyname, keydescription, jsbeebgamekey, jsbeebbrowserkey) values (?, ?, ?, ?, ?, ?)";
+        $sth = $dbh->prepare($s,array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        $sth->bindParam(1, $r['gameid'], PDO::PARAM_INT);
+        $sth->bindParam(2, $r['rel_order'], PDO::PARAM_INT);
+        $sth->bindParam(3, $r['keyname'], PDO::PARAM_STR);
+        $sth->bindParam(4, $r['keydescription'], PDO::PARAM_STR);
+        $sth->bindParam(5, $r['jsbeebgamekey'], PDO::PARAM_STR);
+        $sth->bindParam(6, $r['jsbeebbrowserkey'], PDO::PARAM_STR);
+	      if ( $sth->execute() ) {
+          $id=$dbh->lastInsertId();
+          $msg="New key control added: ".$id.".";
+        } else {
+          $msg="Error adding key control";
+        }
+      } else {
+        $s="update game_keys set gameid=?, rel_order=?, keyname=?, keydescription=?, jsbeebgamekey=?, jsbeebbrowserkey=? where id = ?";
+        $sth = $dbh->prepare($s,array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        $sth->bindParam(1, $r['gameid'], PDO::PARAM_INT);
+        $sth->bindParam(2, $r['rel_order'], PDO::PARAM_INT);
+        $sth->bindParam(3, $r['keyname'], PDO::PARAM_STR);
+        $sth->bindParam(4, $r['keydescription'], PDO::PARAM_STR);
+        $sth->bindParam(5, $r['jsbeebgamekey'], PDO::PARAM_STR);
+        $sth->bindParam(6, $r['jsbeebbrowserkey'], PDO::PARAM_STR);
+        $sth->bindParam(7, $r['id'], PDO::PARAM_INT);
+        $sth->execute();
+	      if ( $sth->execute() ) {
+          $msg="Key control updated.";
+        } else {
+          $msg="Error updating key control";
+        }
+      }
+    }
+  } else {
+    $r['id']='';
+    $r['gameid']='';
+    $r['rel_order']='';
+    $r['keyname']='';
+    $r['keydescription']='';
+    $r['jsbeebgamekey']='';
+    $r['jsbeebbrowserkey']='';
+    $msg="New key control.";
+  }
 }
 
 make_form($r,$msg);

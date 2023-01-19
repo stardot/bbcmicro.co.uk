@@ -10,7 +10,7 @@ show_admin_menu();
 $sql = "select k.id as keyid, k.keydescription, k.keyname, k.jsbeebgamekey, k.jsbeebbrowserkey, k.rel_order, g.id as gameid, g.title from game_keys k inner join games g on k.gameid = g.id order by g.title, k.rel_order";
 $sth = $dbh->prepare($sql,array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
 if ($sth->execute()) {
-	echo '<p>'.$sth->rowCount()." key control entries. <a href='admin_keycontrols_details.php?id=0'>New key control entry</a></p><hr>";
+	echo '<p>'.$sth->rowCount()." key control entries. <a href='admin_keycontrols_details.php'>New key control entry</a></p><hr>";
 	if ($sth->rowCount()) {
 		echo "<table>\n";
 		echo "<tr><td><b>Game ID</b></td><td><b>Key order</b></td><td><b>Game title</b></td>";
