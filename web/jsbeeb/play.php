@@ -25,17 +25,17 @@ if (isset($_GET['disc'])) {
     if ($sth->execute()) {
       $game = $sth->fetch();
     }
-  }
-  $sql = "select * from game_keys where gameid  = ? order by rel_order";
-  $sth = $db->prepare($sql,array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
-  $sth->bindParam(1, $discid, PDO::PARAM_INT);
-  if ($sth->execute()) {
-    $keys = $sth->fetchAll();
-  } else {
-    echo "Error:";
-    echo "\n";
-    $sth->debugDumpParams ();
-    $keys=array();
+    $sql = "select * from game_keys where gameid  = ? order by rel_order";
+    $sth = $db->prepare($sql,array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+    $sth->bindParam(1, $discid, PDO::PARAM_INT);
+    if ($sth->execute()) {
+      $keys = $sth->fetchAll();
+    } else {
+      echo "Error:";
+      echo "\n";
+      $sth->debugDumpParams ();
+      $keys=array();
+    }
   }
 }
 ?>
