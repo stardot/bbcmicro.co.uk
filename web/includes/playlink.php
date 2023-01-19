@@ -28,16 +28,20 @@ function get_playlink($image,$jsbeeb,$wsroot,$keys) {
       } else {
         $url = $jsbdisc . $wsroot . '/' . $ssd;
       }
-      foreach ($keys as $key) {
-        $url .= "&KEY." . $key["jsbeebbrowserkey"] . "=" . $key["jsbeebgamekey"];
-      }
     }
   } else {
     $url = str_replace('%jsbeeb%',$jsbdisc,$image['customurl']);
     $url = str_replace('%wsroot%',$wsroot,$url);
   }
+  //Add key controls
+  $keyurl='';
+  foreach ($keys as $key) {
+    if ($key["jsbeebbrowserkey"] && $key["jsbeebgamekey"]) {
+      $keyurl .= "&KEY." . $key["jsbeebbrowserkey"] . "=" . $key["jsbeebgamekey"];
+    }
+  }
   //Stop disc-operating sounds
-  if ($url === NULL ) {} else { $url.="&noseek"; }
+  if ($url === NULL ) {} else { $url.=$keyurl."&noseek"; }
   return $url;
 }
 
