@@ -105,6 +105,7 @@ if ($stat && (strtotime($ags[0]['dt']) < $stat['mtime'])) {
 }
 
 date_default_timezone_set('Europe/London');
+clearstatcache();
 
 echo "<ul>";
 echo "<li><a href='tmp/".$files."'>All files(zip)</a> - ";
