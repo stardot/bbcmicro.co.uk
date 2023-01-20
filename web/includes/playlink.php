@@ -15,7 +15,7 @@ function get_scrshot($file,$subdir) {
   return $imgfile;
 }
 
-function get_playlink($image,$jsbeeb,$wsroot,$keys) {
+function get_playlink($image,$jsbeeb,$wsroot,$keys,$platform) {
   $jsbdisc=$jsbeeb . '?autoboot&disc=';
   $jsbtape=$jsbeeb . '?autochain&tape=';
   $url = Null;
@@ -39,6 +39,9 @@ function get_playlink($image,$jsbeeb,$wsroot,$keys) {
     if ($key["jsbeebbrowserkey"] && $key["jsbeebgamekey"]) {
       $keyurl .= "&KEY." . $key["jsbeebbrowserkey"] . "=" . $key["jsbeebgamekey"];
     }
+  }
+  if (!is_null($platform) && $platform !== '') {
+    $keyurl .= "&model=" . $platform;
   }
   //Stop disc-operating sounds
   if ($url === NULL ) {} else { $url.=$keyurl."&noseek"; }

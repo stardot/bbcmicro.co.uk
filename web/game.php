@@ -11,7 +11,7 @@ if ( isset($_GET["id"])) {
 }
 
 $sql = "select g.id, g.title_article, g.title, g.parent, g.year, g.notes, g.joystick, g.players_min, g.players_max, g.save, g.hardware, g.version, 
-g.electron, g.series, g.series_no, n.name as genre, r.id as relid, r.name as reltype, g.compat_a, g.compat_b, g.compat_master from games g left join genres n on n.id = g.genre left join reltype r on r.id = g.reltype where g.id  = ?";
+g.electron, g.series, g.series_no, n.name as genre, r.id as relid, r.name as reltype, g.compat_a, g.compat_b, g.compat_master, g.jsbeebplatform from games g left join genres n on n.id = g.genre left join reltype r on r.id = g.reltype where g.id  = ?";
 $sth = $db->prepare($sql,array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
 $sth->bindParam(1, $id, PDO::PARAM_INT);
 if ($sth->execute()) {
@@ -69,8 +69,9 @@ if ($sth->execute()) {
 
 $jsbeeb=JB_LOC;
 $root=WS_ROOT;
+$platform=$game["jsbeebplatform"];
 
-$playlink=get_playlink($img,$jsbeeb,$root,$keys);
+$playlink=get_playlink($img,$jsbeeb,$root,$keys,$platform);
 
 $imglink="";
 if ($img['probs'] != 'N' and $playlink != NULL ) {

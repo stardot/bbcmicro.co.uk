@@ -27,6 +27,7 @@ $eopts=[ 'Y' => 'Yes' ];
 $copts=[ 'Y' => 'Yes', 'N' => 'No' ];
 $mcopts=[ 'Y' => 'Yes', 'N' => 'No', 'P' => 'Partial' ];
 $drops=array( 'joystick','save');
+$platopts=[ 'Master' => 'BBC Master', 'MasterTurbo' => 'BBC Master Turbo', 'B-Tube' => 'BBC Model B with 6502SP', 'b-dfs1.2' => 'BBC Model B with DFS 1.2', 'B1770' => 'BBC Model B with 1770 DFS'];
 
 # GET params means want to edit a game ...
 if (isset($_GET['id']) && is_numeric($_GET['id'])) {
@@ -97,7 +98,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 
 		if ($game_id == null) {
 			# New entry
-			$s="INSERT INTO games ( parent, title_article, title, year, genre, reltype, notes, players_min, players_max, joystick, save, hardware, electron, version, series, series_no, lastupdater, lastupdated, created, creator, compat_a, compat_b, compat_master) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,NOW(),NOW(),?,?,?,?)";
+			$s="INSERT INTO games ( parent, title_article, title, year, genre, reltype, notes, players_min, players_max, joystick, save, hardware, electron, version, series, series_no, lastupdater, lastupdated, created, creator, compat_a, compat_b, compat_master, jsbeebplatform) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,NOW(),NOW(),?,?,?,?,?)";
 			if ($_POST['parent'] == '0' || $_POST['parent'] == '' ) {
 				$p_parent = null;
 			} else {
@@ -143,6 +144,11 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 			} else {
 				$p_electron='';
 			}
+			if ($_POST['jsbeebplatform'] == 0) {
+				$p_jsbeebplatform='';
+			} else {
+				$p_jsbeebplatform=$_POST['jsbeebplatform'];
+			}
 			$sbinds=array(  array('value' => $p_parent, 			'type' => PDO::PARAM_INT),
 					array('value' => $_POST['title_article'], 	'type' => PDO::PARAM_STR),
 					array('value' => $_POST['title'], 		'type' => PDO::PARAM_STR),
@@ -163,7 +169,8 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 					array('value' => $_SESSION['userid'],		'type' => PDO::PARAM_INT),
 					array('value' => $p_compat_a,			'type' => PDO::PARAM_STR),
 					array('value' => $p_compat_b,			'type' => PDO::PARAM_STR),
-					array('value' => $p_compat_master,		'type' => PDO::PARAM_STR)
+					array('value' => $p_compat_master,		'type' => PDO::PARAM_STR),
+					array('value' => $p_jsbeebplatform,		'type' => PDO::PARAM_STR)
 			);
 			$sth=$dbh->prepare($s);
 			if (DEBUG) {echo "<pre>$s<br/>"; print_r($sbinds);echo "</pre>";}
@@ -177,7 +184,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 			}
 		} else {
 			# An entry already exists. Compare it.
-			$s="SELECT id, parent, title_article, title, year, genre, reltype, notes, players_min, players_max, joystick, save, hardware, electron, version, series, series_no, compat_a, compat_b, compat_master FROM games where id = ?";
+			$s="SELECT id, parent, title_article, title, year, genre, reltype, notes, players_min, players_max, joystick, save, hardware, electron, version, series, series_no, compat_a, compat_b, compat_master, jsbeebplatform FROM games where id = ?";
 
 			$sth = $dbh->prepare($s,array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
 			$sth->bindParam(1, $game_id, PDO::PARAM_INT);
@@ -397,7 +404,7 @@ if ($sth->execute()) {
 
 if ($game_id) {
 	$s="	SELECT 	id,title, parent, title_article, title, year, genre, reltype, notes, players_min, players_max, joystick, save,
-			hardware, electron, version, series, series_no, compat_a, compat_b, compat_master,
+			hardware, electron, version, series, series_no, compat_a, compat_b, compat_master, jsbeebplatform,
 			(SELECT GROUP_CONCAT(CONCAT(publishers.id,'|',publishers.name) SEPARATOR '@') 
 				FROM games_publishers LEFT JOIN publishers ON pubid=publishers.id WHERE gameid=games.id) AS publishers,
 			(SELECT GROUP_CONCAT(CONCAT(authors.id,'|',authors.name) SEPARATOR '@') 
@@ -425,7 +432,7 @@ if ($game_id) {
             'reltype'=>'W','notes'=>'','players_min'=>'1', 'players_max'=>'1',
             'joystick'=>'', 'save'=>'','hardware'=>'', 'electron'=>'',
             'version'=>'', 'compilation'=>'', 'series'=>'', 'series_no'=>'',
-            'publishers'=>'','authors'=>'','compilations'=>'','genres'=>''];
+            'publishers'=>'','authors'=>'','compilations'=>'','genres'=>'', 'jsbeebplatform'=>''];
 	make_form(0,$r);
 }
 
@@ -544,7 +551,7 @@ function make_dd($aid,$nam,$typ,$known) {
 }
 
 function make_form($game_id,$r) {
-	global $known_genres, $known_reltyps, $known_publishers, $known_authors, $known_compilations, $jopts, $sopts, $eopts, $copts, $mcopts;
+	global $known_genres, $known_reltyps, $known_publishers, $known_authors, $known_compilations, $jopts, $sopts, $eopts, $copts, $mcopts, $platopts;
 	if (DEBUG) { echo "<pre>"; print_r($r); echo "</pre>";}
 	$pubs=explode('@',$r['publishers']);
 	$names='';
@@ -622,6 +629,11 @@ function make_form($game_id,$r) {
 	# Master Compatibility
 	echo "<label>Master Compatibility.  ";
 	echo make_dd($r['compat_master'], 'compat_master','Master',$mcopts);
+	echo "</label><br/><br/>";
+
+	# JSBeeb platform
+	echo "<label>JSBeeb platform (if not a BBC Model B).  ";
+	echo make_dd($r['jsbeebplatform'], 'jsbeebplatform','Platform',$platopts);
 	echo "</label><br/><br/>";
 
 //	echo "<label> Compilation: <input type='text' name='compilation' size='20' value='".htmlspecialchars($r['compilation'],ENT_QUOTES)."'/></label> ";
