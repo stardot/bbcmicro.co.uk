@@ -40,7 +40,7 @@ function get_playlink($image,$jsbeeb,$wsroot,$keys,$platform) {
       $keyurl .= "&KEY." . $key["jsbeebbrowserkey"] . "=" . $key["jsbeebgamekey"];
     }
   }
-  if (!is_null($platform) && $platform !== '') {
+  if (!is_null($platform) && $platform !== '' && $platform !== '0') {
     $keyurl .= "&model=" . $platform;
   }
   //Stop disc-operating sounds
