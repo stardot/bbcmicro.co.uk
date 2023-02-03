@@ -187,7 +187,7 @@ foreach ($res as $line) {
   $ol[]=$line['compat_a'];
   $ol[]=$line['compat_b'];
   $ol[]=$line['compat_master'];
-  $ol[]=htmlspecialchars($line['notes']);
+  $ol[]=htmlspecialchars($line['notes'] ?? '');
 //  $ol[]='';
 
   $ol2='<tr><td>'.implode('</td><td>',$ol).'</td></tr>';

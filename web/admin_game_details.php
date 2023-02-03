@@ -355,7 +355,7 @@ $sth = $dbh->prepare($s,array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
 if ($sth->execute()) {
 	while ($r=$sth->fetch()) {
 		$compilation_name=$r['name'];
-		if ($r['alias']) $compilation_name.=" (".$r['alias'].")";
+		if (array_key_exists('alias', $r) && $r['alias']) $compilation_name.=" (".$r['alias'].")";
 		$known_compilations[$r['id']]=$compilation_name;
 	}
 	$sth->closeCursor();
@@ -432,7 +432,8 @@ if ($game_id) {
             'reltype'=>'W','notes'=>'','players_min'=>'1', 'players_max'=>'1',
             'joystick'=>'', 'save'=>'','hardware'=>'', 'electron'=>'',
             'version'=>'', 'compilation'=>'', 'series'=>'', 'series_no'=>'',
-            'publishers'=>'','authors'=>'','compilations'=>'','genres'=>'', 'jsbeebplatform'=>''];
+            'publishers'=>'','authors'=>'','compilations'=>'','genres'=>'', 'jsbeebplatform'=>'',
+			'compat_a'=>'','compat_b'=>'','compat_master'=>''];
 	make_form(0,$r);
 }
 
@@ -566,8 +567,8 @@ function make_form($game_id,$r) {
 	echo "<form name='frmGame' method='POST' action='admin_game_details.php'>\n";
 	echo "<input type='hidden' name='id' value='$game_id'>\n";
 
-	echo "<label> Article <input type='text' name='title_article' size='5' value='".htmlspecialchars($r['title_article'],ENT_QUOTES)."'/></label>  ";
-	echo "<label> Title <input type='text' name='title' size='80' value='".htmlspecialchars($r['title'],ENT_QUOTES)."'/></label>";
+	echo "<label> Article <input type='text' name='title_article' size='5' value='".htmlspecialchars($r['title_article'] ?? '',ENT_QUOTES)."'/></label>  ";
+	echo "<label> Title <input type='text' name='title' size='80' value='".htmlspecialchars($r['title'] ?? '',ENT_QUOTES)."'/></label>";
 	echo "<label> Parent ID <input type='text' name='parent' size='4' value='".$r['parent']."'/> ";
 	echo "</label><br/><br/>";
 	echo "<label> Year. 19XX if unknown. <input type='text' name='year' size='4' value='".$r['year']."'/></label>";
@@ -600,7 +601,7 @@ function make_form($game_id,$r) {
 	echo "<br/><br/>";
 
 	echo "<label>Any special hardware required ";
-	echo "<input type='text' name='hardware' size='20' value='".htmlspecialchars($r['hardware'],ENT_QUOTES)."'/></label> ";
+	echo "<input type='text' name='hardware' size='20' value='".htmlspecialchars($r['hardware'] ?? '',ENT_QUOTES)."'/></label> ";
 	echo "</label>";
 
 	echo "<label> Electron conversion ";
@@ -636,9 +637,9 @@ function make_form($game_id,$r) {
 	echo make_dd($r['jsbeebplatform'], 'jsbeebplatform','Platform',$platopts);
 	echo "</label><br/><br/>";
 
-//	echo "<label> Compilation: <input type='text' name='compilation' size='20' value='".htmlspecialchars($r['compilation'],ENT_QUOTES)."'/></label> ";
+//	echo "<label> Compilation: <input type='text' name='compilation' size='20' value='".htmlspecialchars($r['compilation'] ?? '',ENT_QUOTES)."'/></label> ";
 	echo "<label> Series - must be identical for each game in series ";
-	echo "<input type='text' name='series' size='20' value='".htmlspecialchars($r['series'],ENT_QUOTES)."'/></label> ";
+	echo "<input type='text' name='series' size='20' value='".htmlspecialchars($r['series'] ?? '',ENT_QUOTES)."'/></label> ";
 	echo "<label> Number in series <input type='text' name='series_no' size='15' value='".$r['series_no']."'/></label> ";
 	echo "<br/><br/>";
 
@@ -662,7 +663,11 @@ function make_form($game_id,$r) {
 	echo "<label>Compilations<br/>";
 	# Compilations
 	$ac=1;
-	$compilations=explode('@',$r['compilations']);
+	if ($r['compilations']) {
+		$compilations=explode('@',$r['compilations']);
+	} else {
+		$compilations=array();
+	}
 	#if (DEBUG) { echo "<pre>"; print_r($compilations); echo "</pre>";}
 	foreach ($compilations as $compilation) {
 		if (!(False === strpos($compilation,'|' ))) {
@@ -678,7 +683,11 @@ function make_form($game_id,$r) {
 	echo "</label><br/><br/><label>Secondary Genres<br/>";
 
 	$ac=1;
-	$genres=explode('@',$r['genres']);
+	if ($r['genres']) {
+		$genres=explode('@',$r['genres']);
+	} else {
+		$genres=array();
+	}
 	#if (DEBUG) {echo "<pre>"; print_r($genres); echo "</pre>";}
 	foreach ($genres as $genre) {
 		if (!(False === strpos($genre,'|' ))) {
@@ -706,7 +715,7 @@ function make_form($game_id,$r) {
 		echo make_dd(0,'publisher_'.sprintf("%02d",$ac++),'publisher',$known_publishers);
 	} while ($ac<=4);
 
-	echo "<br/><br/><label> Notes: <textarea id='notes' name='notes' rows='5' cols='132' >".htmlspecialchars($r['notes'])."</textarea></label><br/>";
+	echo "<br/><br/><label> Notes: <textarea id='notes' name='notes' rows='5' cols='132' >".htmlspecialchars($r['notes'] ?? '')."</textarea></label><br/>";
 	echo "<input type='submit' value='Save'>\n";
 
 	echo "</form>\n";

@@ -99,13 +99,13 @@ function make_form($r,$msg) {
     echo "<label>ID: <input type='text' name='id' size='80' autofocus='autofocus' value='".$r['id']."'/></label><br/><br/>";
     echo '<input type="hidden" name="action" value="new">';
   } else {
-    echo "<label>ID: <input type='text' name='id' size='80' readonly='readonly' style='border: 0' value='".htmlspecialchars($r['id'],ENT_QUOTES)."'/></label><br/><br/>";
+    echo "<label>ID: <input type='text' name='id' size='80' readonly='readonly' style='border: 0' value='".htmlspecialchars($r['id'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
     echo '<input type="hidden" name="action" value="edit">';
   }
 
-  echo "<label>Name: <input type='text' name='name' size='80' autofocus='autofocus' value='".htmlspecialchars($r['name'],ENT_QUOTES)."'/></label><br/><br/>";
-  echo "<label>Selected (on homepage): <input type='text' name='selected' size='80' autofocus='autofocus' value='".htmlspecialchars($r['selected'],ENT_QUOTES)."'/></label><br/><br/>";
-  echo "<label>Sort order (on homepage): <input type='text' name='rel_order' size='80' autofocus='autofocus' value='".htmlspecialchars($r['rel_order'],ENT_QUOTES)."'/></label><br/><br/>";
+  echo "<label>Name: <input type='text' name='name' size='80' autofocus='autofocus' value='".htmlspecialchars($r['name'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
+  echo "<label>Selected (on homepage): <input type='text' name='selected' size='80' autofocus='autofocus' value='".htmlspecialchars($r['selected'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
+  echo "<label>Sort order (on homepage): <input type='text' name='rel_order' size='80' autofocus='autofocus' value='".htmlspecialchars($r['rel_order'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
 
   echo '<br/><input type="submit" value="Submit"></form>';
   echo '<hr/><a href="admin_releasetypes.php">Back to the list</a>';

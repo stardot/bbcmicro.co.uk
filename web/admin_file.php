@@ -220,7 +220,7 @@ if (($probs != -1) && ($_GET['t'] == 'd')) {
 }
 
 $date=date('Y-m-d H:i:s');
-if ($fu == True && $_GET['t']=='d') {
+if (isset($fu) && $fu == True && $_GET['t']=='d') {
   $s="update games set imgupdated=?, imgupdater=? where id = ?";
   $sth = $dbh->prepare($s,array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
   $sth->bindParam(1, $date, PDO::PARAM_STR);

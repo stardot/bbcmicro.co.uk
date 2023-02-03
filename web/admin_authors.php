@@ -19,7 +19,7 @@ if ($sth->execute()) {
 		echo "<tr><td><b>ID</b></td><td><b>Name</b></td></tr>\n";
 		while ($r=$sth->fetch()) {
 			$alias='';
-			if ( strlen($r['alias'])>0 ) {
+			if ( strlen($r['alias'] ?? '')>0 ) {
 				$alias=" (".$r['alias'].")";
 			}
 			echo "<tr><td>".$r['id']."</td><td><a href=admin_authors_details.php?id=".$r['id'].">".$r['name'].$alias."</a></td></tr>\n";

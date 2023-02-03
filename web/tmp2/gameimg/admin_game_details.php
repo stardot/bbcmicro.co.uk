@@ -489,7 +489,7 @@ function make_form($game_id,$r) {
 	echo "<form name='frmGame' method='POST' action='admin_game_details.php'>\n";
 	echo "<input type='hidden' name='id' value='$game_id'>\n";
 
-	echo "<label> Title <input type='text' name='title' size='80' value='".htmlspecialchars($r['title'],ENT_QUOTES)."'/></label><br/><br/>";
+	echo "<label> Title <input type='text' name='title' size='80' value='".htmlspecialchars($r['title'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
 	echo "<label> Parent ID <input type='text' name='parent' size='4' value='".$r['parent']."'/> ";
 	echo "Note: If populated, this game won't appear in the list, the parent needs to be ";
 	echo "returned in all relevant searches for this game.<br/><br/></label>";
@@ -523,7 +523,7 @@ function make_form($game_id,$r) {
 	echo "<br/><br/>";
 
 	echo "<label>Any special hardware required ";
-	echo "<input type='text' name='hardware' size='20' value='".htmlspecialchars($r['hardware'],ENT_QUOTES)."'/></label> ";
+	echo "<input type='text' name='hardware' size='20' value='".htmlspecialchars($r['hardware'] ?? '',ENT_QUOTES)."'/></label> ";
 	echo "</label>";
 
 	echo "<label> Electron conversion ";
@@ -554,9 +554,9 @@ function make_form($game_id,$r) {
 	echo make_dd($r['compat_master'], 'compat_master','Master',$mcopts);
 	echo "</label><br/><br/>";
 
-	echo "<label> Compilation: <input type='text' name='compilation' size='20' value='".htmlspecialchars($r['compilation'],ENT_QUOTES)."'/></label> ";
+	echo "<label> Compilation: <input type='text' name='compilation' size='20' value='".htmlspecialchars($r['compilation'] ?? '',ENT_QUOTES)."'/></label> ";
 	echo "<label> Series - must be identical for each game in series ";
-	echo "<input type='text' name='series' size='20' value='".htmlspecialchars($r['series'],ENT_QUOTES)."'/></label> ";
+	echo "<input type='text' name='series' size='20' value='".htmlspecialchars($r['series'] ?? '',ENT_QUOTES)."'/></label> ";
 	echo "<label> Number in series <input type='text' name='series_no' size='15' value='".$r['series_no']."'/></label> ";
 	echo "<br/><br/>";
 
@@ -607,7 +607,7 @@ function make_form($game_id,$r) {
 		echo make_dd(0,'publisher_'.sprintf("%02d",$ac++),'publisher',$known_publishers);
 	} while ($ac<=4);
 
-	echo "<br/><br/><label> Notes: <textarea id='notes' name='notes' rows='5' cols='132' >".htmlspecialchars($r['notes'])."</textarea></label><br/>";
+	echo "<br/><br/><label> Notes: <textarea id='notes' name='notes' rows='5' cols='132' >".htmlspecialchars($r['notes'] ?? '')."</textarea></label><br/>";
 	echo "Take care with this field. It allows any HTML to be entered so it is possible to completely mess up the formatting of the page!";
 
 	echo "<br><br><input type='submit' value='Save'>\n";

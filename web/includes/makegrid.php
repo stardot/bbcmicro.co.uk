@@ -50,7 +50,7 @@ function reltypes($state) {
    echo "      </div>";
 }
 
-function atoz_line($current='',$chars,$margin) {
+function atoz_line($current,$chars,$margin) {
   global $state;
 
   echo "<div>";
@@ -64,7 +64,7 @@ function atoz_line($current='',$chars,$margin) {
   echo "</div>";
 }
 
-function gameitem( $id, $ta, $name, $image, $img, $publisher, $year, $pubid, $keys, $platform) {
+function gameitem( $id, $ta, $name, $image, $img, $publisher, $year, $keys, $platform) {
    global $sid;
 
    $jsbeeb=JB_LOC;
@@ -396,7 +396,7 @@ function grid($state) {
       if ($pubpdo->execute()) {
         while($pub=$pubpdo->fetch(PDO::FETCH_ASSOC)) {
           $t=preg_split('/[,(]/',$pub['name']);
-          $u=htmlspecialchars(trim($t[0]));
+          $u=htmlspecialchars(trim($t[0] ?? ''));
           $pubs=$pubs.'<a href="?search='.urlencode($pub['name']).'&on_P=on">'.$u.'</a>, ';
         }
       } else {
@@ -412,7 +412,7 @@ function grid($state) {
       }
       $pubs=trim($pubs,', ');
 
-      gameitem($game["id"],htmlspecialchars($game["title_article"]),htmlspecialchars($game["title"]), $shot, $dnl ,$pubs,$game["year"],$pub["id"],$keys,$game["jsbeebplatform"]);
+      gameitem($game["id"],htmlspecialchars($game["title_article"] ?? ''),htmlspecialchars($game["title"] ?? ''), $shot, $dnl ,$pubs,$game["year"],$keys,$game["jsbeebplatform"]);
     }
   } else {
     echo '    <div class="row" style="display:flex; flex-wrap: wrap;">'."\n<h2>No games found!</h2>";

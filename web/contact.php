@@ -177,7 +177,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 }
 function get_data($var) {
 	if (isset($_POST[$var]))
-		echo htmlspecialchars($_POST[$var]);
+		echo htmlspecialchars($_POST[$var] ?? '');
 }
 
 if (!empty($error_msg)) {

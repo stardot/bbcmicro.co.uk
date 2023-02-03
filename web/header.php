@@ -68,7 +68,7 @@ function sidebar($state) {
 
 function searchbox($state) {
   if (array_key_exists('search',$state)) {
-    $search = htmlspecialchars($state['search'],ENT_QUOTES);
+    $search = htmlspecialchars($state['search'] ?? '',ENT_QUOTES);
   } else {
     $search= "";
   }
