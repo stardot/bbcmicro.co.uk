@@ -82,12 +82,12 @@ require 'includes/menu.php';
             <li><a href="game.php?id=822">Skirmish</a></li>
             <li><a href="game.php?id=14">Snapper</a>. (This looks very much like <a href="index.php?search=Pac-Man">Pac-Man</a>. Hmmm.)</li>
           </ol>
-          <p> What do you think? Have we missed your favourite game? Let us know: <a href="http://bbcmicro.co.uk/contact.php">contact us</a> here or at the forum!</p>
+          <p> What do you think? Have we missed your favourite game? Let us know: <a href="/contact.php">contact us</a> here or at the forum!</p>
           <p>&nbsp;</p>
         </div>
         <div class="col-md-4">
           <h2>Status</h2>
-          <p>The site is still under development. We believe we have most of the games written for the BBC Micro apart from a few very obscure ones which we are still trying to track down. If you know of a game we have missed, or, even better, if you own one, <a href="http://bbcmicro.co.uk/contact.php">contact us</a> and we will get it added to the database. We maintain a list of titles which we believe to be <a href="http://stardot.org.uk/forums/viewtopic.php?f=7&t=14458">missing from the archive</a>.</p>
+          <p>The site is still under development. We believe we have most of the games written for the BBC Micro apart from a few very obscure ones which we are still trying to track down. If you know of a game we have missed, or, even better, if you own one, <a href="/contact.php">contact us</a> and we will get it added to the database. We maintain a list of titles which we believe to be <a href="http://stardot.org.uk/forums/viewtopic.php?f=7&t=14458">missing from the archive</a>.</p>
 	  <p>&nbsp;</p>
           <h2>Purpose</h2>
           <p>We strive for ease of use rather than the exact preservation of original releases. Games on tape have been transferred to disc-images so that they will load quickly. And changes have been made to enhance usability — see the <i>Who we are</i> section for more details. Any major changes have been noted on a per-game basis. </p>
