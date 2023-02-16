@@ -1,6 +1,0 @@
-sudo: false
-install: true
-env:
-    - TEST_SUITE=short-tests
-    - TEST_SUITE=long-tests
-script: make -j2 ${TEST_SUITE}
