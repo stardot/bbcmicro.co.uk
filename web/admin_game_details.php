@@ -18,8 +18,7 @@ tinymce.init({
 </script>
 </head>
 <body><?php
-show_admin_menu("game_details", $_GET['id'] ?? '');
-
+show_admin_menu("game_details", $_REQUEST['id'] ?? '');
 
 $jopts=[ 'R' => 'Required', 'O' => 'Optional' ];
 $sopts=[ 'D' => 'Save to Disc', 'T' => 'Save to Tape' ];
