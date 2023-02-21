@@ -18,7 +18,7 @@ tinymce.init({
 </script>
 </head>
 <body><?php
-show_admin_menu();
+show_admin_menu("game_details", $_GET['id'] ?? '');
 
 
 $jopts=[ 'R' => 'Required', 'O' => 'Optional' ];

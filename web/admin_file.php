@@ -4,7 +4,7 @@ require_once('includes/config.php');
 require_once('includes/admin_db_open.php');
 require_once('includes/admin_menu.php');
 
-show_admin_menu();
+show_admin_menu("file", $_GET['id'] ?? '', $_GET['t'] ?? '');
 
 if ( isset($_GET['id']) && is_numeric($_GET['id']) ) {
   $id = $_GET['id'];

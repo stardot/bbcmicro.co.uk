@@ -10,6 +10,13 @@ function make_menu_bar($active_tab,$lprefix='') {
 		$class=($active_tab==$name)?" class=\"active\"":'';
 		echo "<li$class><a href=\"$target\">$name</a></li>\n";
 	}
+	if ($active_tab == 'Games') {
+		ini_set('session.cookie_httponly', True);
+		session_start();
+		if (array_key_exists('bbcmicro',$_SESSION) && isset($_GET["id"])) {
+			echo "<li><a href=\"/admin_game_details.php?id=" . $_GET["id"] . "\">Edit</a></li>\n";
+		}
+	}
 	echo "</ul>\n";
 	echo "</div><!-- /.nav-collapse -->\n";
 }
