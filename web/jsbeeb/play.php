@@ -108,7 +108,7 @@ Your browser has suspended audio -- mouse click or key press for sound.
     </div>
 
 <?php
-  if ($game) {
+  if (isset($game) && $game) {
     if (strlen($game["title_article"]) > 0) {
       $ta=$game["title_article"].' ';
     } else {

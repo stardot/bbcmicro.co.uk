@@ -76,7 +76,7 @@ function gameitem( $id, $ta, $name, $image, $img, $publisher, $year, $keys, $pla
      $title=$ta.' '.$title;
    }
    
-   $ssd = get_discloc($img["filename"],$img['subdir']);
+   $ssd = get_discloc($img["filename"] ?? '',$img['subdir'] ?? '');
 ?>
      <div class="col-sm-6 col-md-4 col-lg-3 thumb1">
       <div class="thumbnail text-center">
@@ -89,7 +89,7 @@ function gameitem( $id, $ta, $name, $image, $img, $publisher, $year, $keys, $pla
   if ($ssd != null && file_exists($ssd)) { ?>
        <p><a href="<?php echo $ssd ?>" type="button" onmousedown="log(<?php echo $id; ?>);" class="btn btn-default">Download</a><?php
   }
-  if (($img['probs'] != 'N' and $img['probs'] != 'P') and $playlink != null) { ?>
+  if ((($img['probs'] ?? '') != 'N' and ($img['probs'] ?? '') != 'P') and $playlink != null) { ?>
           <a id="plybtn" href="<?php echo $playlink ?>" type="button" onmousedown="log(<?php echo $id; ?>);" class="btn btn-default">Play</a></p>
 <?php
   }
@@ -381,7 +381,7 @@ function grid($state) {
       $keypdo->bindParam(':gameid',$game["id"], PDO::PARAM_INT);
       if ($scrpdo->execute()) {
         $img=$scrpdo->fetch(PDO::FETCH_ASSOC);
-        $shot = get_scrshot($img['filename'],$img['subdir']);
+        $shot = get_scrshot($img['filename'] ?? '',$img['subdir'] ?? '');
       } else {
         echo "Error:";
         $sim->debugDumpParams ();

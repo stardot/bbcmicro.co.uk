@@ -52,7 +52,7 @@ if ($sth->execute()) {
   $img=array();
 }
 
-$ssd = get_discloc($img["filename"],$img['subdir']);
+$ssd = get_discloc($img["filename"] ?? '',$img['subdir'] ?? '');
 $ssd_info = pathinfo($ssd);
 
 $sql = "select * from game_keys where gameid  = ? order by rel_order";
@@ -69,13 +69,13 @@ if ($sth->execute()) {
 
 $jsbeeb=JB_LOC;
 $root=WS_ROOT;
-$platform=$game["jsbeebplatform"];
+$platform=$game["jsbeebplatform"] ?? '';
 
 $playlink=get_playlink($img,$jsbeeb,$root,$keys,$platform);
 
 $imglink="";
-if ($img['probs'] != 'N' and $playlink != NULL ) {
-  if ($img['probs']=='P') {
+if (($img['probs'] ?? '') != 'N' and $playlink != NULL ) {
+  if (($img['probs'] ?? '')=='P') {
     $imglink='<p style="text-align: center">This game doesn\'t work properly in JSBeeb.</p>' . $imglink .'<p><a type="button" class="btn btn-warning btn-lg center-block" onmousedown="log('.$id.',\'d\');" href="' . $playlink . '" >Play Anyway</a></p>';
   }else{
     $imglink=$imglink .'<p><a type="button" class="btn btn-primary btn-lg center-block" onmousedown="log('.$id.',\'d\');" href="' . $playlink . '" >Play</a></p>';
@@ -143,13 +143,13 @@ if ($sth->execute()) {
 
 //print_r($compilations);
 
-if (strlen($game["title_article"]) > 0) {
+if (strlen($game["title_article"] ?? '') > 0) {
    $ta=$game["title_article"].' ';
 } else {
    $ta='';
 }
 
-$split=explode('(',$game["title"]);
+$split=explode('(',$game["title"] ?? '');
 $title='<h1>' . $ta . $split[0];
 if (count($split) > 1 ) {
    $title = $title . '</h1><p>(' . implode('(',array_slice($split,1)) . "</p>";

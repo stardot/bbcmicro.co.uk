@@ -19,8 +19,8 @@ function get_playlink($image,$jsbeeb,$wsroot,$keys,$platform) {
   $jsbdisc=$jsbeeb . '?autoboot&disc=';
   $jsbtape=$jsbeeb . '?autochain&tape=';
   $url = Null;
-  if ($image['customurl'] === NULL or $image['customurl'] === '' ) {
-    $ssd=get_discloc($image['filename'],$image['subdir']);
+  if (($image['customurl'] ?? '') === '' ) {
+    $ssd=get_discloc($image['filename'] ?? '',$image['subdir'] ?? '');
     if (file_exists($ssd)) {
       $file_parts = pathinfo($ssd);
       if (strtolower($file_parts['extension']) == 'uef') {

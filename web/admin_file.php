@@ -143,7 +143,7 @@ if (!empty($_FILES["file"])) {
         echo "Filename is too long (> 255 chars). Please shorten it.";
       } else {
         move_uploaded_file($_FILES["file"]["tmp_name"],$ldir.'/'.$fn);
-        if ($fn==$r['filename']) {
+        if ($fn==($r['filename'] ?? '')) {
           $fu=True;
         }
       }
@@ -245,7 +245,7 @@ echo "<TABLE border=1 cellpadding=5 cellspacing=0 class=whitelinks><TR><TH>Selec
 
 echo "<form ". $_SERVER['PHP_SELF']."?t=".$_GET['t']."&id=".$id ." method=\"POST\">";
 for($index=0; $index < $indexCount; $index++) {
-  if ($dirArray[$index] == $r['filename']) { $ticked='checked'; } else { $ticked=''; }
+  if (isset($r) && is_array($r) && $dirArray[$index] == $r['filename']) { $ticked='checked'; } else { $ticked=''; }
     echo "<TR>
       <td><input type=\"radio\" name=\"filename\" value=\"".$index."\"  ".$ticked."/></td>
       <td><a href=\"".$ldir.'/'.$dirArray[$index]."\">$dirArray[$index]</a></td>
@@ -260,7 +260,7 @@ for($index=0; $index < $indexCount; $index++) {
 <?php
 if ( $_GET['t'] == 'd' ) {
   $p=array('N'=>"",'O'=>"",'P'=>"");
-  $p[$r['probs']] = "selected" ;
+  if (isset($r) && is_array($r)) { $p[$r['probs']] = "selected" ; }
   ?> <label>Are there any issues with the image or playing it in jsbeeb <select name="probs">
 <option value="0">-- Problems? --</option><option <?php echo $p['N']; ?> value="N">Don't play in jsbeeb</option>
 <option <?php echo $p['P']; ?> value="P">Problematic in jsbeeb</option>
@@ -268,7 +268,9 @@ if ( $_GET['t'] == 'd' ) {
 </select>
 </label>
   <?php
-  echo "<br/><br/><label> Custom URL for jsbeeb <input type='text' name='customurl' size='40' value='".$r['customurl']."'/> %jsbeeb% is the jsbeeb location, %wsroot% is the base URL of the website.</label><br/><br/>";
+  echo "<br/><br/><label> Custom URL for jsbeeb <input type='text' name='customurl' size='40' value='";
+  if (isset($r) && is_array($r)) { echo $r['customurl']; }
+  echo "'/> %jsbeeb% is the jsbeeb location, %wsroot% is the base URL of the website.</label><br/><br/>";
 }
 ?>
 <input type="submit" value="Submit"></form>
