@@ -87,8 +87,7 @@ function make_form($r,$gamecount,$msg) {
     $plural = ($gamecount > 1) ? "s" : "";
     echo "Release type is used by " . $gamecount . " game" . $plural . ".<br/><br/>";
     echo "You need to remove the release type from all games before deleting.<br/><br/>";
-  } elseif ($gamecount == -1) {
-  } else {
+  } elseif ($gamecount == 0) {
     echo '<input type="hidden" name="action" value="delete">';
     echo "Release type is not used, and is safe to delete.<br/><br/>";
     echo '<br/><input type="submit" value="Delete"></form>';

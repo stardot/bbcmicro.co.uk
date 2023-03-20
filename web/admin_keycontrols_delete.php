@@ -8,6 +8,7 @@ show_admin_menu();
 
 $id=null;
 $msg='';
+$showdelete=1;
 # GET params means want to display an entry, so fetch it
 if (isset($_GET['id']) && is_numeric($_GET['id'])) {
   $id=$_GET['id'];
@@ -46,7 +47,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
         $sth->execute();
 	      if ( $sth->execute() ) {
           $msg="Key control deleted: ".$r['keydescription'].".";
-          $gamecount=-1;
+          $showdelete=-1;
         } else {
           $msg="Error deleting key control: ".$r['keydescription'].".";
         }
@@ -64,9 +65,9 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
   }
 }
 
-make_form($r,$msg);
+make_form($r,$showdelete,$msg);
 
-function make_form($r,$msg) {
+function make_form($r,$showdelete,$msg) {
   echo "<br><b>".$r['keyname']."</b>";
   echo "<hr>";
   echo "<p>$msg</p>\n";
@@ -80,7 +81,10 @@ function make_form($r,$msg) {
   echo "<label>JSBeeb game key: <input type='text' name='jsbeebgamekey' size='80' autofocus='autofocus' style='border: 0' readonly='readonly' value='".htmlspecialchars($r['jsbeebgamekey'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
   echo "<label>JSBeeb browser key: <input type='text' name='jsbeebbrowserkey' size='80' autofocus='autofocus' style='border: 0' readonly='readonly' value='".htmlspecialchars($r['jsbeebbrowserkey'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
  
-  echo '<br/><input type="submit" value="Delete"></form>';
+  if ($showdelete > 0) {
+    echo '<br/><input type="submit" value="Delete"></form>';
+  }
+
   echo '<hr/><a href="admin_keycontrols.php">Back to the list</a>';
 }
 ?>
