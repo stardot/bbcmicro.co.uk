@@ -16,13 +16,29 @@ if ($sth->execute()) {
 	if ($sth->rowCount()) {
 		echo '<p>'.$sth->rowCount()." release types. <a href='admin_releasetypes_details.php'>New release type</a></p><hr>";
 		echo "<table>\n";
-		echo "<tr><td><b>ID</b></td><td><b>Name</b></td><td><b>Selected</b></td><td><b>Order</b></td></tr>\n";
+		echo "<tr><td><b>ID</b></td><td><b>Name</b></td><td><b>Selected</b></td><td><b>Order</b></td><td><b>Games</b></td></tr>\n";
 		while ($r=$sth->fetch()) {
 			echo "<tr><td>".$r['id']."</td><td><a href=admin_releasetypes_details.php?id=".$r['id'].">".$r['name']."</a></td>";
 			echo "<td><a href=admin_releasetypes_details.php?id=".$r['id'].">".$r['selected']."</a></td>";
-			echo "<td><a href=admin_releasetypes_details.php?id=".$r['id'].">".$r['rel_order']."</a></td></tr>\n";
+			echo "<td><a href=admin_releasetypes_details.php?id=".$r['id'].">".$r['rel_order']."</a></td>";
+			$gamecount=0;
+			$s2="select * from games where reltype = ?";
+			$sth2 = $dbh->prepare($s2,array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+			$sth2->bindParam(1, $r['id'], PDO::PARAM_STR);
+			if ($sth2->execute()) {
+			  $gamecount=$sth2->rowCount();
+			  $sth2->closeCursor();
+			} else {
+			  echo "$s2 gave ".$dbh->errorCode()."<br>\n";
+			  exit(3);
+			}
+			if ($gamecount > 0) {
+				echo "<td>$gamecount</td>";
+			} else {
+				echo "<td>Unused (<a href=admin_releasetypes_delete.php?id=".$r['id'].">Delete</a>)</td>";
+			}
 		}
-		echo "</table>\n";
+		echo "</tr>\n</table>\n";
 	}
 	$sth->closeCursor();
 } else {
