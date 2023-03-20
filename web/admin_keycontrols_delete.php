@@ -12,7 +12,7 @@ $showdelete=1;
 # GET params means want to display an entry, so fetch it
 if (isset($_GET['id']) && is_numeric($_GET['id'])) {
   $id=$_GET['id'];
-  $s="select * from game_keys where id = ?";
+  $s="select k.id as id, k.keydescription, k.keyname, k.jsbeebgamekey, k.jsbeebbrowserkey, k.rel_order, g.id as gameid, g.title from game_keys k inner join games g on k.gameid = g.id where k.id = ?";
 
   $sth = $dbh->prepare($s,array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
   $sth->bindParam(1, $id, PDO::PARAM_STR);
@@ -30,6 +30,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
   if (isset($_POST) && $_POST) {
     $r['id']=$_POST['id'];
     $r['gameid']=$_POST['gameid'];
+    $r['title']=$_POST['title'];
     $r['rel_order']=$_POST['rel_order'];
     $r['keyname']=$_POST['keyname'];
     $r['keydescription']=$_POST['keydescription'];
@@ -46,22 +47,23 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
         $sth->bindParam(1, $r['id'], PDO::PARAM_INT);
         $sth->execute();
 	      if ( $sth->execute() ) {
-          $msg="Key control deleted: ".$r['keydescription'].".";
+          $msg="Key control deleted: ".$r['keydescription']." for game ".$r['title'].".";
           $showdelete=-1;
         } else {
-          $msg="Error deleting key control: ".$r['keydescription'].".";
+          $msg="Error deleting key control: ".$r['keydescription']." for game ".$r['title'].".";
         }
       }
     }
   } else {
     $r['id']='';
     $r['gameid']='';
+    $r['title']='';
     $r['rel_order']='';
     $r['keyname']='';
     $r['keydescription']='';
     $r['jsbeebgamekey']='';
     $r['jsbeebbrowserkey']='';
-    $msg="New key control.";
+    $msg="No ID set.";
   }
 }
 
@@ -74,13 +76,15 @@ function make_form($r,$showdelete,$msg) {
   echo "<form name='frmGame' method='POST' action='admin_keycontrols_delete.php'>\n";
   echo "<input type='hidden' name='id' value='".$r['id']."'>\n";
 
-  echo "<label>Game ID: <input type='text' name='gameid' size='80' autofocus='autofocus' style='border: 0' readonly='readonly' value='".htmlspecialchars($r['gameid'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
+  echo "<label>Key ID: <input type='text' name='id' size='80' autofocus='autofocus' style='border: 0' readonly='readonly' value='".htmlspecialchars($r['id'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
   echo "<label>Key order: <input type='text' name='rel_order' size='80' autofocus='autofocus' style='border: 0' readonly='readonly' value='".htmlspecialchars($r['rel_order'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
   echo "<label>Key name: <input type='text' name='keyname' size='80' autofocus='autofocus' style='border: 0' readonly='readonly' value='".htmlspecialchars($r['keyname'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
   echo "<label>Key function: <input type='text' name='keydescription' size='80' autofocus='autofocus' style='border: 0' readonly='readonly' value='".htmlspecialchars($r['keydescription'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
   echo "<label>JSBeeb game key: <input type='text' name='jsbeebgamekey' size='80' autofocus='autofocus' style='border: 0' readonly='readonly' value='".htmlspecialchars($r['jsbeebgamekey'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
   echo "<label>JSBeeb browser key: <input type='text' name='jsbeebbrowserkey' size='80' autofocus='autofocus' style='border: 0' readonly='readonly' value='".htmlspecialchars($r['jsbeebbrowserkey'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
- 
+  echo "<label>Game ID: <input type='text' name='gameid' size='80' autofocus='autofocus' style='border: 0' readonly='readonly' value='".htmlspecialchars($r['gameid'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
+  echo "<label>Game title: <input type='text' name='title' size='80' autofocus='autofocus' style='border: 0' readonly='readonly' value='".htmlspecialchars($r['title'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
+
   if ($showdelete > 0) {
     echo '<br/><input type="submit" value="Delete"></form>';
   }
