@@ -41,7 +41,7 @@ require 'includes/menu.php';
      <span class="icon-bar"></span>
      <span class="icon-bar"></span>
     </button>
-    <a href="index.php" class="navbar-brand"><?php echo $site_name?></a>
+    <a href="index.php" class="navbar-brand"><?php echo $site_name_html?></a>
    </div>
    <?php make_menu_bar("Contact") ?>
   </div><!-- /.container -->
@@ -49,7 +49,7 @@ require 'includes/menu.php';
     <!-- Main jumbotron for a primary marketing message or call to action -->
     <div class="jumbotron">
       <div class="container">
-        <h1><?php echo $site_name?></h1>
+        <h1><?php echo $site_name_html?></h1>
         <p>Contact us at the <a href='http://stardot.org.uk/forums/viewforum.php?f=51' target='_blank'>StarDot forums</a>, or email us using the form below.</p>
       </div>
     </div>

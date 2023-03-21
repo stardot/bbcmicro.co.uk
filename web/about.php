@@ -41,7 +41,7 @@ require 'includes/menu.php';
      <span class="icon-bar"></span>
      <span class="icon-bar"></span>
     </button>
-    <a href="index.php" class="navbar-brand"><?php echo $site_name?></a>
+    <a href="index.php" class="navbar-brand"><?php echo $site_name_html?></a>
    </div>
    <?php make_menu_bar("About")?>
   </div><!-- /.container -->
@@ -49,7 +49,7 @@ require 'includes/menu.php';
     <!-- Main jumbotron for a primary marketing message or call to action -->
     <div class="jumbotron">
       <div class="container">
-        <h1><?php echo $site_name?></h1>
+        <h1><?php echo $site_name_html?></h1>
 	<p>In 1981, after <a href="http://www.bbc.co.uk/news/technology-15969065" class="postlink">winning a contract from the BBC</a>, <a href="https://en.wikipedia.org/wiki/Acorn_Computers" class="postlink">Acorn Computers</a> released the 8-bit <a href="https://en.wikipedia.org/wiki/BBC_Micro" class="postlink">BBC Micro</a>. It was used in most schools in the UK, and many of us who were in school at the time remember the computer fondly.</p>
         <p>We have been lovingly restoring BBC Micro games from the 1980s onwards. We have put them here so you can play them in emulators, or on a real BBC Micro, or in your browser. If you would like to help us improve the site, please <a href="contact.php">contact us</a>.</p>
       </div>

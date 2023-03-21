@@ -32,7 +32,7 @@ global $site_name;
 }
 
 function nav() {
-global $site_name;
+global $site_name_html;
 ?>
  <nav class="navbar navbar-fixed-top navbar-inverse">
   <div class="container">
@@ -43,7 +43,7 @@ global $site_name;
      <span class="icon-bar"></span>
      <span class="icon-bar"></span>
     </button>
-    <a class="navbar-brand" href="index.php"><?php echo $site_name?></a>
+    <a class="navbar-brand" href="index.php"><?php echo $site_name_html?></a>
    </div>
    <?php make_menu_bar("Games")?>
   </div><!-- /.container -->
