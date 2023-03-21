@@ -29,6 +29,8 @@ require 'includes/menu.php';
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+
+    <script src="https://www.hCaptcha.com/1/api.js" async defer></script>
   </head>
 
   <body>
@@ -90,7 +92,27 @@ function isBot() {
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
 	if (isBot() !== false)
 		$error_msg[] = "No bots please! UA reported as: ".$_SERVER['HTTP_USER_AGENT'];
-		
+
+    if (isset($_POST['h-captcha-response']) && $_POST['h-captcha-response'] !== '') {
+		$data = array(
+			'secret' => HCAPTCHA_SECRET,
+			'response' => $_POST['h-captcha-response']
+		);
+		$verify = curl_init();
+		curl_setopt($verify, CURLOPT_URL, "https://hcaptcha.com/siteverify");
+		curl_setopt($verify, CURLOPT_POST, true);
+		curl_setopt($verify, CURLOPT_POSTFIELDS, http_build_query($data));
+		curl_setopt($verify, CURLOPT_RETURNTRANSFER, true);
+		$response = curl_exec($verify);
+		// var_dump($response);
+		$responseData = json_decode($response);
+		if(!($responseData->success)) {
+			$error_msg[] = "Captcha failed. Your mail could not be sent this time.";
+		}
+	} else {
+		$error_msg[] = "Captcha failed. Your mail could not be sent this time.";
+	}
+
 	// lets check a few things - not enough to trigger an error on their own, but worth assigning a spam score.. 
 	// score quickly adds up therefore allowing genuine users with 'accidental' score through but cutting out real spam :)
 	$points = (int)0;
@@ -139,12 +161,14 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 		
 		$message = "You received this e-mail message through your website: \n\n";
 		foreach ($_POST as $key => $val) {
-			if (is_array($val)) {
-				foreach ($val as $subval) {
-					$message .= ucwords($key) . ": " . clean($subval) . "\r\n";
+			if ($key !== 'G-recaptcha-response' && $key !== 'H-captcha-response') {
+				if (is_array($val)) {
+					foreach ($val as $subval) {
+						$message .= ucwords($key) . ": " . clean($subval) . "\r\n";
+					}
+				} else {
+					$message .= ucwords($key) . ": " . clean($val) . "\r\n";
 				}
-			} else {
-				$message .= ucwords($key) . ": " . clean($val) . "\r\n";
 			}
 		}
 		$message .= "\r\n";
@@ -209,7 +233,9 @@ if ($result != NULL) {
 	<label for="comments">Comments: *</label>
 	<textarea name="comments" class="form-control" id="comments" rows="5" cols="20"><?php get_data("comments"); ?></textarea><br />
 </div>
-</p>
+
+<div class="h-captcha" data-sitekey="<?php echo HCAPTCHA_SITE_KEY ?>"></div>
+
 <p>
 	<input type="submit" class="btn btn-primary btn-lg btn-block" name="submit" id="submit" value="Send" <?php if (isset($disable) && $disable === true) echo ' disabled="disabled"'; ?> />
 </p>
