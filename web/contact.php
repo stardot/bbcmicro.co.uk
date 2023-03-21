@@ -159,6 +159,18 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 		}
 		$headers  .= "Reply-To: {$_POST['email']}\r\n";
 
+		require_once('includes/admin_db_open.php');
+        $s="insert into contacts (name, email, message) values (?,?,?)";
+        $sth = $dbh->prepare($s,array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        $sth->bindParam(1, $_POST['name'], PDO::PARAM_STR);
+        $sth->bindParam(2, $_POST['email'], PDO::PARAM_STR);
+        $sth->bindParam(3, $_POST['comments'], PDO::PARAM_STR);
+		if ( $sth->execute() ) {
+          //$error_msg[] = "Contact stored";
+        } else {
+          //$error_msg[] = "Error storing contact";
+        }
+
 		if (mail($yourEmail,$subject,$message,$headers)) {
 			if (!empty($thanksPage)) {
 				header("Location: $thanksPage");
