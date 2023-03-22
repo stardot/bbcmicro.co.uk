@@ -277,7 +277,7 @@ if ( ! empty($compilations)) {
      <span class="icon-bar"></span>
      <span class="icon-bar"></span>
     </button>
-    <a href="index.php" class="navbar-brand"><?php echo $site_name?></a>
+    <a href="index.php" class="navbar-brand"><?php echo $site_name_html?></a>
    </div>
    <?php make_menu_bar("Games")?>
   </div><!-- /.container -->
