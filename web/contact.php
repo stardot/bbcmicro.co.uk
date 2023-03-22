@@ -107,10 +107,10 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 		// var_dump($response);
 		$responseData = json_decode($response);
 		if(!($responseData->success)) {
-			$error_msg[] = "Captcha failed. Your mail could not be sent this time.";
+			$error_msg[] = "Captcha failed. Your message could not be sent this time.";
 		}
 	} else {
-		$error_msg[] = "Captcha failed. Your mail could not be sent this time.";
+		$error_msg[] = "Captcha failed. Your message could not be sent this time.";
 	}
 
 	// lets check a few things - not enough to trigger an error on their own, but worth assigning a spam score.. 
@@ -200,15 +200,15 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 				header("Location: $thanksPage");
 				exit;
 			} else {
-				$result = 'Your mail was successfully sent.';
+				$result = 'Your message was successfully sent.';
 				$disable = true;
 			}
 		} else {
-			$error_msg[] = 'Your mail could not be sent this time. ['.$points.']';
+			$error_msg[] = 'Your message could not be sent this time. ['.$points.']';
 		}
 	} else {
 		if (empty($error_msg))
-			$error_msg[] = 'Your mail looks too much like spam, and could not be sent this time. ['.$points.']';
+			$error_msg[] = 'Your message looks too much like spam, and could not be sent this time. ['.$points.']';
 	}
 }
 function get_data($var) {
