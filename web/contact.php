@@ -234,13 +234,18 @@ if ($result != NULL) {
 	<textarea name="comments" class="form-control" id="comments" rows="5" cols="20"><?php get_data("comments"); ?></textarea><br />
 </div>
 
-<div class="h-captcha" data-sitekey="<?php echo HCAPTCHA_SITE_KEY ?>"></div>
+<div class="form-group">
+	<div class="h-captcha" data-sitekey="<?php echo HCAPTCHA_SITE_KEY ?>"></div>
+</div>
 
 <p>
 	<input type="submit" class="btn btn-primary btn-lg btn-block" name="submit" id="submit" value="Send" <?php if (isset($disable) && $disable === true) echo ' disabled="disabled"'; ?> />
 </p>
 </form>
 <p>&nbsp;</p>
+<p class="text-right"><small>This site is protected by <a href="https://www.hCaptcha.com">hCaptcha</a> and its
+<a href="https://www.hcaptcha.com/privacy">Privacy Policy</a> and
+<a href="https://www.hcaptcha.com/terms">Terms of Service</a> apply.</small></p>
 <p class="text-right"><small>Powered by <a href="http://jemsmailform.com/">Jem's PHP Mail Form</a></small></p>
 
     </p></div>
