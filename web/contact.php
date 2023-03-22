@@ -219,7 +219,7 @@ if ($result != NULL) {
 	
 <div class="form-group">
 	<label for="comments">Comments: *</label>
-	<textarea name="comments" class="form-control" id="comments" rows="5" cols="20"><?php get_data("comments"); ?></textarea><br />
+	<textarea name="comments" class="form-control" id="comments" rows="5" cols="20" maxlength="2000"><?php get_data("comments"); ?></textarea><br />
 </div>
 </p>
 <p>
