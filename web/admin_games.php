@@ -42,7 +42,7 @@ if ($sth->execute()) {
 			echo "<tr><td><a href='admin_game_details.php?id=".$r['id']."'>".$r['title']."</td><td>".$r['year']."</td>";
 
 			echo "<td>";
-			$pubs=explode('@',$r['publishers']);
+			$pubs=explode('@',$r['publishers'] ?? '');
 			$names='';
 			foreach ($pubs as $pub) {
 				if ($pub) {
@@ -66,7 +66,7 @@ if ($sth->execute()) {
 
 			if (defined('ST_FILES') && ST_FILES ) {
 				echo "<td><a href='admin_file.php?t=f&id=".$r['id']."'>";
-				$files=explode('@',$r['files']);
+				$files=explode('@',$r['files'] ?? '');
 				$names='';
 				$filenames='';
 				foreach ($files as $file) {

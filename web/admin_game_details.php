@@ -554,7 +554,7 @@ function make_dd($aid,$nam,$typ,$known) {
 function make_form($game_id,$r) {
 	global $known_genres, $known_reltyps, $known_publishers, $known_authors, $known_compilations, $jopts, $sopts, $eopts, $copts, $mcopts, $platopts;
 	if (DEBUG) { echo "<pre>"; print_r($r); echo "</pre>";}
-	$pubs=explode('@',$r['publishers']);
+	$pubs=explode('@',$r['publishers'] ?? '');
 	$names='';
 	foreach ($pubs as $pub) {
 		if ($pub) {
@@ -646,7 +646,7 @@ function make_form($game_id,$r) {
 	echo "<label>Authors<br/>";
 	# Authors
 	$ac=1;
-	$authors=explode('@',$r['authors']);
+	$authors=explode('@',$r['authors'] ?? '');
 	#if (DEBUG) { echo "<pre>"; print_r($authors); echo "</pre>";}
 	foreach ($authors as $author) {
 		if (!(False === strpos($author,'|' ))) {
