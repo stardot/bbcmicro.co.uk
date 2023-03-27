@@ -96,7 +96,7 @@ CREATE TABLE `games` (
   `created` datetime NOT NULL,
   `creator` int(11) NOT NULL,
   `imgupdated` datetime DEFAULT NULL,
-  `imgupdater` int(11) NOT NULL,
+  `imgupdater` int(11) NOT NULL DEFAULT '0',
   `compat_a` char(1) DEFAULT 'N' COMMENT 'Model A Compatibility',
   `compat_b` char(1) DEFAULT 'Y' COMMENT 'Model B Compatibility',
   `compat_master` char(1) DEFAULT NULL COMMENT 'Master Compatibility',
