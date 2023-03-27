@@ -18,8 +18,6 @@ tinymce.init({
 </script>
 </head>
 <body><?php
-show_admin_menu("game_details", $_REQUEST['id'] ?? '');
-
 $jopts=[ 'R' => 'Required', 'O' => 'Optional' ];
 $sopts=[ 'D' => 'Save to Disc', 'T' => 'Save to Tape' ];
 $eopts=[ 'Y' => 'Yes' ];
@@ -345,6 +343,9 @@ if ($sth->execute()) {
 } else {
 	echo "$s gave ".$dbh->errorCode()."<br>\n";
 }
+
+# Show admin menu at this point so newly added games have an ID allocated
+show_admin_menu("game_details", $game_id ?? '');
 
 # First gobble all known compilations
 $s="SELECT id,name FROM compilations order by name";
