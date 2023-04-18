@@ -217,10 +217,10 @@ function get_data($var) {
 }
 
 if (!empty($error_msg)) {
-	echo '<p class="bg-danger">ERROR: '. implode("<br />", $error_msg) . "</p>";
+	echo '<p class="bg-danger" style="font-weight: bold; font-size: 2em;">ERROR: '. implode("<br />", $error_msg) . "</p>";
 }
 if ($result != NULL) {
-	echo '<p class="success">'. $result . "</p>";
+	echo '<p class="bg-success" style="font-weight: bold; font-size: 2em;">'. $result . "</p>";
 }
 ?>
 
