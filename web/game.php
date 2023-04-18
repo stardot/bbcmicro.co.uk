@@ -86,7 +86,7 @@ if (($img['probs'] ?? '') != 'N' and $playlink != NULL ) {
 
 if ( $ssd != NULL && file_exists($ssd)) {
   $imglink=$imglink.'<p><a type="button" download="'.$ssd_info['basename'].'" class="btn btn-primary btn-lg center-block" onmousedown="log('.$id.',\'d\');" href="' . $ssd . '">Download</a></p>';
-  if ( $ssd_info['extension'] = 'ssd' ) {
+  if ( $ssd_info['extension'] == 'ssd' ) {
     $imglink=$imglink.'<p><a href="explore.php?id='.$id.'" type="button" class="btn btn-primary btn-lg center-block">Explore Disc</a></p>';
   }
 } else {
