@@ -15,7 +15,6 @@ $s="	SELECT 		id,name,email,message,date
 $sth = $dbh->prepare($s,array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
 if ($sth->execute()) {
 	if ($sth->rowCount()) {
-		echo '<style>table { border-collapse: collapse; } td { border: 1px solid black; padding: 10px; }</style>';
 		echo '<p>'.$sth->rowCount()." contacts.</p><hr>";
 		echo "<table>\n";
 		echo "<tr><td><b>ID</b></td><td><b>Name</b></td><td><b>Email</b></td><td><b>Message</b></td><td><b>Date</b></td></tr>\n";

@@ -66,7 +66,7 @@ if ($sth->execute()) {
 			echo "<tr><td><a href='admin_game_details.php?id=".$r['id']."'>".$r['title']."</td><td>".$r['year']."</td>";
 
 			echo "<td>";
-			$pubs=explode('@',$r['publishers']);
+			$pubs=explode('@',$r['publishers'] ?? '');
 			$names='';
 			foreach ($pubs as $pub) {
 				if ($pub) {
