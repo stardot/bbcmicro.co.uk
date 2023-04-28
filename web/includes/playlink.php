@@ -21,7 +21,7 @@ function get_playlink($image,$jsbeeb,$wsroot,$keys,$platform) {
   $url = Null;
   if (($image['customurl'] ?? '') === '' ) {
     $ssd=get_discloc($image['filename'] ?? '',$image['subdir'] ?? '');
-    if (file_exists($ssd)) {
+    if (isset($ssd) && file_exists($ssd)) {
       $file_parts = pathinfo($ssd);
       if (strtolower($file_parts['extension']) == 'uef') {
         $url = $jsbtape . $wsroot . '/' . $ssd;
@@ -58,7 +58,7 @@ function get_discloc($file,$subdir) {
   if ($file === NULL || $file === '') {
     $imgfile=$di;
   }
-  if (!file_exists($imgfile)) {
+  if (isset($imgfile) && !file_exists($imgfile)) {
     $imgfile=$di;
   }
   return $imgfile;

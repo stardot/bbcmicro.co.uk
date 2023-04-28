@@ -155,7 +155,7 @@ function pager($limit, $rows, $page, $state) {
      $pl.= '     <li class="disabled"><span>&laquo;</span></li> '. "\n";
   }
   for ( $i=1; $i <= $pages; $i++ ) {
-    if ( ($i % 5 == 0 ) || (($i > ($page - 4)) && ( $i < ($page + 4))) || ( $i == 1) || ( $i == $pages) ) {
+    if ( ($i % 10 == 0 ) || (($i > ($page - 5)) && ( $i < ($page + 5))) || ( $i == 1) || ( $i == $pages) ) {
       if ($i != $page ) {
         $pl.= '     <li><a onclick=\'$.get("getgrid.php", '.json_state($state,'page', $i).', function(data){ $("#maingrid").html(data); }); window.scrollTo(0,0); return false;\' href="?'.url_state($state,'page', $i).'">' . $i . '</a></li>' . "\n";
       } else {
@@ -237,7 +237,7 @@ function grid($state) {
   if (array_key_exists('atoz',$state)) {
     if ($state['atoz']=='#') {
       $doing_atoz_numbers=true;
-      $atoz="^[0-9]";
+      $atoz="^[^a-zA-Z]";
       $atoz2=".*";
       $wc[]="title REGEXP :atoz\n";
     } else {
@@ -352,7 +352,7 @@ function grid($state) {
   foreach ($res2 as $game ) {
     $a=strtoupper(substr($game['c1'],0,1));
       
-    if (is_numeric($a)) {
+    if (!preg_match('/[a-zA-Z]/', $a)) {
        $a='#';
     }
 
