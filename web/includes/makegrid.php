@@ -148,27 +148,113 @@ function pager($limit, $rows, $page, $state) {
   $pages = ceil($rows/$limit);
   $pl='';
 
-  $pl.= '    <ul class="pagination">';
+  $el = "border-color: white; margin-left: 0; margin-right: 1px; cursor: default; text-align: center;";
+
+  $links = 4;
+  $skip = 10;
+
+  // Left three buttons
+
+  $pl.= '    <div class="page-buttons top"><ul class="pagination">';
   if ( $page != 1 ) {
-      $pl.= '     <li><a onclick=\'$.get("getgrid.php", '. json_state($state,'page', ($page - 1)).', function(data){ $("#maingrid").html(data); window.scrollTo(0,0); }); return false;\' href="?'. url_state($state,'page', ($page - 1)). '">&laquo;</a></li>' . "\n";
+    $pl.= '     <li><a title="First page" onclick=\'$.get("getgrid.php", '. json_state($state,'page', 1).', function(data){ $("#maingrid").html(data); window.scrollTo(0,0); }); return false;\' href="?'. url_state($state,'page', 1). '">|&lt;</a></li>' . "\n";
   }else{
-     $pl.= '     <li class="disabled"><span>&laquo;</span></li> '. "\n";
+    $pl.= '     <li class="disabled"><span>|&lt;</span></li> '. "\n";
   }
-  for ( $i=1; $i <= $pages; $i++ ) {
-    if ( ($i % 10 == 0 ) || (($i > ($page - 5)) && ( $i < ($page + 5))) || ( $i == 1) || ( $i == $pages) ) {
-      if ($i != $page ) {
-        $pl.= '     <li><a onclick=\'$.get("getgrid.php", '.json_state($state,'page', $i).', function(data){ $("#maingrid").html(data); }); window.scrollTo(0,0); return false;\' href="?'.url_state($state,'page', $i).'">' . $i . '</a></li>' . "\n";
+
+  if ( $page != 1 ) {
+    $pl.= '     <li><a title="Back ' . $skip . ' pages" onclick=\'$.get("getgrid.php", '. json_state($state,'page', max(1, $page - $skip)).', function(data){ $("#maingrid").html(data); window.scrollTo(0,0); }); return false;\' href="?'. url_state($state,'page', max(1, $page - $skip)). '">&lt;&lt;</a></li>' . "\n";
+  }else{
+    $pl.= '     <li class="disabled"><span>&lt;&lt;</span></li> '. "\n";
+  }
+
+  if ( $page != 1 ) {
+    $pl.= '     <li><a title="Previous page" onclick=\'$.get("getgrid.php", '. json_state($state,'page', ($page - 1)).', function(data){ $("#maingrid").html(data); window.scrollTo(0,0); }); return false;\' href="?'. url_state($state,'page', ($page - 1)). '">&lt;</a></li>' . "\n";
+  }else{
+    $pl.= '     <li class="disabled"><span>&lt;</span></li> '. "\n";
+  }
+
+  $pl.= '    </ul></div>';
+
+  // Pagination block
+
+  $pl.= '    <div class="page-numbers"><ul class="pagination">';
+
+  $left_end = $page - $links;
+  $right_end = $page + $links;
+  if ($left_end < 1) {
+    $right_end -= $left_end - 1;
+    $right_end = max(1, $right_end);
+    $left_end = 1;
+  }
+  if ($right_end > $pages - 1) {
+    $left_end -= $right_end - $pages;
+    $left_end = max(1, $left_end);
+    $right_end = $pages;
+  }
+
+  // Left ellipsis
+
+  if ($left_end > 1) {
+    $pl.= '     <li class="disabled ellipses"><span style="' . $el . ' width: 43px;">...</span></li> '. "\n";
+  } else {
+    $pl.= '     <li class="disabled ellipses"><span style="' . $el . ' width: 43px;">&nbsp;</span></li> '. "\n";
+  }
+
+  // Pagination buttons
+
+  for ( $i=$left_end; $i <= $right_end; $i++ ) {
+    if ($i != $page) {
+      $clli = '';
+    } else {
+      $clli = ' class="active"';
+    }
+    $cla = '';
+    if ($i == $left_end) {
+      $cla = ' class="page-first"';
+    }
+    if ($i == $right_end) {
+      if ($cla == '') {
+        $cla = ' class="page-last"';
       } else {
-        $pl.= '     <li class="active"><a onclick=\'$.get("getgrid.php", '. json_state($state,'page', $i).', function(data){ $("#maingrid").html(data); }); window.scrollTo(0,0); return false;\' href="?'.url_state($state,'page', $i).'">' . $i . '</a></li> '. "\n";
+        $cla = ' class="page-first page-last"';
       }
     }
+    $pl.= '     <li' . $clli . '><a' . $cla . ' style="width: 48px; text-align: center" onclick=\'$.get("getgrid.php", '.json_state($state,'page', $i).', function(data){ $("#maingrid").html(data); }); window.scrollTo(0,0); return false;\' href="?'.url_state($state,'page', $i).'">' . $i . '</a></li>' . "\n";
   }
+
+  // Right ellipsis
+
+  if ($right_end < $pages) {
+    $pl.= '     <li class="disabled ellipses"><span style="' . $el . ' width: 44px;">...</span></li> '. "\n";
+  } else {
+    $pl.= '     <li class="disabled ellipses"><span style="' . $el . ' width: 43px;">&nbsp;</span></li> '. "\n";
+  }
+
+  $pl.= '    </ul></div>';
+
+  // Right three buttons
+
+  $pl.= '    <div class="page-buttons bottom"><ul class="pagination">';
+
   if ( $page < $pages ) {
-      $pl.= '     <li><a onclick=\'$.get("getgrid.php", '. json_state($state,'page', ($page + 1)).', function(data){ $("#maingrid").html(data); }); window.scrollTo(0,0); return false;\' href="?'. url_state($state,'page', ($page + 1)). '">&raquo;</a></li>' . "\n";
+      $pl.= '     <li><a title="Next page" onclick=\'$.get("getgrid.php", '. json_state($state,'page', ($page + 1)).', function(data){ $("#maingrid").html(data); }); window.scrollTo(0,0); return false;\' href="?'. url_state($state,'page', ($page + 1)). '">&gt;</a></li>' . "\n";
   }else{
-     $pl.= '     <li class="disabled"><span>&raquo;</span></li> '. "\n";
+     $pl.= '     <li class="disabled"><span>&gt;</span></li> '. "\n";
   }
-  $pl.= "    </ul>\n";
+
+  if ( $page < $pages ) {
+      $pl.= '     <li><a title="Forward ' . $skip . ' pages" onclick=\'$.get("getgrid.php", '. json_state($state,'page', min($pages, $page + $skip)).', function(data){ $("#maingrid").html(data); }); window.scrollTo(0,0); return false;\' href="?'. url_state($state,'page', min($pages, $page + $skip)). '">&gt;&gt;</a></li>' . "\n";
+  }else{
+     $pl.= '     <li class="disabled"><span>&gt;&gt;</span></li> '. "\n";
+  }
+
+  if ( $page < $pages ) {
+      $pl.= '     <li><a title="Last page" onclick=\'$.get("getgrid.php", '. json_state($state,'page', $pages).', function(data){ $("#maingrid").html(data); }); window.scrollTo(0,0); return false;\' href="?'. url_state($state,'page', $pages). '">&gt;|</a></li>' . "\n";
+  }else{
+     $pl.= '     <li class="disabled"><span>&gt;|</span></li> '. "\n";
+  }
+  $pl.= "    </ul></div>\n";
   return $pl;
 }
 

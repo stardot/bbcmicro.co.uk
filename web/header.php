@@ -22,6 +22,22 @@ global $site_name;
     <link rel="stylesheet" href="bs/css/typeahead.css">
     <link rel="stylesheet" href="bs/css/grid.css">
 
+    <!-- Local CSS -->
+    <style>
+      .page-buttons, .page-numbers { display: inline; }
+      .page-first { border-top-left-radius: 4px; border-bottom-left-radius: 4px; }
+      .page-last { border-top-right-radius: 4px; border-bottom-right-radius: 4px; }
+      @media (max-width: 991px) {
+        .page-buttons, .page-numbers { display: block; text-align: center; }
+        .page-buttons.top ul { margin-bottom: 0; }
+        .page-buttons.bottom ul { margin-top: 0; }
+        .page-numbers ul { margin: 0; }
+      }
+      @media (max-width: 550px) {
+        .ellipses { display: none !important; }
+      }
+    </style>
+
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
