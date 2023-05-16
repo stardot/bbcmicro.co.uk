@@ -6,5 +6,5 @@
 
 .navbar-brand { font-size: 1rem !important; color: #9d9d9d !important; }
 .navbar-brand:hover { color: #fff !important; }
-.navbar-brand .highlight, .navbar-brand .highlight { color: yellow; }
+.navbar-brand .highlight, .navbar-brand .highlight { color: yellow; border: 0; }
 .navbar-brand:hover .highlight, .navbar-brand:focus .highlight { color: #fff; }
