@@ -41,4 +41,8 @@ define('ST_ALLOW_OVERWRITE',True);
 
 #Allow files?
 define('ST_FILES',False);
+
+# hCaptcha secret
+define('HCAPTCHA_SECRET','');
+define('HCAPTCHA_SITE_KEY','');
 ?>
