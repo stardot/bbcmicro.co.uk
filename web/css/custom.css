@@ -12,3 +12,13 @@
 @media (max-width: 550px) {
   .ellipses { display: none !important; }
 }
+
+.navbar-inverse .navbar-brand .highlight,
+.navbar-inverse .navbar-brand .highlight {
+  color: yellow;
+}
+
+.navbar-inverse .navbar-brand:hover .highlight,
+.navbar-inverse .navbar-brand:focus .highlight {
+  color: #fff;
+}
