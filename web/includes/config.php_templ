@@ -3,6 +3,7 @@
 # Constant for now, might be data-driven (e.g. if
 # same code used for Electron or Atom archives)
 $site_name="Complete BBC Micro Games Archive";
+$site_name_html='Complete <span class="highlight">BBC Micro</span> Games Archive</span>';
 
 define('DB_HOST','');
 define('DB_NAME','');
