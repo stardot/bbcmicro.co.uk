@@ -33,7 +33,12 @@ Running a diff between Mick's collection and bbcmicro.co.uk
 Note that the workspace folder is deleted and recreated at the start of each
 run, so if you want to keep its contents, make a copy of it first.
 
+
+Checking download links on bbcmicro.co.uk
+=========================================
+
 There is an additional script in the scripts folder: get_bbcmicro_DL_links.pl.
+
 This checks for valid URLs in download buttons on the bbcmicro.co.uk site,
 flagging any that don't look correct with "Unmatched link" in the output. The
 parameter to the script is the total number of game pages on the site, which you
