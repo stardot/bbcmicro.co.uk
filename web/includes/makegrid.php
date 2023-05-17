@@ -155,30 +155,52 @@ function pager($limit, $rows, $page, $state) {
 
   // Left three buttons
 
-  $pl.= '    <div class="page-buttons top"><ul class="pagination">';
+  $left_buttons = '<ul class="pagination">';
   if ( $page != 1 ) {
-    $pl.= '     <li><a title="First page" onclick=\'$.get("getgrid.php", '. json_state($state,'page', 1).', function(data){ $("#maingrid").html(data); window.scrollTo(0,0); }); return false;\' href="?'. url_state($state,'page', 1). '">|&lt;</a></li>' . "\n";
+    $left_buttons.= '     <li><a title="First page" onclick=\'$.get("getgrid.php", '. json_state($state,'page', 1).', function(data){ $("#maingrid").html(data); window.scrollTo(0,0); }); return false;\' href="?'. url_state($state,'page', 1). '">|&lt;</a></li>' . "\n";
   }else{
-    $pl.= '     <li class="disabled"><span>|&lt;</span></li> '. "\n";
+    $left_buttons.= '     <li class="disabled"><span>|&lt;</span></li> '. "\n";
+  }
+  if ( $page != 1 ) {
+    $left_buttons.= '     <li><a title="Back ' . $skip . ' pages" onclick=\'$.get("getgrid.php", '. json_state($state,'page', max(1, $page - $skip)).', function(data){ $("#maingrid").html(data); window.scrollTo(0,0); }); return false;\' href="?'. url_state($state,'page', max(1, $page - $skip)). '">&lt;&lt;</a></li>' . "\n";
+  }else{
+    $left_buttons.= '     <li class="disabled"><span>&lt;&lt;</span></li> '. "\n";
+  }
+  if ( $page != 1 ) {
+    $left_buttons.= '     <li><a title="Previous page" onclick=\'$.get("getgrid.php", '. json_state($state,'page', ($page - 1)).', function(data){ $("#maingrid").html(data); window.scrollTo(0,0); }); return false;\' href="?'. url_state($state,'page', ($page - 1)). '">&lt;</a></li>' . "\n";
+  }else{
+    $left_buttons.= '     <li class="disabled"><span>&lt;</span></li> '. "\n";
+  }
+  $left_buttons.= '    </ul>';
+
+  // Right three buttons
+
+  $right_buttons = '<ul class="pagination">';
+
+  if ( $page < $pages ) {
+      $right_buttons.= '     <li><a title="Next page" onclick=\'$.get("getgrid.php", '. json_state($state,'page', ($page + 1)).', function(data){ $("#maingrid").html(data); }); window.scrollTo(0,0); return false;\' href="?'. url_state($state,'page', ($page + 1)). '">&gt;</a></li>' . "\n";
+  }else{
+     $right_buttons.= '     <li class="disabled"><span>&gt;</span></li> '. "\n";
   }
 
-  if ( $page != 1 ) {
-    $pl.= '     <li><a title="Back ' . $skip . ' pages" onclick=\'$.get("getgrid.php", '. json_state($state,'page', max(1, $page - $skip)).', function(data){ $("#maingrid").html(data); window.scrollTo(0,0); }); return false;\' href="?'. url_state($state,'page', max(1, $page - $skip)). '">&lt;&lt;</a></li>' . "\n";
+  if ( $page < $pages ) {
+      $right_buttons.= '     <li><a title="Forward ' . $skip . ' pages" onclick=\'$.get("getgrid.php", '. json_state($state,'page', min($pages, $page + $skip)).', function(data){ $("#maingrid").html(data); }); window.scrollTo(0,0); return false;\' href="?'. url_state($state,'page', min($pages, $page + $skip)). '">&gt;&gt;</a></li>' . "\n";
   }else{
-    $pl.= '     <li class="disabled"><span>&lt;&lt;</span></li> '. "\n";
+     $right_buttons.= '     <li class="disabled"><span>&gt;&gt;</span></li> '. "\n";
   }
 
-  if ( $page != 1 ) {
-    $pl.= '     <li><a title="Previous page" onclick=\'$.get("getgrid.php", '. json_state($state,'page', ($page - 1)).', function(data){ $("#maingrid").html(data); window.scrollTo(0,0); }); return false;\' href="?'. url_state($state,'page', ($page - 1)). '">&lt;</a></li>' . "\n";
+  if ( $page < $pages ) {
+      $right_buttons.= '     <li><a title="Last page" onclick=\'$.get("getgrid.php", '. json_state($state,'page', $pages).', function(data){ $("#maingrid").html(data); }); window.scrollTo(0,0); return false;\' href="?'. url_state($state,'page', $pages). '">&gt;|</a></li>' . "\n";
   }else{
-    $pl.= '     <li class="disabled"><span>&lt;</span></li> '. "\n";
+     $right_buttons.= '     <li class="disabled"><span>&gt;|</span></li> '. "\n";
   }
+  $right_buttons.= "    </ul>\n";
 
-  $pl.= '    </ul></div>';
+  // Main pagination block
 
-  // Pagination block
+  $pl.= '    <div class="page-buttons top">' . $left_buttons . '</div>';
 
-  $pl.= '    <div class="page-numbers"><ul class="pagination">';
+  $pl.= '    <div class="page-numbers main">' . $left_buttons . '<ul class="pagination">';
 
   $left_end = $page - $links;
   $right_end = $page + $links;
@@ -231,30 +253,12 @@ function pager($limit, $rows, $page, $state) {
     $pl.= '     <li class="disabled ellipses"><span style="' . $el . ' width: 43px;">&nbsp;</span></li> '. "\n";
   }
 
-  $pl.= '    </ul></div>';
+  $pl.= '    </ul>' . $right_buttons . '</div>';
 
   // Right three buttons
 
-  $pl.= '    <div class="page-buttons bottom"><ul class="pagination">';
+  $pl.= '    <div class="page-buttons bottom">' . $right_buttons . "</div>\n";
 
-  if ( $page < $pages ) {
-      $pl.= '     <li><a title="Next page" onclick=\'$.get("getgrid.php", '. json_state($state,'page', ($page + 1)).', function(data){ $("#maingrid").html(data); }); window.scrollTo(0,0); return false;\' href="?'. url_state($state,'page', ($page + 1)). '">&gt;</a></li>' . "\n";
-  }else{
-     $pl.= '     <li class="disabled"><span>&gt;</span></li> '. "\n";
-  }
-
-  if ( $page < $pages ) {
-      $pl.= '     <li><a title="Forward ' . $skip . ' pages" onclick=\'$.get("getgrid.php", '. json_state($state,'page', min($pages, $page + $skip)).', function(data){ $("#maingrid").html(data); }); window.scrollTo(0,0); return false;\' href="?'. url_state($state,'page', min($pages, $page + $skip)). '">&gt;&gt;</a></li>' . "\n";
-  }else{
-     $pl.= '     <li class="disabled"><span>&gt;&gt;</span></li> '. "\n";
-  }
-
-  if ( $page < $pages ) {
-      $pl.= '     <li><a title="Last page" onclick=\'$.get("getgrid.php", '. json_state($state,'page', $pages).', function(data){ $("#maingrid").html(data); }); window.scrollTo(0,0); return false;\' href="?'. url_state($state,'page', $pages). '">&gt;|</a></li>' . "\n";
-  }else{
-     $pl.= '     <li class="disabled"><span>&gt;|</span></li> '. "\n";
-  }
-  $pl.= "    </ul></div>\n";
   return $pl;
 }
 
