@@ -37,9 +37,9 @@ perl scripts/split_mb_dsd.pl -vv >> output/workspace/split.txt
 # Diff the files
 echo "> Running diff between Mick's collection and bbcmicro.co.uk SSDs"
 cd output/workspace
-diff -q -x 'Disc999*' SSDs_from_DSDs bbcm > ../diff.txt
+diff -q -x 'Disc999*' SSDs_from_DSDs bbcm | sort > ../diff.txt
 echo >> ../diff.txt
-diff -q SSDs_from_DSDs bbcm | grep 'Disc999*' >> ../diff.txt
+diff -q SSDs_from_DSDs bbcm | grep 'Disc999*' | sort >> ../diff.txt
 cd ../..
 
 # Create archive folder
