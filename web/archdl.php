@@ -41,7 +41,7 @@ $zipf=$cwd . '/' . 'tmp/'.$files;
 $zipd=$cwd . '/' . 'tmp/'.$discs;
 $zips=$cwd . '/' . 'tmp/'.$scrs;
 
-$stat=stat($zipf);
+$stat=@stat($zipf);
 
 if ($stat && (strtotime($ags[0]['dt']) < $stat['mtime'])) {
    echo "Using cached files<br/>";

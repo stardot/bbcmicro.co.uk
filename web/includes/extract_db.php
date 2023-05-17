@@ -79,7 +79,7 @@ $text='<!DOCTYPE html>
 
 foreach ($res as $line) {
   // print_r($line);
-  $fp=explode('-',$line['filename']);
+  $fp=explode('-',$line['filename'] ?? '');
   $id=$line['id'];
   // Secondary Genres
 
@@ -127,7 +127,7 @@ foreach ($res as $line) {
 
   $ol=array();
   $ol[]=strtoupper($line['id']);
-  $ol[]=strtoupper($line['parent']);
+  $ol[]=strtoupper($line['parent'] ?? '');
   $ol[]=strtoupper($fp[0]); 	//Disc
 				// Title
   $ol[]=$line['title_article'];
