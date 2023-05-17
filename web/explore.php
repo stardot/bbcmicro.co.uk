@@ -65,6 +65,9 @@ if (array_key_exists('HTTP_REFERER', $_SERVER)) {
   <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
   <link href="bs/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
 
+  <!-- Local CSS -->
+  <link href="css/custom.css" rel="stylesheet">
+
   <!-- Custom styles for this template -->
   <link href="bs/css/jumbotron.css" rel="stylesheet">
 

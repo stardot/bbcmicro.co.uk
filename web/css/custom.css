@@ -27,3 +27,10 @@
 .navbar-inverse .navbar-brand:focus .highlight {
   color: #fff;
 }
+
+.bbc-micro-button {
+  position: absolute;
+  right: 20px;
+  top: 5px;
+  height: 40px;
+}
