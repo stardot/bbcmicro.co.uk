@@ -1,10 +1,54 @@
-#leds { display: none; }
-.gameDetails { text-align: center; color: <?php echo $fgcolour ?>; }
-.gameDetails a { color: #9d9d9d; }
-.gameDetails a:hover { color: <?php echo $fgcolour ?>; }
-.nav-item.active > a { color: #fff; }
+#leds {
+  display: none;
+}
 
-.navbar-brand { font-size: 1rem !important; color: #9d9d9d !important; }
-.navbar-brand:hover { color: #fff !important; }
-.navbar-brand .highlight, .navbar-brand .highlight { color: yellow; border: 0; }
-.navbar-brand:hover .highlight, .navbar-brand:focus .highlight { color: #fff; }
+.gameDetails {
+  text-align: center;
+}
+
+.gameDetails a {
+  color: #9d9d9d;
+}
+
+.nav-item.active > a {
+  color: #fff;
+}
+
+.navbar-brand {
+  font-size: 1rem !important;
+  color: #9d9d9d !important;
+}
+
+.navbar-brand:hover {
+  color: #fff !important;
+}
+
+.navbar-brand .highlight,
+.navbar-brand .highlight {
+  color: yellow;
+  border: 0;
+}
+
+.navbar-brand:hover .highlight,
+.navbar-brand:focus .highlight {
+  color: #fff;
+}
+
+.navbar {
+  padding-top: 6px !important;
+  padding-bottom: 6px !important;
+}
+
+.bbc-micro-button {
+  top: 0;
+}
+
+@media (max-width: 991px) {
+  .bbc-micro-button { display: none; }
+}
+
+@media (min-width: 1400px) {
+  .container, .container-lg, .container-md, .container-sm, .container-xl, .container-xxl {
+    max-width: 1140px !important;
+  }
+}
