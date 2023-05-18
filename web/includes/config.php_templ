@@ -29,20 +29,24 @@ if ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
 define('WS_ROOT', $protocol . '://bbcmicro.co.uk');
 define('JB_LOC', WS_ROOT . '/jsbeeb/play.php');
 
-#Items per page on the grid. Ideally has factors of 3,4
+# Items per page on the grid. Ideally has factors of 3,4
 define('GD_IPP',36);
 
 # Used to debug the SQL and state on the main grid page.
 define('GD_DEBUG',False); 
 #define('DEBUG',True); 
 
-#Allow files to be overwritten?
+# Allow files to be overwritten?
 define('ST_ALLOW_OVERWRITE',True);
 
-#Allow files?
+# Allow files?
 define('ST_FILES',False);
 
 # hCaptcha secret
 define('HCAPTCHA_SECRET','');
 define('HCAPTCHA_SITE_KEY','');
+
+# CSS version
+define('CSSV', '1');
+
 ?>

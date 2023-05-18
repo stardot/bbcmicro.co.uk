@@ -250,7 +250,7 @@ if ( ! empty($compilations)) {
     <link href="bs/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
 
     <!-- Local CSS -->
-    <link href="css/custom.css" rel="stylesheet">
+    <link href="css/custom.css?v=<?php echo CSSV ?>" rel="stylesheet">
 
     <!-- Custom styles for this template -->
     <link href="bs/css/jumbotron.css" rel="stylesheet">

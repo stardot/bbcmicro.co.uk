@@ -18,7 +18,7 @@ function make_menu_bar($active_tab,$lprefix='') {
 		}
 	}
 	echo "</ul>\n";
-	echo "<a href=\"${lprefix}about.php\"><img src=\"/css/BBC_Micro.png\" class=\"bbc-micro-button\" alt=\"BBC Micro\"></a>";
+	echo "<a href=\"" . $lprefix . "about.php\"><img src=\"/css/BBC_Micro.png\" class=\"bbc-micro-button\" alt=\"BBC Micro\"></a>";
 	echo "</div><!-- /.nav-collapse -->\n";
 }
 ?>

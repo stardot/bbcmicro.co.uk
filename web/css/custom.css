@@ -103,5 +103,7 @@
 }
 
 @media (max-width: 767px) {
-  .bbc-micro-button { display: none; }
+  .bbc-micro-button {
+    display: none;
+  }
 }
