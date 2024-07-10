@@ -41,7 +41,12 @@ function get_playlink($image,$jsbeeb,$wsroot,$keys,$platform) {
     }
   }
   if (!is_null($platform) && $platform !== '' && $platform !== '0') {
-    $keyurl .= "&model=" . $platform;
+    $copro=[ 'Master' => '', 'MasterTurbo' => '&coProcessor=true', 'B-Tube' => '&coProcessor=true', 'b-dfs1.2' => '', 'B1770' => ''];
+    $model=[ 'Master' => '&model=Master', 'MasterTurbo' => '&model=Master', 'B-Tube' => '', 'b-dfs1.2' => '&model=B-DFS1.2', 'B1770' => '&model=B1770'];
+
+    if (array_key_exists($platform, $copro)) {
+      $keyurl .= $copro[$platform] . $model[$platform];
+    }
   }
   //Stop disc-operating sounds
   if ($url === NULL ) {} else { $url.=$keyurl."&noseek"; }
