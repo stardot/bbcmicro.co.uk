@@ -64,7 +64,7 @@ function atoz_line($current,$chars,$margin) {
   echo "</div>";
 }
 
-function gameitem( $id, $ta, $name, $image, $img, $publisher, $year, $keys, $platform) {
+function gameitem( $id, $ta, $name, $image, $img, $publisher, $year, $keys, $platform, $dl, $gp) {
    global $sid;
 
    $jsbeeb=JB_LOC;
@@ -86,11 +86,27 @@ function gameitem( $id, $ta, $name, $image, $img, $publisher, $year, $keys, $pla
        <div class="row-dt"><a href="?search=<?php echo urlencode($year) ?>&on_Y=on"><?php echo $year; ?></a></div>
 <?php
   $playlink=get_playlink($img,$jsbeeb,$root,$keys,$platform);
+  if ($dl != null && $dl > 0) {
+    $download_title = "Downloaded " . $dl . " time";
+    if ($dl > 1) {
+      $download_title .= "s";
+    }
+  } else {
+    $download_title = "Not downloaded yet";
+  }
+  if ($gp != null && $gp > 0) {
+    $played_title = "Played " . $gp . " time";
+    if ($gp > 1) {
+      $played_title .= "s";
+    }
+  } else {
+    $played_title = "Not played yet";
+  }
   if ($ssd != null && file_exists($ssd)) { ?>
-       <p><a href="<?php echo $ssd ?>" type="button" onmousedown="log(<?php echo $id; ?>);" class="btn btn-default">Download</a><?php
+       <p><a href="<?php echo $ssd ?>" type="button" onmousedown="log(<?php echo $id; ?>);" class="btn btn-default" title="<?php echo $download_title ?>">Download</a><?php
   }
   if ((($img['probs'] ?? '') != 'N' and ($img['probs'] ?? '') != 'P') and $playlink != null) { ?>
-          <a id="plybtn" href="<?php echo $playlink ?>" type="button" onmousedown="log(<?php echo $id; ?>);" class="btn btn-default">Play</a></p>
+          <a id="plybtn" href="<?php echo $playlink ?>" type="button" onmousedown="logPlay(<?php echo $id; ?>);" class="btn btn-default" title="<?php echo $played_title ?>">Play</a></p>
 <?php
   }
 ?>
@@ -502,7 +518,7 @@ function grid($state) {
       }
       $pubs=trim($pubs,', ');
 
-      gameitem($game["id"],htmlspecialchars($game["title_article"] ?? ''),htmlspecialchars($game["title"] ?? ''), $shot, $dnl ,$pubs,$game["year"],$keys,$game["jsbeebplatform"]);
+      gameitem($game["id"],htmlspecialchars($game["title_article"] ?? ''),htmlspecialchars($game["title"] ?? ''), $shot, $dnl ,$pubs,$game["year"],$keys,$game["jsbeebplatform"], $game["dl"], $game["gp"]);
     }
   } else {
     echo '    <div class="row" style="display:flex; flex-wrap: wrap;">'."\n<h2>No games found!</h2>";

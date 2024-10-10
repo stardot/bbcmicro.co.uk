@@ -194,6 +194,12 @@ function log(a) {
   i.src = "count.php?t=d&id="+a;
   return true;
 }
+// Log plays.
+function logPlay(a) {
+  var i = document.createElement("img");
+  i.src = "count.php?t=g&id="+a;
+  return true;
+}
   </script>
 <?php include_once("includes/googleid.php") ?>
 </body>
