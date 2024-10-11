@@ -380,7 +380,7 @@ function grid($state) {
       $ob = "order by g.title";
       break;
     case "p":
-      $ob = "order by dl desc, gp desc";
+      $ob = "order by tt desc, dl desc, gp desc";
       break;
     case "b":
     default:
@@ -388,7 +388,7 @@ function grid($state) {
   }
   $ym=date("Ym",time()-90*24*60*60);
   $offset = $limit * ($page -1);
-  $sql ='select SQL_CALC_FOUND_ROWS g.*, sum(d.downloads) as dl, sum(d.gamepages) as gp from games g'."\n";
+  $sql ='select SQL_CALC_FOUND_ROWS g.*, sum(d.downloads) as dl, sum(d.gamepages) as gp, sum(coalesce(d.downloads, 0) + coalesce(d.gamepages, 0)) as tt from games g'."\n";
   $sql.=' left join game_downloads d on g.id = d.id and d.year > ' . $ym . ' where ' . implode(" AND ",$wc) . ' group by g.id '. $ob . ' LIMIT :limit OFFSET :offset';
   $sql2 = 'select distinct upper(substring(title,1,1)) AS c1 from games g WHERE ' . implode(' AND ',$wc) . " order by c1"; 
 
