@@ -38,8 +38,8 @@ $ssd = get_discloc($img["filename"],$img['subdir']);
 $filename = basename($ssd);
 
 
-$back_url='index.php';
-$back_desc='Home Page';
+$back_url='game.php?id='.$id;
+$back_desc='Game Details';
 if (array_key_exists('HTTP_REFERER', $_SERVER)) {
   if ( parse_url($_SERVER["HTTP_REFERER"],PHP_URL_HOST) == $_SERVER["SERVER_NAME"] ) {
     $back_url = "javascript:history.go(-1)";
