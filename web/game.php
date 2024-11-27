@@ -10,6 +10,14 @@ if ( isset($_GET["id"])) {
   $id=intval($_GET["id"]);
 }
 
+if($id == 0)
+{
+  // Added by Chris Barrett 2023-08-01 to prevent error log spam when there's no id in the query string.
+  // Redirects user to the game index page instead.
+  header("Location: /index.php");
+  exit();
+}
+
 $sql = "select g.id, g.title_article, g.title, g.parent, g.year, g.notes, g.joystick, g.players_min, g.players_max, g.save, g.hardware, g.version, 
 g.electron, g.series, g.series_no, n.name as genre, r.id as relid, r.name as reltype, g.compat_a, g.compat_b, g.compat_master, g.jsbeebplatform from games g left join genres n on n.id = g.genre left join reltype r on r.id = g.reltype where g.id  = ?";
 $sth = $db->prepare($sql,array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
