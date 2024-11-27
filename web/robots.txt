@@ -1,0 +1,51 @@
+User-agent: Googlebot
+Disallow:
+Crawl-delay: 10 
+User-agent: googlebot-image
+Disallow:
+Crawl-delay: 10 
+User-agent: googlebot-mobile
+Disallow:
+Crawl-delay: 10 
+User-agent: MSNBot
+Disallow:
+Crawl-delay: 10 
+User-agent: Slurp
+Disallow:
+Crawl-delay: 10 
+User-agent: Teoma
+Disallow:
+Crawl-delay: 10 
+User-agent: Gigabot
+Disallow:
+Crawl-delay: 10 
+User-agent: Robozilla
+Disallow:
+Crawl-delay: 10 
+User-agent: Nutch
+Disallow:
+Crawl-delay: 10 
+User-agent: ia_archiver
+Disallow:
+Crawl-delay: 10 
+User-agent: baiduspider
+Disallow:
+Crawl-delay: 10 
+User-agent: naverbot
+Disallow:
+Crawl-delay: 10 
+User-agent: yeti
+Disallow:
+Crawl-delay: 10 
+User-agent: yahoo-mmcrawler
+Disallow:
+Crawl-delay: 10 
+User-agent: psbot
+Disallow:
+Crawl-delay: 10 
+User-agent: yahoo-blogs/v3.9
+Disallow:
+Crawl-delay: 10 
+User-agent: *
+Disallow: /
+Crawl-delay: 10
