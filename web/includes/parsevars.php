@@ -45,6 +45,11 @@ function getstate() {
     if (preg_match('/^on_[A-Z]$/',$k)) {
       $state['only'][] = substr($k,-1);
     }
+    if ($k == 'f_pubid') {                //Publisher dropdown
+      if ($v > 0) {
+        $state['f_pubid'] = $v;
+      }
+    }
   }
 
   if (isset($ro)) {                       // Radio - Only set this one

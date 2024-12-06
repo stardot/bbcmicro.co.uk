@@ -331,9 +331,11 @@ function grid($state) {
     $wc[] = '(' . implode ('  OR ',$sls) . ')';
   }
 
-//  if (array_key_exists ('pubid', $state)) {
-//    $wc[] = "id in (select gameid from games_publishers gp where gp.pubid = :pubid)\n";
-//  }
+  if (array_key_exists ('f_pubid', $state)) {
+    if ($state['f_pubid'] > 0) {
+      $wc[] = "g.id in (select gameid from games_publishers gp where gp.pubid = :pubid)\n";
+    }
+  }
 
 //  if (array_key_exists ('year', $state)) {
 //    $wc[] = "year = :year\n";
@@ -399,6 +401,13 @@ function grid($state) {
     $search=prepare_search($state['search']);
     $sth->bindParam(':search', $search, PDO::PARAM_STR);
     $sth2->bindParam(':search', $search, PDO::PARAM_STR);
+  }
+  if (array_key_exists ('f_pubid',$state)) {
+    $pubid=$state['f_pubid'];
+    if($pubid > 0) {
+      $sth->bindParam(':pubid', $pubid, PDO::PARAM_STR);
+      $sth2->bindParam(':pubid', $pubid, PDO::PARAM_STR);
+    }
   }
   if (array_key_exists('atoz',$state)) {
     $sth->bindParam(':atoz',$atoz, PDO::PARAM_STR);
@@ -546,5 +555,98 @@ function grid($state) {
   }
   echo "   </div>\n";
 
+}
+
+function filters($state) {
+  global $db;
+
+  $wc=array();
+  $sls=array();
+
+  $all=( !array_key_exists('only', $state) || count($state['only']) == 0);
+
+  if (array_key_exists ('search', $state)) {
+    if ( $all || !(array_search('T',$state['only'])===False )) {
+      $sls[] = "g.title like :search\n";
+    }
+    if ( $all || !(array_search('P',$state['only'])===False )) {
+      $sls[] = "g.id in (select gameid\n" .
+               "   from games_publishers gp, publishers p\n" .
+               "   where p.id = gp.pubid and p.name like :search)\n";
+    }
+    if ( $all || !(array_search('A',$state['only'])===False )) {
+      $sls[] = "g.id in (select games_id\n   from games_authors ga, authors a\n" .
+               "   where a.id = ga.authors_id and (a.name like :search or a.alias like :search))\n";
+    }
+    if ( $all || !(array_search('Y',$state['only'])===False )) {
+      $sls[] = "g.year like :search\n";
+    }
+    if ( $all || !(array_search('Z',$state['only'])===False )) {
+      $sls[] = "g.series like :search\n";
+    }
+    if ( $all || !(array_search('C',$state['only'])===False )) {
+      $sls[] = "g.id in (select games_id from games_compilations gc, compilations c\n" .
+               "  where c.id = gc.compilations_id and c.name like :search\n)";
+    }
+    if ( $all || !(array_search('G',$state['only'])===False )) {
+      $sls[] = "g.genre in (select id from genres where name like :search)\n";
+    }
+    if ( $all || !(array_search('S',$state['only'])===False )) {
+      $sls[] = "g.id in (select gameid from game_genre m, genres g where g.id = m.genreid and g.name like :search)\n";
+    }
+  }
+
+  if (count($sls)>0) {
+    $wc[] = '(' . implode ('  OR ',$sls) . ')';
+  }
+
+  if (array_key_exists('rtype',$state)) {
+    $wc[]="FIND_IN_SET(reltype,:array)\n";
+  } else {
+    $wc[]="reltype in (select id from reltype where selected = 'Y')\n";
+  }
+
+  $sql3 ='select DISTINCT p.id, p.name from games g left join games_publishers gp on gp.gameid = g.id left join publishers p on gp.pubid = p.id where ' . implode(" AND ",$wc) . ' order by p.name';
+
+  $sth3 = $db->prepare($sql3,array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+
+  if (array_key_exists('search',$state)) {
+    $search=prepare_search($state['search']);
+    $sth3->bindParam(':search', $search, PDO::PARAM_STR);
+  }
+  if (array_key_exists('rtype',$state)) {
+    $t=implode(',',$state['rtype']);
+    $sth3->bindParam(':array',$t);
+  }
+
+  if ($sth3->execute()) {
+    $res3 = $sth3->fetchAll();
+  } else {
+    echo "<pre>Error3:";
+    echo "\n";
+    $sth3->debugDumpParams ();
+    $res3=array();
+    print_r($sth3->ErrorInfo());
+    echo "</pre>";
+  }
+
+  // Loop through and get relevant publishers
+  echo "<h4>Filter by:</h4>";
+  echo "<select style='max-width:100%' name='f_pubid'>\n<option value='0'>-- Select publisher --</option>";
+  $pid=$_GET['f_pubid'];
+  foreach ($res3 as $pub ) {
+    $id=$pub['id'];
+    $name=$pub['name'];
+    $sel=($id==$pid)?' selected':'';
+    echo "<option value='$id'$sel>$name</option>\n";
+  }
+  echo "</select>\n";
+
+  if ( defined('GD_DEBUG') && GD_DEBUG == True ) {
+    echo "<pre>";
+    echo "\n\nSQL3:\n";
+    echo $sql3;
+    echo "</pre>";
+  }
 }
 ?>

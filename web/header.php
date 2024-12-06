@@ -61,6 +61,7 @@ function sidebar($state) {
   searchbox($state);
   if (array_key_exists('search',$state)) {
     refines($state);
+    filters($state);
   }
   searchbuttons();
   if (!array_key_exists('search',$state)) {

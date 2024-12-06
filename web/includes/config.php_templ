@@ -34,7 +34,7 @@ define('GD_IPP',36);
 
 # Used to debug the SQL and state on the main grid page.
 define('GD_DEBUG',False); 
-#define('DEBUG',True); 
+#define('GD_DEBUG',True); 
 
 # Allow files to be overwritten?
 define('ST_ALLOW_OVERWRITE',True);
