@@ -447,7 +447,7 @@ if ( ! empty($compilations)) {
       <hr>
 
 <?php
-$sql="select id, title,(SELECT GROUP_CONCAT(CONCAT(publishers.id,'|',publishers.name) SEPARATOR '@') FROM games_publishers LEFT JOIN publishers ON pubid=publishers.id WHERE gameid=games.id) AS publishers, year from games where parent = ? ";
+$sql="select id, title, title_article, (SELECT GROUP_CONCAT(CONCAT(publishers.id,'|',publishers.name) SEPARATOR '@') FROM games_publishers LEFT JOIN publishers ON pubid=publishers.id WHERE gameid=games.id) AS publishers, year from games where parent = ? ";
 $sth = $db->prepare($sql,array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
 $sth->bindParam(1, $id, PDO::PARAM_INT);
 if ($sth->execute()) {
@@ -484,8 +484,13 @@ foreach ($children as $child) {
 			} else {
 				$names="<i>No Publisher</i>";
 			}
+            if (strlen($child["title_article"] ?? '') > 0) {
+                $ta=$child["title_article"].' ';
+            } else {
+                $ta='';
+            }
 ?>
-              <tr> <td><a href="game.php?id=<?php echo $child['id']; ?>"><?php echo $child['title'];?></a></td> <td><?php echo $names;?></td> <td><?php echo $child['year'];?></td> </tr>
+              <tr> <td><a href="game.php?id=<?php echo $child['id']; ?>"><?php echo $ta;?><?php echo $child['title'];?></a></td> <td><?php echo $names;?></td> <td><?php echo $child['year'];?></td> </tr>
 <?php
 }
 ?>
@@ -496,7 +501,7 @@ foreach ($children as $child) {
 <?php
 }
 if ( ! is_null($game['parent'])) {
-$sql="select id, title,(SELECT GROUP_CONCAT(CONCAT(publishers.id,'|',publishers.name) SEPARATOR '@') FROM games_publishers LEFT JOIN publishers ON pubid=publishers.id WHERE gameid=games.id) AS publishers, year from games where id = ? ";
+$sql="select id, title, title_article, (SELECT GROUP_CONCAT(CONCAT(publishers.id,'|',publishers.name) SEPARATOR '@') FROM games_publishers LEFT JOIN publishers ON pubid=publishers.id WHERE gameid=games.id) AS publishers, year from games where id = ? ";
 $sth = $db->prepare($sql,array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
 $sth->bindParam(1, $game['parent'], PDO::PARAM_INT);
 if ($sth->execute()) {
@@ -532,8 +537,13 @@ foreach ($children as $child) {
 			} else {
 				$names="<i>No Publisher</i>";
 			}
+            if (strlen($child["title_article"] ?? '') > 0) {
+                $ta=$child["title_article"].' ';
+            } else {
+                $ta='';
+            }
 ?>
-              <tr> <td><a href="game.php?id=<?php echo $child['id']; ?>"><?php echo $child['title'];?></a></td> <td><?php echo $names;?></td> <td><?php echo $child['year'];?></td> </tr>
+              <tr> <td><a href="game.php?id=<?php echo $child['id']; ?>"><?php echo $ta;?><?php echo $child['title'];?></a></td> <td><?php echo $names;?></td> <td><?php echo $child['year'];?></td> </tr>
 <?php
 }
 ?>
