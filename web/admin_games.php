@@ -27,22 +27,28 @@ if ($sth->execute()) {
 	echo $sth->rowCount()." games. <a href='admin_game_details.php?id=0'>New game</a><hr>";
 	if ($sth->rowCount()) {
 		echo "<table>\n";
-		echo "<tr><td><b>Title</b></td><td><b>Year</b><td><b>Publisher</b></td></td>";
-		echo "<td><b>Screenshot</b></td><td><b>Disc</b></td>";
-		if (defined('ST_FILES') && ST_FILES ) {
-			echo "<td><b>Files</b></td>";
-		}
-		echo "</tr>\n";
+		echo "<tr><td><b>Title</b></td><td><b>Details</b></td></tr>\n";
 		while ($r=$sth->fetch(PDO::FETCH_ASSOC)) {
 			if ($r['id']) {
 				$t=$r['id'];
 			} else {
 				$t='<i>None</i>';
 			}
-			echo "<tr><td><a href='admin_game_details.php?id=".$r['id']."'>".$r['title']."</td><td>".$r['year']."</td>";
+            $title = str_replace(",", ", ", $r['title']);
+			echo "<tr><td style='width: 50%; max-width: 50%; overflow: hidden;'><a href='admin_game_details.php?id=".$r['id']."'>".$title."</td>\n";
 
-			echo "<td>";
+            echo "<td style='width: 50%; max-width: 50%'>";
+
+            echo "<p><b>Year:</b> ".$r['year']."</p>";
+
 			$pubs=explode('@',$r['publishers'] ?? '');
+
+            if (count($pubs) > 1) {
+    			echo "<p><b>Publishers:</b> ";
+            } else {
+    			echo "<p><b>Publisher:</b> ";
+            }
+
 			$names='';
 			foreach ($pubs as $pub) {
 				if ($pub) {
@@ -55,17 +61,30 @@ if ($sth->execute()) {
 			} else {
 				echo "<i>None</i>";
 			}
-			echo "</td>";
+			echo "</p>";
 
-			echo "<td><a href='admin_file.php?t=s&id=".$r['id']."'>";
-			if (empty($r['screenshot'])) echo "<i>None</i>"; else echo $r['screenshot'];
-			echo "</a></td>";
-			echo "<td><a href='admin_file.php?t=d&id=".$r['id']."'>";
-			if (empty($r['disc'])) echo "None"; else echo $r['disc'];
-			echo "</a></td>";
+			echo "<p><b>Screenshot:</b> <a href='admin_file.php?t=s&id=".$r['id']."'>";
+			if (empty($r['screenshot'])){
+                echo "<i>None</i>";
+            } else {
+                $screenshot = $r['screenshot'];
+                if (strlen($screenshot) > 15) $screenshot = substr($r['screenshot'], 0, 15) . "...";
+                echo $screenshot;
+            }
+			echo "</a></p>";
+
+			echo "<p><b>Disc:</b> <a href='admin_file.php?t=d&id=".$r['id']."'>";
+			if (empty($r['disc'])) {
+                echo "<i>None</i>";
+            } else {
+                $disc = $r['disc'];
+                if (strlen($disc) > 15) $disc = substr($r['disc'], 0, 15) . "...";
+                echo $disc;
+            }
+			echo "</a></p>";
 
 			if (defined('ST_FILES') && ST_FILES ) {
-				echo "<td><a href='admin_file.php?t=f&id=".$r['id']."'>";
+				echo "<p>Files: <a href='admin_file.php?t=f&id=".$r['id']."'>";
 				$files=explode('@',$r['files'] ?? '');
 				$names='';
 				$filenames='';
@@ -79,9 +98,10 @@ if ($sth->execute()) {
 					echo substr($filenames,0,strlen($filenames)-2);
 				} else {
 					echo "<i>None</i>";
-				}			echo "</a></td>";
+				}
+			echo "</a></p>";
 			}
-			echo "</tr>\n";
+			echo "</td>\n</tr>\n";
 		}
 		echo "</table>\n";
 	}

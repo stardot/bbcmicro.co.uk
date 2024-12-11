@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
- <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Admin tools</title>
 
 	<style>
+body { font-family: arial,helvetica,sans-serif; }
 table { border-collapse: collapse; }
 td { border: 1px solid black; padding: 10px; }
 tr:nth-child(even) {background: #eee}
