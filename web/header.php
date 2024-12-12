@@ -79,7 +79,7 @@ function searchbox($state) {
 ?>
      <fieldset class="form-group" id="search">
       <label for="search"><h3>Search</h3></label>
-      <input id="searchbox" name="search" class="typeahead form-control" type="text" placeholder="Search" value="<?php echo $search ; ?>" />
+      <input id="searchbox" name="search" class="typeahead form-control" type="text" placeholder="Search" oninput="clearFilters()" value="<?php echo $search ; ?>" />
      </fieldset>
      <fieldset class="form-group" id="order">
 <?php
@@ -201,6 +201,32 @@ function logPlay(a) {
   var i = document.createElement("img");
   i.src = "count.php?t=g&id="+a;
   return true;
+}
+function resetFilters() {
+  resetOption("f_pubid");
+  resetOption("f_genreid");
+  resetOption("f_year1");
+  resetOption("f_year2");
+}
+function clearFilters() {
+  removeOptions("f_pubid");
+  removeOptions("f_genreid");
+  removeOptions("f_year1");
+  removeOptions("f_year2");
+}
+function removeOptions(id) {
+  var list = document.getElementById(id);
+  list.value = "0";
+  var i, L = list.options.length - 1;
+  if (L > 0) {
+    for(i = L; i >= 1; i--) {
+      list.remove(i);
+    }
+  }
+}
+function resetOption(id) {
+  var list = document.getElementById(id);
+  list.value = "0";
 }
   </script>
 <?php include_once("includes/googleid.php") ?>

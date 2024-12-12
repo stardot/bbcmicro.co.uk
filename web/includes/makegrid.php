@@ -337,6 +337,37 @@ function grid($state) {
     }
   }
 
+  if (array_key_exists ('f_genreid', $state)) {
+    if ($state['f_genreid'] > 0) {
+      $wc[] = "g.id in (select gameid from game_genre gg where gg.genreid = :genreid)\n";
+    }
+  }
+
+  if (array_key_exists ('f_year1', $state)) {
+    if ($state['f_year1'] > 0) {
+      $wc[] = "g.year >= :year1\n";
+      if ($state['f_year1'] <= 1989) {
+        $wc[] = "(g.year >= :year1 or g.year = '198X' or g.year = '19XX')\n";
+      } elseif ($state['f_year1'] <= 1999) {
+        $wc[] = "(g.year >= :year1 or g.year = '19XX')\n";
+      } else {
+        $wc[] = "g.year >= :year1\n";
+      }
+    }
+  }
+
+  if (array_key_exists ('f_year2', $state)) {
+    if ($state['f_year2'] > 0) {
+      if ($state['f_year2'] <= 1979) {
+        $wc[] = "g.year <= :year2\n";
+      } elseif ($state['f_year2'] <= 1989) {
+        $wc[] = "(g.year <= :year2 or g.year = '198X')\n";
+      } else {
+        $wc[] = "(g.year <= :year2 or g.year = '198X' or g.year = '19XX')\n";
+      }
+    }
+  }
+
 //  if (array_key_exists ('year', $state)) {
 //    $wc[] = "year = :year\n";
 //  }
@@ -407,6 +438,27 @@ function grid($state) {
     if($pubid > 0) {
       $sth->bindParam(':pubid', $pubid, PDO::PARAM_STR);
       $sth2->bindParam(':pubid', $pubid, PDO::PARAM_STR);
+    }
+  }
+  if (array_key_exists ('f_genreid',$state)) {
+    $genreid=$state['f_genreid'];
+    if($genreid > 0) {
+      $sth->bindParam(':genreid', $genreid, PDO::PARAM_STR);
+      $sth2->bindParam(':genreid', $genreid, PDO::PARAM_STR);
+    }
+  }
+  if (array_key_exists ('f_year1',$state)) {
+    $year1=$state['f_year1'];
+    if($year1 > 0) {
+      $sth->bindParam(':year1', $year1, PDO::PARAM_STR);
+      $sth2->bindParam(':year1', $year1, PDO::PARAM_STR);
+    }
+  }
+  if (array_key_exists ('f_year2',$state)) {
+    $year2=$state['f_year2'];
+    if($year2 > 0) {
+      $sth->bindParam(':year2', $year2, PDO::PARAM_STR);
+      $sth2->bindParam(':year2', $year2, PDO::PARAM_STR);
     }
   }
   if (array_key_exists('atoz',$state)) {
@@ -606,17 +658,27 @@ function filters($state) {
     $wc[]="reltype in (select id from reltype where selected = 'Y')\n";
   }
 
-  $sql3 ='select DISTINCT p.id, p.name from games g left join games_publishers gp on gp.gameid = g.id left join publishers p on gp.pubid = p.id where ' . implode(" AND ",$wc) . ' order by p.name';
+  $sql3 ='select DISTINCT p.id, p.name from games g left join games_publishers gp on gp.gameid = g.id left join publishers p on gp.pubid = p.id where p.id is not null and ' . implode(" AND ",$wc) . ' order by p.name';
+
+  $sql4 ='select DISTINCT gr.id, gr.name from games g left join game_genre gg on gg.gameid = g.id left join genres gr on gg.genreid = gr.id where gr.id is not null and ' . implode(" AND ",$wc) . ' order by gr.name';
+
+  $sql5 ='select DISTINCT g.year from games g where g.year not like \'%X%\' and ' . implode(" AND ",$wc) . ' order by g.year';
 
   $sth3 = $db->prepare($sql3,array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+  $sth4 = $db->prepare($sql4,array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+  $sth5 = $db->prepare($sql5,array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
 
   if (array_key_exists('search',$state)) {
     $search=prepare_search($state['search']);
     $sth3->bindParam(':search', $search, PDO::PARAM_STR);
+    $sth4->bindParam(':search', $search, PDO::PARAM_STR);
+    $sth5->bindParam(':search', $search, PDO::PARAM_STR);
   }
   if (array_key_exists('rtype',$state)) {
     $t=implode(',',$state['rtype']);
     $sth3->bindParam(':array',$t);
+    $sth4->bindParam(':array',$t);
+    $sth5->bindParam(':array',$t);
   }
 
   if ($sth3->execute()) {
@@ -630,22 +692,77 @@ function filters($state) {
     echo "</pre>";
   }
 
+  if ($sth4->execute()) {
+    $res4 = $sth4->fetchAll();
+  } else {
+    echo "<pre>Error4:";
+    echo "\n";
+    $sth4->debugDumpParams ();
+    $res4=array();
+    print_r($sth4->ErrorInfo());
+    echo "</pre>";
+  }
+
+  if ($sth5->execute()) {
+    $res5 = $sth5->fetchAll();
+  } else {
+    echo "<pre>Error5:";
+    echo "\n";
+    $sth5->debugDumpParams ();
+    $res5=array();
+    print_r($sth5->ErrorInfo());
+    echo "</pre>";
+  }
+
   // Loop through and get relevant publishers
-  echo "<h4>Filter by:</h4>";
-  echo "<select style='max-width:100%' name='f_pubid'>\n<option value='0'>-- Select publisher --</option>";
-  $pid=$_GET['f_pubid'];
+  echo "<h4 style='margin-top:3ch'>Filter by:</h4>";
+
+  echo "Publisher:<br /><select style='max-width:100%;margin-bottom: 2ch' name='f_pubid' id='f_pubid'>\n<option value='0'>All publishers</option>";
   foreach ($res3 as $pub ) {
+    $pid=$_GET['f_pubid'];
     $id=$pub['id'];
     $name=$pub['name'];
     $sel=($id==$pid)?' selected':'';
     echo "<option value='$id'$sel>$name</option>\n";
   }
-  echo "</select>\n";
+  echo "</select><br />";
+
+  echo "Genre:<br /><select style='max-width:100%;margin-bottom: 2ch' name='f_genreid' id='f_genreid'>\n<option value='0'>All genres</option>";
+  foreach ($res4 as $gen ) {
+    $gid=$_GET['f_genreid'];
+    $id=$gen['id'];
+    $name=$gen['name'];
+    $sel=($id==$gid)?' selected':'';
+    echo "<option value='$id'$sel>$name</option>\n";
+  }
+  echo "</select><br />";
+
+  echo "From year:<br /><select style='max-width:100%;margin-bottom: 2ch' name='f_year1' id='f_year1'>\n<option value='0'>Any start year</option>";
+  foreach ($res5 as $year ) {
+    $y1=$_GET['f_year1'];
+    $y=$year["year"];
+    $sel=($y==$y1)?' selected':'';
+    echo "<option value='$y'$sel>$y</option>\n";
+  }
+  echo "</select><br />";
+
+  echo "To year:<br /><select style='max-width:100%;margin-bottom: 3ch' name='f_year2' id='f_year2'>\n<option value='0'>Any end year</option>";
+  foreach ($res5 as $year ) {
+    $y2=$_GET['f_year2'];
+    $y=$year["year"];
+    $sel=($y==$y2)?' selected':'';
+    echo "<option value='$y'$sel>$y</option>\n";
+  }
+  echo "</select><br />";
+
+  echo "<div><a href='#' onclick='resetFilters(); return false;'>Reset filters</a></div><br />";
 
   if ( defined('GD_DEBUG') && GD_DEBUG == True ) {
     echo "<pre>";
     echo "\n\nSQL3:\n";
     echo $sql3;
+    echo "\n\nSQL4:\n";
+    echo $sql4;
     echo "</pre>";
   }
 }

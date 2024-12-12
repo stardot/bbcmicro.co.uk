@@ -33,21 +33,36 @@ function getstate() {
 
   // Tick boxes
   foreach($_GET as $k => $v ) {
-    if (preg_match('/^rt_[A-Z]$/',$k)) {  //Release types checkbox (Hidden)
+    if (preg_match('/^rt_[A-Z]$/',$k)) {  // Release types checkbox (Hidden)
       $state['rtype'][] = substr($k,-1);
     }
-    if (preg_match('/^ro_[A-Z]$/',$k)) {  //Release type radio (Display only)
+    if (preg_match('/^ro_[A-Z]$/',$k)) {  // Release type radio (Display only)
       $ro = substr($k,-1);
     }
-    if (preg_match('/^rs_[A-Z]$/',$k)) {  //Release types toggle
+    if (preg_match('/^rs_[A-Z]$/',$k)) {  // Release types toggle
       $rt = substr($k,-1);
     }
     if (preg_match('/^on_[A-Z]$/',$k)) {
       $state['only'][] = substr($k,-1);
     }
-    if ($k == 'f_pubid') {                //Publisher dropdown
+    if ($k == 'f_pubid') {                // Publisher dropdown
       if ($v > 0) {
         $state['f_pubid'] = $v;
+      }
+    }
+    if ($k == 'f_genreid') {              // Genre dropdown
+      if ($v > 0) {
+        $state['f_genreid'] = $v;
+      }
+    }
+    if ($k == 'f_year1') {                // From year dropdown
+      if ($v > 0) {
+        $state['f_year1'] = $v;
+      }
+    }
+    if ($k == 'f_year2') {                // To year dropdown
+      if ($v > 0) {
+        $state['f_year2'] = $v;
       }
     }
   }
