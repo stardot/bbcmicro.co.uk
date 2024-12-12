@@ -715,7 +715,7 @@ function make_form($game_id,$r) {
 		echo make_dd(0,'publisher_'.sprintf("%02d",$ac++),'publisher',$known_publishers);
 	} while ($ac<=4);
 
-	echo "<br/><br/><label> Notes: <textarea id='notes' name='notes' rows='10' cols='132' >".htmlspecialchars($r['notes'] ?? '')."</textarea></label><br/>";
+	echo "<br/><br/><label> Notes: <textarea id='notes' name='notes' rows='20' cols='132' >".htmlspecialchars($r['notes'] ?? '')."</textarea></label><br/>";
 	echo "<input type='submit' value='Save' style='margin-bottom: 20ch'>\n";
 
 	echo "</form>\n";
