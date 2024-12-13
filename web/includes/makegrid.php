@@ -284,6 +284,11 @@ function prepare_search($string, $state) {
       return $string;
     }
   }
+  if (array_key_exists ('f_words', $state)) {
+    if ($state['f_words'] > 0) {
+      return '\b'.str_replace(' ','\b \b',$string).'\b';
+    }
+  }
   $string=preg_replace('/^(A|An|The) /i','',$string);
   $string=preg_replace('/,? (A|An|The)$/i','',$string);
   $string="%".str_replace(' ','%',$string)."%";
@@ -301,34 +306,41 @@ function grid($state) {
 
   $all=( !array_key_exists('only', $state) || count($state['only']) == 0);
 
+  $like = ' like ';
+  if (array_key_exists ('f_words', $state)) {
+    if ($state['f_words'] > 0) {
+      $like = ' REGEXP ';
+    }
+  }
+
   if (array_key_exists ('search', $state)) {
     if ( $all || !(array_search('T',$state['only'])===False )) {
-      $sls[] = "g.title like :search\n";
+      $sls[] = "g.title $like :search\n";
     }
     if ( $all || !(array_search('P',$state['only'])===False )) {
       $sls[] = "g.id in (select gameid\n" .
                "   from games_publishers gp, publishers p\n" .
-               "   where p.id = gp.pubid and p.name like :search)\n";
+               "   where p.id = gp.pubid and p.name $like :search)\n";
     }
     if ( $all || !(array_search('A',$state['only'])===False )) {
       $sls[] = "g.id in (select games_id\n   from games_authors ga, authors a\n" .
-               "   where a.id = ga.authors_id and (a.name like :search or a.alias like :search))\n";
+               "   where a.id = ga.authors_id and (a.name $like :search or a.alias $like :search))\n";
     }
     if ( $all || !(array_search('Y',$state['only'])===False )) {
-      $sls[] = "g.year like :search\n";
+      $sls[] = "g.year $like :search\n";
     }
     if ( $all || !(array_search('Z',$state['only'])===False )) {
-      $sls[] = "g.series like :search\n";
+      $sls[] = "g.series $like :search\n";
     }
     if ( $all || !(array_search('C',$state['only'])===False )) {
       $sls[] = "g.id in (select games_id from games_compilations gc, compilations c\n" .
-               "  where c.id = gc.compilations_id and c.name like :search\n)";
+               "  where c.id = gc.compilations_id and c.name $like :search\n)";
     }
     if ( $all || !(array_search('G',$state['only'])===False )) {
-      $sls[] = "g.genre in (select id from genres where name like :search)\n";
+      $sls[] = "g.genre in (select id from genres where name $like :search)\n";
     }
     if ( $all || !(array_search('S',$state['only'])===False )) {
-      $sls[] = "g.id in (select gameid from game_genre m, genres g where g.id = m.genreid and g.name like :search)\n";
+      $sls[] = "g.id in (select gameid from game_genre m, genres g where g.id = m.genreid and g.name $like :search)\n";
     }
   }
 
@@ -618,34 +630,41 @@ function filters($state) {
 
   $all=( !array_key_exists('only', $state) || count($state['only']) == 0);
 
+  $like = ' like ';
+  if (array_key_exists ('f_exact', $state)) {
+    if ($state['f_exact'] > 0) {
+      $like = ' REGEXP ';
+    }
+  }
+
   if (array_key_exists ('search', $state)) {
     if ( $all || !(array_search('T',$state['only'])===False )) {
-      $sls[] = "g.title like :search\n";
+      $sls[] = "g.title $like :search\n";
     }
     if ( $all || !(array_search('P',$state['only'])===False )) {
       $sls[] = "g.id in (select gameid\n" .
                "   from games_publishers gp, publishers p\n" .
-               "   where p.id = gp.pubid and p.name like :search)\n";
+               "   where p.id = gp.pubid and p.name $like :search)\n";
     }
     if ( $all || !(array_search('A',$state['only'])===False )) {
       $sls[] = "g.id in (select games_id\n   from games_authors ga, authors a\n" .
-               "   where a.id = ga.authors_id and (a.name like :search or a.alias like :search))\n";
+               "   where a.id = ga.authors_id and (a.name $like :search or a.alias $like :search))\n";
     }
     if ( $all || !(array_search('Y',$state['only'])===False )) {
-      $sls[] = "g.year like :search\n";
+      $sls[] = "g.year $like :search\n";
     }
     if ( $all || !(array_search('Z',$state['only'])===False )) {
-      $sls[] = "g.series like :search\n";
+      $sls[] = "g.series $like :search\n";
     }
     if ( $all || !(array_search('C',$state['only'])===False )) {
       $sls[] = "g.id in (select games_id from games_compilations gc, compilations c\n" .
-               "  where c.id = gc.compilations_id and c.name like :search\n)";
+               "  where c.id = gc.compilations_id and c.name $like :search\n)";
     }
     if ( $all || !(array_search('G',$state['only'])===False )) {
-      $sls[] = "g.genre in (select id from genres where name like :search)\n";
+      $sls[] = "g.genre in (select id from genres where name $like :search)\n";
     }
     if ( $all || !(array_search('S',$state['only'])===False )) {
-      $sls[] = "g.id in (select gameid from game_genre m, genres g where g.id = m.genreid and g.name like :search)\n";
+      $sls[] = "g.id in (select gameid from game_genre m, genres g where g.id = m.genreid and g.name $like :search)\n";
     }
   }
 

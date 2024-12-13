@@ -70,6 +70,11 @@ function getstate() {
         $state['f_exact'] = $v;
       }
     }
+    if ($k == 'f_words') {                // Match whole words checkbox
+      if ($v > 0) {
+        $state['f_words'] = $v;
+      }
+    }
   }
 
   if (isset($ro)) {                       // Radio - Only set this one

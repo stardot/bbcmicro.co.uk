@@ -93,6 +93,17 @@ function randomgame() {
 
 function refines($state) {
   $checked='';
+  if (array_key_exists ('f_words', $state)) {
+    if ($state['f_words'] > 0) {
+      $checked='checked';
+    }
+  }
+ ?>
+      <div class="checkbox" style="margin-top: 0">
+       <label><input type="checkbox" name="f_words" <?php echo $checked ?> value="1"/>Match whole words</label>
+      </div>
+<?php
+  $checked='';
   if (array_key_exists ('f_exact', $state)) {
     if ($state['f_exact'] > 0) {
       $checked='checked';
