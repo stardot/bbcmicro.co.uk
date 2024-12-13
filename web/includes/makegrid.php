@@ -283,15 +283,22 @@ function prepare_search($string, $state) {
   $exact = (array_key_exists('f_exact', $state) && $state['f_exact'] > 0);
   $words = (array_key_exists('f_words', $state) && $state['f_words'] > 0);
   if ($exact && $words) {
-    return '\b'.$string.'\b';
+    return '\b'.preg_quote($string).'\b';
   } elseif ($exact) {
     return "%".$string."%";
   } elseif ($words) {
-    return '\b'.str_replace(' ','\b.*\b',$string).'\b';
+    return '\b'.regex_string($string).'\b';
   }
   $string=preg_replace('/^(A|An|The) /i','',$string);
   $string=preg_replace('/,? (A|An|The)$/i','',$string);
   $string="%".str_replace(' ','%',$string)."%";
+  return $string;
+}
+
+function regex_string($string) {
+  $string=preg_quote($string);
+  $string=str_replace(' ','\b.*\b',$string);
+  $string=str_replace('\b–\b','.*',$string);
   return $string;
 }
 
