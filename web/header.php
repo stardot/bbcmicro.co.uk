@@ -91,8 +91,19 @@ function randomgame() {
 <?php
 }
 
-function refines($state) { ?>
-     <h4>Only include matches on:</h4>
+function refines($state) {
+  $checked='';
+  if (array_key_exists ('f_exact', $state)) {
+    if ($state['f_exact'] > 0) {
+      $checked='checked';
+    }
+  }
+ ?>
+     <h4>Search type:</h4>
+      <div class="checkbox">
+       <label><input type="checkbox" name="f_exact" <?php echo $checked ?> value="1"/>Match exact search term</label>
+      </div>
+     <h4 style="margin-top:3ch">Only include matches on:</h4>
 <?php
   $types=array('T'=>'Title','Y'=>'Year','P'=>'Publisher','A'=>'Author','G'=>'Primary Genre','S'=>'Secondary Genre','Z'=>'Series','C'=>'Compilation');
   foreach ( $types as $tid => $type ) {

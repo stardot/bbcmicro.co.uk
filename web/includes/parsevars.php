@@ -65,6 +65,11 @@ function getstate() {
         $state['f_year2'] = $v;
       }
     }
+    if ($k == 'f_exact') {                // Exact match checkbox
+      if ($v > 0) {
+        $state['f_exact'] = $v;
+      }
+    }
   }
 
   if (isset($ro)) {                       // Radio - Only set this one

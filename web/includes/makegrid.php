@@ -278,7 +278,12 @@ function pager($limit, $rows, $page, $state) {
   return $pl;
 }
 
-function prepare_search($string) {
+function prepare_search($string, $state) {
+  if (array_key_exists ('f_exact', $state)) {
+    if ($state['f_exact'] > 0) {
+      return $string;
+    }
+  }
   $string=preg_replace('/^(A|An|The) /i','',$string);
   $string=preg_replace('/,? (A|An|The)$/i','',$string);
   $string="%".str_replace(' ','%',$string)."%";
@@ -368,10 +373,6 @@ function grid($state) {
     }
   }
 
-//  if (array_key_exists ('year', $state)) {
-//    $wc[] = "year = :year\n";
-//  }
-
   $doing_atoz_numbers=false;
   if (array_key_exists('atoz',$state)) {
     if ($state['atoz']=='#') {
@@ -429,7 +430,7 @@ function grid($state) {
   $sth2 = $db->prepare($sql2,array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
 
   if (array_key_exists('search',$state)) {
-    $search=prepare_search($state['search']);
+    $search=prepare_search($state['search'], $state);
     $sth->bindParam(':search', $search, PDO::PARAM_STR);
     $sth2->bindParam(':search', $search, PDO::PARAM_STR);
   }
@@ -669,7 +670,7 @@ function filters($state) {
   $sth5 = $db->prepare($sql5,array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
 
   if (array_key_exists('search',$state)) {
-    $search=prepare_search($state['search']);
+    $search=prepare_search($state['search'], $state);
     $sth3->bindParam(':search', $search, PDO::PARAM_STR);
     $sth4->bindParam(':search', $search, PDO::PARAM_STR);
     $sth5->bindParam(':search', $search, PDO::PARAM_STR);
@@ -755,7 +756,7 @@ function filters($state) {
   }
   echo "</select><br />";
 
-  echo "<div><a href='#' onclick='resetFilters(); return false;'>Reset filters</a></div><br />";
+  echo "<div><a href='#' onclick='resetFilters(); return false;'>Reset filters</a></div>";
 
   if ( defined('GD_DEBUG') && GD_DEBUG == True ) {
     echo "<pre>";
