@@ -279,20 +279,33 @@ function pager($limit, $rows, $page, $state) {
 }
 
 function prepare_search($string, $state) {
-  if (array_key_exists ('f_exact', $state)) {
-    if ($state['f_exact'] > 0) {
-      return $string;
-    }
-  }
-  if (array_key_exists ('f_words', $state)) {
-    if ($state['f_words'] > 0) {
-      return '\b'.str_replace(' ','\b \b',$string).'\b';
-    }
+  $string = str_replace("'","''",$string);
+  $exact = (array_key_exists('f_exact', $state) && $state['f_exact'] > 0);
+  $words = (array_key_exists('f_words', $state) && $state['f_words'] > 0);
+  if ($exact && $words) {
+    return '\b'.$string.'\b';
+  } elseif ($exact) {
+    return "%".$string."%";
+  } elseif ($words) {
+    return '\b'.str_replace(' ','\b.*\b',$string).'\b';
   }
   $string=preg_replace('/^(A|An|The) /i','',$string);
   $string=preg_replace('/,? (A|An|The)$/i','',$string);
   $string="%".str_replace(' ','%',$string)."%";
   return $string;
+}
+
+function prepare_like($state) {
+  $exact = (array_key_exists('f_exact', $state) && $state['f_exact'] > 0);
+  $words = (array_key_exists('f_words', $state) && $state['f_words'] > 0);
+  if ($exact && $words) {
+    return ' REGEXP ';
+  } elseif ($exact) {
+    return ' like ';
+  } elseif ($words) {
+    return ' REGEXP ';
+  }
+  return ' like ';
 }
 
 function grid($state) {
@@ -306,12 +319,7 @@ function grid($state) {
 
   $all=( !array_key_exists('only', $state) || count($state['only']) == 0);
 
-  $like = ' like ';
-  if (array_key_exists ('f_words', $state)) {
-    if ($state['f_words'] > 0) {
-      $like = ' REGEXP ';
-    }
-  }
+  $like = prepare_like($state);
 
   if (array_key_exists ('search', $state)) {
     if ( $all || !(array_search('T',$state['only'])===False )) {
@@ -630,12 +638,7 @@ function filters($state) {
 
   $all=( !array_key_exists('only', $state) || count($state['only']) == 0);
 
-  $like = ' like ';
-  if (array_key_exists ('f_exact', $state)) {
-    if ($state['f_exact'] > 0) {
-      $like = ' REGEXP ';
-    }
-  }
+  $like = prepare_like($state);
 
   if (array_key_exists ('search', $state)) {
     if ( $all || !(array_search('T',$state['only'])===False )) {

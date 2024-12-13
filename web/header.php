@@ -111,7 +111,7 @@ function refines($state) {
   }
  ?>
       <div class="checkbox" style="margin-top: 0">
-       <label><input type="checkbox" name="f_exact" <?php echo $checked ?> value="1"/>Match exact search term</label>
+       <label><input type="checkbox" name="f_exact" <?php echo $checked ?> value="1"/>Match whole search term</label>
       </div>
      <h4 style="margin-top:3ch">Only include matches on:</h4>
 <?php
