@@ -109,7 +109,7 @@ Mick has enhanced the games by fixing bugs, adding user-friendly instructions (t
 </p><p>
 Our thanks go to Mick for the countless hours of work he has put into compiling, enhancing, testing, and re-testing the games in this collection.
 </p><p>
-Thanks also to Paul Houghton and Richard Toohey for developing the bbcmicro.co.uk website, and to Gary for hosting it.
+Thanks also to Paul Houghton and Richard Toohey for developing the bbcmicro.co.uk website, Gary for hosting it, and Mark Moxon for ongoing development. 
 </p><p>
 Lee "Eagle Eye" Newsome proofread the game instructions, tested every game several times, and coordinated the work on the website project, aided and abetted by "lurkio" at Stardot.
 </p><p>
