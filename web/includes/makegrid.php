@@ -279,7 +279,7 @@ function pager($limit, $rows, $page, $state) {
 }
 
 function prepare_search($string, $state) {
-  $string = str_replace("'","''",$string);
+  $string = trim(str_replace("'","''",$string));
   $exact = (array_key_exists('f_exact', $state) && $state['f_exact'] > 0);
   $words = (array_key_exists('f_words', $state) && $state['f_words'] > 0);
   if ($exact && $words) {
