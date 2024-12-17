@@ -279,15 +279,16 @@ function pager($limit, $rows, $page, $state) {
 }
 
 function prepare_search($string, $state) {
-  $string = trim(str_replace("'","''",$string));
+  $string = trim($string);
   $exact = (array_key_exists('f_exact', $state) && $state['f_exact'] > 0);
   $words = (array_key_exists('f_words', $state) && $state['f_words'] > 0);
   if ($exact && $words) {
-    return '\b'.preg_quote($string).'\b';
+    if ($string = "'n'" || $string = "'n" || $string = "n'") $string="n";
+    return '(\b|^)'.preg_quote($string).'(\b|$)';
   } elseif ($exact) {
     return "%".$string."%";
   } elseif ($words) {
-    return '\b'.regex_string($string).'\b';
+    return '(\b|^)'.regex_string($string).'(\b|$)';
   }
   $string=preg_replace('/^(A|An|The) /i','',$string);
   $string=preg_replace('/,? (A|An|The)$/i','',$string);
@@ -297,6 +298,7 @@ function prepare_search($string, $state) {
 
 function regex_string($string) {
   $string=preg_quote($string);
+  $string=str_replace("'","'?",$string);
   $string=str_replace(' ','\b.*\b',$string);
   $string=str_replace('\b–\b','.*',$string);
   return $string;
