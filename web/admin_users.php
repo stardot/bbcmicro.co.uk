@@ -14,7 +14,7 @@ $s="SELECT	id,username,description,locked,email,pwhash
 $sth = $dbh->prepare($s,array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
 if ($sth->execute()) {
 	if ($sth->rowCount()) {
-		echo $sth->rowCount()." administrators	<a href='admin_user_details.php?id=0'>New user</a><hr>";
+		echo '<p>'.$sth->rowCount()." administrators	<a href='admin_user_details.php?id=0'>New user</a></p><hr>";
 		echo "<table>\n";
 		echo "<tr><td><b>ID</b></td><td><b>Username</b></td><td><b>Name</b></td><td><b>Locked</b></td><td><b>Email address</b></td></tr>\n";
 		while ($r=$sth->fetch()) {

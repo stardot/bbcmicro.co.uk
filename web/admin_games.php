@@ -24,7 +24,7 @@ $s="	SELECT 		id,title,year,
 
 $sth = $dbh->prepare($s,array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
 if ($sth->execute()) {
-	echo $sth->rowCount()." games. <a href='admin_game_details.php?id=0'>New game</a><hr>";
+	echo '<p>'.$sth->rowCount()." games. <a href='admin_game_details.php?id=0'>New game</a></p><hr>";
 	if ($sth->rowCount()) {
 		echo "<table>\n";
 		echo "<tr><td><b>Title</b></td><td><b>Details</b></td></tr>\n";

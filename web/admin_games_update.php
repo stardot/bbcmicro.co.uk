@@ -50,7 +50,7 @@ if (isset($_POST['games'])) {
 echo "</pre>";
 
 if ($sth->execute()) {
-	echo $sth->rowCount()." games. <a href='admin_game_details.php?id=0'>New game</a><hr>";
+	echo '<p>'.$sth->rowCount()." games. <a href='admin_game_details.php?id=0'>New game</a></p><hr>";
 	if ($sth->rowCount()) {
 		echo "<form name='frmGame' method='POST' action='admin_games_update.php'>\n";
 		echo "<table>\n";
