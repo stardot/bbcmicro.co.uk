@@ -17,7 +17,12 @@ make_link('Edit Publishers','admin_publishers.php','publishers');
 make_link('Edit Admin Users','admin_users.php','users');
 make_link('Edit Release Types','admin_releasetypes.php','reltype');
 make_link('Edit Key Controls','admin_keycontrols.php','game_keys');
+
+echo '<br>';
+
 make_link('See contact form messages','admin_contacts.php','contacts');
+
+echo '<br><a href="archdl.php">Generate zip files</a><br>';
 
 exit;
 
