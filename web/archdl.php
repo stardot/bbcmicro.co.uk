@@ -1,4 +1,5 @@
 <?php
+require('includes/admin_session.php');
 require 'includes/config.php';
 require 'includes/db_connect.php';
 require 'includes/playlink.php';
