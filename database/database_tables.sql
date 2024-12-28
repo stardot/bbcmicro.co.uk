@@ -35,6 +35,7 @@ CREATE TABLE `contacts` (
   `email` varchar(255) DEFAULT NULL,
   `message` varchar(2000) DEFAULT NULL,
   `date` datetime NOT NULL DEFAULT current_timestamp(),
+  `status` VARCHAR(1) NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
