@@ -55,9 +55,10 @@ global $site_name_html;
 }
 
 
-function sidebar($state) {
-?>   <div class="col-xs-3 col-sm-2 sidebar-offcanvas" id="sidebar">
+function sidebar($state, $highlights) {
+?>   <div class="col-xs-3 col-sm-3 col-md-3 col-lg-2 sidebar-offcanvas" id="sidebar">
 <?php
+  highlights($highlights);
   searchbox($state);
   if (array_key_exists('search',$state)) {
     refines($state);
@@ -68,6 +69,141 @@ function sidebar($state) {
     randomgame();
   }
   echo "    </div>\r";
+}
+
+function highlights($highlights) {
+  global $db;
+
+  foreach ($highlights as $h) {
+
+    if ($h['random'] == 1) {
+      $rndsql = 'select id from games order by rand() limit 1';
+      $rndpdo = $db->prepare($rndsql,array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+      if ($rndpdo->execute()) {
+        $random_game=$rndpdo->fetch(PDO::FETCH_ASSOC);
+        $game_id = $random_game['id'];
+      } else {
+        echo "Error:";
+      }
+    } else {
+      $game_id = $h['games_id'];
+    }
+
+    $gamsql = 'select id, title_article, title, year, jsbeebplatform from games where id = :gameid';
+    $scrsql = 'select filename, subdir from screenshots where gameid = :gameid order by main, id limit 1';
+    $dscsql = 'select filename, subdir, customurl, probs from images where gameid = :gameid order by main, id limit 1';
+    $pubsql = 'select id,name from publishers where id in (select pubid from games_publishers where gameid = :gameid)';
+    $keysql = "select jsbeebbrowserkey,jsbeebgamekey from game_keys where gameid = :gameid order by rel_order";
+
+    $gampdo = $db->prepare($gamsql,array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+    $scrpdo = $db->prepare($scrsql,array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+    $dscpdo = $db->prepare($dscsql,array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+    $pubpdo = $db->prepare($pubsql,array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+    $keypdo = $db->prepare($keysql,array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+
+    $gampdo->bindParam(':gameid',$game_id, PDO::PARAM_INT);
+    $scrpdo->bindParam(':gameid',$game_id, PDO::PARAM_INT);
+    $dscpdo->bindParam(':gameid',$game_id, PDO::PARAM_INT);
+    $pubpdo->bindParam(':gameid',$game_id, PDO::PARAM_INT);
+    $keypdo->bindParam(':gameid',$game_id, PDO::PARAM_INT);
+
+    if ($scrpdo->execute()) {
+      $img=$scrpdo->fetch(PDO::FETCH_ASSOC);
+      $shot = get_scrshot($img['filename'] ?? '',$img['subdir'] ?? '');
+    } else {
+	    echo "$scrsql gave ".$db->errorCode()."<br>\n";
+    }
+
+    if ($dscpdo->execute()) {
+      $dnl=$dscpdo->fetch(PDO::FETCH_ASSOC);
+    } else {
+	    echo "$dscsql gave ".$db->errorCode()."<br>\n";
+    }
+
+    $pubs='';
+    if ($pubpdo->execute()) {
+      while($pub=$pubpdo->fetch(PDO::FETCH_ASSOC)) {
+        $t=preg_split('/[,(]/',$pub['name']);
+        $u=htmlspecialchars(trim($t[0] ?? ''));
+        $pubs=$pubs.$u.', ';
+      }
+    } else {
+	    echo "$pubsql gave ".$db->errorCode()."<br>\n";
+    }
+    $pubs=trim($pubs,', ');
+
+    if ($keypdo->execute()) {
+      $keys=$keypdo->fetchAll();
+    } else {
+	    echo "$keysql gave ".$db->errorCode()."<br>\n";
+      $keys=array();
+    }
+
+    if ($gampdo->execute()) {
+      $game=$gampdo->fetch(PDO::FETCH_ASSOC);
+    } else {
+	    echo "$gamsql gave ".$db->errorCode()."<br>\n";
+    }
+
+    highlightitem($h, $game["id"],htmlspecialchars($game["title_article"] ?? ''),htmlspecialchars($game["title"] ?? ''), $shot, $dnl ,$pubs,$game["year"],$keys,$game["jsbeebplatform"]);
+  }
+}
+
+function highlightitem( $h, $id, $ta, $name, $image, $img, $publisher, $year, $keys, $platform) {
+  $jsbeeb=JB_LOC;
+  $root=WS_ROOT;
+
+  if ($h['title'] && strlen($h['title'] && $h['random']) != 1) {
+    $title=$h['title'];
+  } else {
+    $split=explode('(',$name);
+    $title=trim($split[0]);
+    if (strlen($ta)>0){
+      $title=$ta.' '.$title;
+    }
+  }
+
+  if ($h['url'] && strlen($h['url']) > 0) {
+    $url=$h['url'];
+  } else {
+    $url='game.php?id='.$id;
+  }
+
+  if ($h['screenshot_url'] && strlen($h['screenshot_url']) > 0) {
+    $image=$h['screenshot_url'];
+  }
+
+  if ($h['colour'] && strlen($h['colour']) > 0) {
+    $background=" style='background-color: " . $h['colour'] . "'";
+  } else {
+    $background='';
+  }
+
+  // Taken from gameitem()
+  $ssd = get_discloc($img["filename"] ?? '',$img['subdir'] ?? '');
+?>
+      <div class="thumbnail text-center"<?php echo $background; ?>>
+       <h4 style="margin-top: 0"><?php echo $h['heading']; ?></h4>
+       <a href="<?php echo $url; ?>"><img src="<?php echo $image; ?>" alt="<?php echo $image; ?>" class="pic"></a>
+       <div class="row-title" style="height: auto; margin-bottom: 0.25em"><span class="row-title"><a href="<?php echo $url; ?>"><?php echo $title ?></a></span></div>
+       <div class="row-pub" style="height: auto; font-size: 0.85em;"><?php echo $publisher ?> (<?php echo $year; ?>)</div>
+<?php
+  if ($h['subtitle'] && strlen($h['subtitle']) > 0) {
+?>
+       <div class="row-subtitle" style="margin: 0.5em 0 1em 0"><span class="row-subtitle"><?php echo $h['subtitle'] ?></span></div>
+<?php
+  }
+  $playlink=get_playlink($img,$jsbeeb,$root,$keys,$platform);
+  if ($ssd != null && file_exists($ssd)) { ?>
+       <p><a href="<?php echo $ssd ?>" type="button" onmousedown="log(<?php echo $id; ?>);" class="btn btn-default">Download</a></p><?php
+  }
+  if ((($img['probs'] ?? '') != 'N' and ($img['probs'] ?? '') != 'P') and $playlink != null) { ?>
+          <p><a id="plybtn" href="<?php echo $playlink ?>" type="button" onmousedown="logPlay(<?php echo $id; ?>);" class="btn btn-default">Play</a></p>
+<?php
+  }
+?>
+      </div>
+<?php
 }
 
 function searchbox($state) {
@@ -165,7 +301,7 @@ function containstart($state) {
  <form id="searchform" action="index.php" method="get">
  <div class="container">
   <div class="row row-offcanvas row-offcanvas-right">
-   <div class="col-xs-12 col-sm-10">
+   <div class="col-xs-12 col-sm-9 col-md-9 col-lg-10">
     <p class="pull-right visible-xs">
      <button type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas">Search</button>
     </p><?php // Add a button to catch searches using the enter key ?>

@@ -31,6 +31,15 @@ function getstate() {
     }
   }
 
+function get_highlights() {
+  global $db;
+  $sql = 'select url, random, visible, colour, title, subtitle, heading, games_id, screenshot_url from highlights where visible = 1 order by sort_order';
+  $sth = $db->prepare($sql,array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+  $sth->execute(); 
+  $hs = $sth->fetchAll();
+  return $hs;
+}
+
   // Tick boxes
   foreach($_GET as $k => $v ) {
     if (preg_match('/^rt_[A-Z]$/',$k)) {  // Release types checkbox (Hidden)

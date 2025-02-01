@@ -17,6 +17,7 @@ make_link('Edit Publishers','admin_publishers.php','publishers');
 make_link('Edit Admin Users','admin_users.php','users');
 make_link('Edit Release Types','admin_releasetypes.php','reltype');
 make_link('Edit Key Controls','admin_keycontrols.php','game_keys');
+make_link('Edit Highlights','admin_highlights.php','highlights');
 
 echo '<br>';
 

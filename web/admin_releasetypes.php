@@ -19,8 +19,8 @@ if ($sth->execute()) {
 		echo "<tr><td><b>ID</b></td><td><b>Name</b></td><td><b>Selected</b></td><td><b>Order</b></td><td><b>Games</b></td></tr>\n";
 		while ($r=$sth->fetch()) {
 			echo "<tr><td>".$r['id']."</td><td><a href=admin_releasetypes_details.php?id=".$r['id'].">".$r['name']."</a></td>";
-			echo "<td><a href=admin_releasetypes_details.php?id=".$r['id'].">".$r['selected']."</a></td>";
-			echo "<td><a href=admin_releasetypes_details.php?id=".$r['id'].">".$r['rel_order']."</a></td>";
+			echo "<td>".$r['selected']."</td>";
+			echo "<td>".$r['rel_order']."</td>";
 			$gamecount=0;
 			$s2="select * from games where reltype = ?";
 			$sth2 = $dbh->prepare($s2,array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
