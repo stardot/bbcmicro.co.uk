@@ -32,7 +32,9 @@ if ($sth->execute()) {
 			echo "<td><a href=admin_highlights_delete.php?id=".$r['id'].">Delete</a></td>";
 		}
 		echo "</tr>\n</table>\n";
-	}
+	} else {
+		echo "<p>No highlights. <a href='admin_highlights_details.php'>New highlight</a></p><hr>";
+    }
 	$sth->closeCursor();
 } else {
 	echo "$s gave ".$dbh->errorCode()."<br>\n";
