@@ -164,6 +164,10 @@ function pager($limit, $rows, $page, $state) {
   $pages = ceil($rows/$limit);
   $pl='';
 
+  if ($pages == 0) {
+    return "";
+  }
+
   $el = "border-color: white; margin-left: 0; margin-right: 1px; cursor: default; text-align: center;";
 
   $links = 4;
@@ -565,6 +569,12 @@ function grid($state) {
 
   // No longer show release types along the top of the homepage (moved to search bar)
   //reltypes($state);
+
+  if (!array_key_exists('search',$state)) {
+    echo "<h2>All games</h2>\n";
+  } elseif ( $rows > 0 ) {
+    echo "<h2>Search results</h2>\n";
+  }
 
   atoz_line($atoz,$chars,'bottom');
 
