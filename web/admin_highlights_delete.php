@@ -8,8 +8,8 @@ show_admin_menu();
 
 $id=null;
 $msg='';
-$gamecount=0;
-# GET params means want to display an entry, so fetch it
+$showdelete=1;
+# GET params means want to edit an entry, so fetch it
 if (isset($_GET['id']) && is_string($_GET['id'])) {
   $id=$_GET['id'];
   $s="select * from highlights where id = ?";
@@ -21,79 +21,102 @@ if (isset($_GET['id']) && is_string($_GET['id'])) {
     $r=$sth->fetch(PDO::FETCH_ASSOC);
     $sth->closeCursor();
     if ($r === False ) $rec=-1;
-    $r['action']='delete';
-
-    $s2="select * from games where highlights = ?";
-    $sth2 = $dbh->prepare($s2,array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
-    $sth2->bindParam(1, $id, PDO::PARAM_STR);
-    if ($sth2->execute()) {
-      $gamecount=$sth2->rowCount();
-      $sth2->closeCursor();
-    } else {
-      echo "$s2 gave ".$dbh->errorCode()."<br>\n";
-      exit(3);
-    }
+    $r['action']='edit';
   } else {
     echo "$s gave ".$dbh->errorCode()."<br>\n";
     exit(3);
   }
 } else {
-  # POST params mean delete it
+  # POST params mean an update or add
   if (isset($_POST) && $_POST) {
-    $r['id']=$_POST['id'];
-    $r['name']=$_POST['name'];
-    $r['selected']=$_POST['selected'];
-    $r['rel_order']=$_POST['rel_order'];
-    if ( strlen($r['id']) < 1 ) {
-        $msg = "ID can't be blank";
+    if (isset($_POST['id']) && is_numeric($_POST['id'])) {
+      $r['id']=($_POST['id'] == '0' || $_POST['id'] == '') ? null : $_POST['id'];
     } else {
-      if ( $_POST['action'] == 'delete' ) {
-        $s="delete from highlights where id = ?";
-        $sth = $dbh->prepare($s,array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
-        $sth->bindParam(1, $r['id'], PDO::PARAM_STR);
-        if ( $sth->execute() ) {
-          $msg="Release type deleted: ".$r['name'].".";
-          $gamecount=-1;
-        } else {
-          $msg="Error deleting release type: ".$r['name'].".";
-        }
+      $r['id']=null;
+    }
+    $r['games_id']=($_POST['games_id'] == '0' || $_POST['games_id'] == '') ? null : $_POST['games_id'];
+    $r['heading']=$_POST['heading'];
+    $r['title']=$_POST['title'];
+    $r['subtitle']=$_POST['subtitle'];
+    $r['random']=($_POST['random'] == '') ? 0 : $_POST['random'];
+    $r['visible']=($_POST['visible'] == '') ? 0 : $_POST['visible'];
+    $r['colour']=$_POST['colour'];
+    $r['url']=$_POST['url'];
+    $r['screenshot_url']=$_POST['screenshot_url'];
+    $r['sort_order']=($_POST['sort_order'] == '') ? 0 : $_POST['sort_order'];
+    $r['position']=($_POST['position'] == '') ? 0 : $_POST['position'];
+    $r['action']=$_POST['action'];
+
+    if ( $r['id'] == null || $r['id'] == '' ) {
+      $msg = "ID can't be blank";
+    } else {
+      $s="delete from highlights where id = ?";
+      $sth = $dbh->prepare($s,array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+      $sth->bindParam(1, $r['id'], PDO::PARAM_INT);
+      $sth->execute();
+      if ( $sth->execute() ) {
+        $msg="Highlight deleted: ".$r['heading'].".";
+        $showdelete=-1;
+      } else {
+        $msg="Error deleting highlight: ".$r['heading'].".";
       }
     }
   } else {
-    $r['name']='';
     $r['id']='';
-    $r['selected']='';
-    $r['rel_order']='';
-    $r['action']='new';
+    $r['games_id']='';
+    $r['url']='';
+    $r['random']='';
+    $r['visible']='';
+    $r['colour']='';
+    $r['title']='';
+    $r['subtitle']='';
+    $r['heading']='';
+    $r['screenshot_url']='';
+    $r['sort_order']='';
+    $r['position']='';
     $msg="No ID set.";
   }
 }
 
-make_form($r,$gamecount,$msg);
+make_form($r,$showdelete,$msg);
 
-function make_form($r,$gamecount,$msg) {
-  echo "<br><b>".$r['name']."</b>";
+function make_form($r,$showdelete,$msg) {
+  echo "<br><b>".$r['heading']."</b>";
   echo "<hr>";
   echo "<p>$msg</p>\n";
-  echo "<form name='frmGame' method='POST' action='admin_releasetypes_delete.php'>\n";
+  echo "<form name='frmGame' method='POST' action='admin_highlights_delete.php'>\n";
 
-  echo "<label>ID: <input type='text' name='id' size='80' readonly='readonly' style='border: 0' value='".htmlspecialchars($r['id'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
+  if ($r['id']=='' || $r['action']=='new') {
+    echo '<input type="hidden" name="action" value="new">';
+  } else {
+    echo "<label>ID: <input type='text' name='id' class='big-text' readonly='readonly' style='border: 0' value='".htmlspecialchars($r['id'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
+    echo '<input type="hidden" name="action" value="edit">';
+  }
 
-  echo "<label>Name: <input type='text' name='name' size='80' autofocus='autofocus' readonly='readonly' style='border: 0' value='".htmlspecialchars($r['name'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
-  echo "<label>Selected (on homepage): <input type='text' name='selected' size='80' autofocus='autofocus' style='border: 0' readonly='readonly' value='".htmlspecialchars($r['selected'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
-  echo "<label>Sort order (on homepage): <input type='text' name='rel_order' size='80' autofocus='autofocus' style='border: 0' readonly='readonly' value='".htmlspecialchars($r['rel_order'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
+  echo "<label>Heading: <input type='text' name='heading' class='big-text' autofocus='autofocus' readonly='readonly' value='".htmlspecialchars($r['heading'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
+  echo "<label>Show on site? <input type='text' name='visible' class='big-text' autofocus='autofocus' readonly='readonly' value='".($r['visible'] == 1 ? 'Y' : 'N')."'/></label><br/><br/>";
+  echo "<label>Show a random game? <input type='text' name='random' class='big-text' autofocus='autofocus' readonly='readonly' value='".($r['random'] == 1 ? 'Y' :'N')."'/></label><br/><br/>";
+  echo "<label>Sort order within search column: <input type='text' name='sort_order' size='10' autofocus='autofocus' readonly='readonly' value='".htmlspecialchars($r['sort_order'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
+  echo "<label>Position within search column <input type='text' name='position' class='big-text' autofocus='autofocus' readonly='readonly' value='".($r['position'] == 1 ? 'Bottom' :'Top')."'/></label><br/><br/>";
+  echo "<label>Background colour (CSS, e.g. #123456 or yellow): <input type='text' name='colour' size='10' autofocus='autofocus' readonly='readonly' value='".htmlspecialchars($r['colour'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
 
-  if ($gamecount > 0) {
-    $plural = ($gamecount > 1) ? "s" : "";
-    echo "Release type is used by " . $gamecount . " game" . $plural . ".<br/><br/>";
-    echo "You need to remove the release type from all games before deleting.<br/><br/>";
-  } elseif ($gamecount == 0) {
-    echo '<input type="hidden" name="action" value="delete">';
-    echo "Release type is not used, and is safe to delete.<br/><br/>";
+  if ($r['random'] == 1) {
+      echo "<p>The following have no effect when showing a random game.</p>";
+  }
+
+  $disabled = ($r['random'] == 1 ? "readonly='readonly' style='border: 0'" : '');
+
+  echo "<label>Game ID: <input $disabled type='text' name='games_id' size='10' autofocus='autofocus' value='".htmlspecialchars($r['games_id'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
+  echo "<label>Game title override: <input $disabled type='text' name='title' class='big-text' autofocus='autofocus' value='".htmlspecialchars($r['title'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
+  echo "<label>Subtitle: <input $disabled type='text' name='subtitle' class='big-text' autofocus='autofocus' value='".htmlspecialchars($r['subtitle'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
+  echo "<label>Link URL override: <input $disabled type='text' name='url' class='big-text' autofocus='autofocus' value='".htmlspecialchars($r['url'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
+  echo "<label>Screenshot URL override: <input $disabled type='text' name='screenshot_url' class='big-text' autofocus='autofocus' value='".htmlspecialchars($r['screenshot_url'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
+
+  if ($showdelete > 0) {
     echo '<br/><input type="submit" value="Delete"></form>';
   }
 
-  echo '<hr/><a href="admin_releasetypes.php">Back to the list</a>';
+  echo '<hr/><a href="admin_highlights.php">Back to the list</a>';
 }
 ?>
 </body>

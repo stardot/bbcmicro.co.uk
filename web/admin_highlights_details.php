@@ -99,7 +99,7 @@ if (isset($_GET['id']) && is_string($_GET['id'])) {
     $r['heading']='';
     $r['screenshot_url']='';
     $r['sort_order']='';
-    $r['[position']='';
+    $r['position']='';
     $r['action']='new';
     $msg="New highlight.";
   }

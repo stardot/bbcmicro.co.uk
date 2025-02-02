@@ -16,7 +16,7 @@ if ($sth->execute()) {
 	if ($sth->rowCount()) {
 		echo '<p>'.$sth->rowCount()." highlights. <a href='admin_highlights_details.php'>New highlight</a></p><hr>";
 		echo "<table>\n";
-		echo "<tr><td><b>ID</b></td><td><b>Heading</b></td><td><b>Show?</b></td><td><b>Random?</b></td><td><b>Colour</b></td><td><b>Sort</b></td><td><b>Position</b></td><td><b>Game</b></td><td><b>Title</b></td><td><b>Subtitle</b></td><td><b>Link</b></td><td><b>Screenshot</b></td></tr>\n";
+		echo "<tr><td><b>ID</b></td><td><b>Heading</b></td><td><b>Show?</b></td><td><b>Random?</b></td><td><b>Colour</b></td><td><b>Sort</b></td><td><b>Position</b></td><td><b>Game</b></td><td><b>Title</b></td><td><b>Subtitle</b></td><td><b>Link</b></td><td><b>Screenshot</b></td><td><b>Delete</b></td></tr>\n";
 		while ($r=$sth->fetch()) {
 			echo "<tr><td>".$r['id']."</td><td><a href=admin_highlights_details.php?id=".$r['id'].">".$r['heading']."</a></td>";
 			echo "<td>".($r['visible'] == 1 ? 'Y' : 'N')."</td>";
@@ -29,6 +29,7 @@ if ($sth->execute()) {
 			echo "<td>".$r['subtitle']."</td>";
 			echo "<td>".$r['url']."</td>";
 			echo "<td>".$r['screenshot_url']."</td>";
+			echo "<td><a href=admin_highlights_delete.php?id=".$r['id'].">Delete</a></td>";
 		}
 		echo "</tr>\n</table>\n";
 	}
