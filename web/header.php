@@ -183,15 +183,15 @@ function highlightitem( $h, $id, $ta, $name, $image, $img, $publisher, $year, $k
   }
 
   if ($h['colour'] && strlen($h['colour']) > 0) {
-    $background=" style='background-color: " . $h['colour'] . "'";
+    $background=" style='margin-bottom: 1em; background-color: " . $h['colour'] . "'";
   } else {
-    $background='';
+    $background=" style='margin-bottom: 1em'";
   }
 
   // Taken from gameitem()
   $ssd = get_discloc($img["filename"] ?? '',$img['subdir'] ?? '');
 ?>
-      <div class="thumbnail text-center" style="margin-bottom: 1em" <?php echo $background; ?>>
+      <div class="thumbnail text-center" <?php echo $background; ?>>
        <h4 style="margin-top: 0"><?php echo $h['heading']; ?></h4>
        <a href="<?php echo $url; ?>"><img src="<?php echo $image; ?>" alt="<?php echo $image; ?>" class="pic"></a>
        <div class="row-title" style="height: auto; margin-bottom: 0.25em"><span class="row-title"><a href="<?php echo $url; ?>"><?php echo $title ?></a></span></div>
