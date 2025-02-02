@@ -59,7 +59,7 @@ function sidebar($state, $highlights) {
 ?>   <div class="col-xs-3 col-sm-3 col-md-3 col-lg-2 sidebar-offcanvas" id="sidebar" style="margin-top: 20px">
 <?php
   if (!array_key_exists('search',$state)) {
-    highlights($highlights);
+    highlights($highlights, 0);
   }
   searchbox($state);
   if (array_key_exists('search',$state)) {
@@ -70,13 +70,20 @@ function sidebar($state, $highlights) {
   if (!array_key_exists('search',$state)) {
     randomgame();
   }
+  if (!array_key_exists('search',$state)) {
+    highlights($highlights, 1);
+  }
   echo "    </div>\r";
 }
 
-function highlights($highlights) {
+function highlights($highlights, $position) {
   global $db;
 
   foreach ($highlights as $h) {
+
+    if ($h['position'] != $position) {
+      continue;
+    }
 
     if ($h['random'] == 1) {
       $rndsql = 'select id from games order by rand() limit 1';
@@ -225,7 +232,7 @@ function searchbox($state) {
 
 function randomgame() {
 ?>     <p>&nbsp;</p><h3>Random Game</h3>
-       <p><a href="q/random.php" class="btn btn-default btn-lg btn-block">Lucky Dip</a></p>
+       <p style="margin-bottom: 3em"><a href="q/random.php" class="btn btn-default btn-lg btn-block">Lucky Dip</a></p>
 <?php
 }
 
