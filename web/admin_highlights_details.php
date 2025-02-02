@@ -82,7 +82,7 @@ if (isset($_GET['id']) && is_string($_GET['id'])) {
       $sth->bindParam(12, $r['id'], PDO::PARAM_STR);
       $sth->execute();
       if ( $sth->execute() ) {
-        $msg="highlight updated.";
+        $msg="Highlight updated.";
       } else {
         $msg="Error updating highlight";
       }

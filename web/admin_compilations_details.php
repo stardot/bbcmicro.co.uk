@@ -40,7 +40,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
         $sth->bindParam(2, $id, PDO::PARAM_INT);
         $sth->execute();
 	if ( $sth->execute() ) {
-          $msg="compilation updated.";
+          $msg="Compilation updated.";
         } else {
           $msg="Error updating compilation";
         }
