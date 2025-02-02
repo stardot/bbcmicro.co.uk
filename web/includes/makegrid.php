@@ -563,7 +563,8 @@ function grid($state) {
     $atoz="";
   }
 
-  reltypes($state);
+  // No longer show release types along the top of the homepage (moved to search bar)
+  //reltypes($state);
 
   atoz_line($atoz,$chars,'bottom');
 

@@ -269,6 +269,36 @@ function refines($state) {
       </div>
 <?php
   }
+ ?>
+
+     <h4 style="margin-top:3ch">Only include release types:</h4>
+
+<?php
+
+  $reltyps=get_reltypes();
+  foreach ( $reltyps as $reltyp ) {
+    $checked='';
+    $active=' btn-default';
+    if (!array_key_exists('rtype',$state) || count($state['rtype'])==0){
+        if ($reltyp['selected'] == 'Y') {
+          $checked='  <input type="hidden" name="rt_' . $reltyp['id'] .'">';
+          $active=" checked='checked'";
+        }
+    } else {
+        if (array_key_exists('rtype',$state) && array_search($reltyp['id'],$state['rtype'])===False) {
+          ;
+        }else{
+          $checked='  <input type="hidden" name="rt_' . $reltyp['id'] .'">';
+          $active=" checked='checked'";
+        }
+    }
+?>
+      <div class="checkbox">
+       <label><input type="checkbox" name="rt_<?php echo $reltyp['id']; ?>" <?php echo $active ?>/><?php echo $reltyp['name'] ?></label>
+      </div>
+<?php
+   }
+
 }
 
 
