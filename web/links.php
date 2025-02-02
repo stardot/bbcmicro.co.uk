@@ -77,6 +77,39 @@ require 'includes/menu.php';
 	<br>
 	<a href='http://www.flaxcottage.com/educational/' target='_blank'>Educational Software Archive</a><br>
 
+	<h2>Database download links</h2>
+
+<?php
+date_default_timezone_set('Europe/London');
+clearstatcache();
+
+$files="BBCMicroFiles.zip";
+$discs="BBCMicroDiscs.zip";
+$scrs="BBCMicroScShots.zip";
+
+$cwd=getcwd();
+$zipf=$cwd . '/' . 'tmp/'.$files;
+$zipd=$cwd . '/' . 'tmp/'.$discs;
+$zips=$cwd . '/' . 'tmp/'.$scrs;
+
+$stat=@stat($zipf);
+
+echo "<a href='tmp/".$files."'>All files (zip)</a> - ";
+$stat=stat($zipf);
+echo date("d/m/y H:i:s", $stat['mtime']);
+echo "<br><br>";
+
+echo "<a href='tmp/".$discs."'>All files with original disc names (zip)</a> - ";
+$stat=stat($zipd);
+echo date("d/m/y H:i:s", $stat['mtime']);
+echo "<br><br>";
+
+echo "<a href='tmp/".$scrs."'>All screenshots (zip)</a> - ";
+$stat=stat($zips);
+echo date("d/m/y H:i:s", $stat['mtime']);
+echo "<br><br>";
+
+?>
       </div>
     </div>
 
