@@ -291,3 +291,24 @@ CREATE TABLE `game_keys` (
   `rel_order` int NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+--
+-- Table structure for table `highlights`
+--
+
+CREATE TABLE `highlights` (
+  `id` int(11) NOT NULL,
+  `games_id` int(11) DEFAULT NULL,
+  `url` varchar(1000) DEFAULT NULL,
+  `random` tinyint(1) DEFAULT 0,
+  `visible` tinyint(1) DEFAULT 0,
+  `colour` varchar(11) DEFAULT NULL,
+  `title` varchar(255) DEFAULT NULL,
+  `subtitle` varchar(1000) DEFAULT NULL,
+  `heading` varchar(255) DEFAULT NULL,
+  `screenshot_url` varchar(1000) DEFAULT NULL,
+  `sort_order` int(11) DEFAULT 0,
+  `position` int(11) DEFAULT 0,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
