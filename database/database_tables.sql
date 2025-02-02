@@ -297,8 +297,10 @@ CREATE TABLE `game_keys` (
 -- Table structure for table `highlights`
 --
 
+DROP TABLE IF EXISTS `highlights`;
+
 CREATE TABLE `highlights` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `games_id` int(11) DEFAULT NULL,
   `url` varchar(1000) DEFAULT NULL,
   `random` tinyint(1) DEFAULT 0,
