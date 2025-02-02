@@ -137,7 +137,7 @@ function make_form($user_id,$r,$error) {
 	echo "<input type='radio' name='locked' id='selno' value='N' ";
 	if ($r['locked'] != 'Y' ) echo "checked='checked'";
 	echo "><label for='selno'>No</label><br/><br/>";
-	echo "<label> Email address <input type='text' name='email' size='80' value='".$r['email']."'/></label><br/><br/>";
+	echo "<label> Email address <input type='text' name='email' class='big-text' value='".$r['email']."'/></label><br/><br/>";
 	echo "<label>Change password:  <input type='password' name='psw'/></label> <label>And again: <input type='password' name='psw2'/></label><br/><br/>";
 	echo "<br/><br/><input type='submit' value='Save'/>\n";
 	echo "</form>";

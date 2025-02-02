@@ -109,17 +109,17 @@ date_default_timezone_set('Europe/London');
 clearstatcache();
 
 echo "<ul>";
-echo "<li><a href='tmp/".$files."'>All files(zip)</a> - ";
+echo "<li><a href='tmp/".$files."'>All files (zip)</a> - ";
 $stat=stat($zipf);
 echo date("d/m/y H:i:s", $stat['mtime']);
 echo "</li>";
 
-echo "<li><a href='tmp/".$discs."'>All files with original disc names(zip)</a> - ";
+echo "<li><a href='tmp/".$discs."'>All files with original disc names (zip)</a> - ";
 $stat=stat($zipd);
 echo date("d/m/y H:i:s", $stat['mtime']);
 echo "</li>";
 
-echo "<li><a href='tmp/".$scrs."'>All screenshots(zip)</a> - ";
+echo "<li><a href='tmp/".$scrs."'>All screenshots (zip)</a> - ";
 $stat=stat($zips);
 echo date("d/m/y H:i:s", $stat['mtime']);
 echo "</li>";

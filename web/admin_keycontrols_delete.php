@@ -76,14 +76,14 @@ function make_form($r,$showdelete,$msg) {
   echo "<form name='frmGame' method='POST' action='admin_keycontrols_delete.php'>\n";
   echo "<input type='hidden' name='id' value='".$r['id']."'>\n";
 
-  echo "<label>Key ID: <input type='text' name='id' size='80' autofocus='autofocus' style='border: 0' readonly='readonly' value='".htmlspecialchars($r['id'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
-  echo "<label>Key order: <input type='text' name='rel_order' size='80' autofocus='autofocus' style='border: 0' readonly='readonly' value='".htmlspecialchars($r['rel_order'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
-  echo "<label>Key name: <input type='text' name='keyname' size='80' autofocus='autofocus' style='border: 0' readonly='readonly' value='".htmlspecialchars($r['keyname'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
-  echo "<label>Key function: <input type='text' name='keydescription' size='80' autofocus='autofocus' style='border: 0' readonly='readonly' value='".htmlspecialchars($r['keydescription'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
-  echo "<label>JSBeeb game key: <input type='text' name='jsbeebgamekey' size='80' autofocus='autofocus' style='border: 0' readonly='readonly' value='".htmlspecialchars($r['jsbeebgamekey'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
-  echo "<label>JSBeeb browser key: <input type='text' name='jsbeebbrowserkey' size='80' autofocus='autofocus' style='border: 0' readonly='readonly' value='".htmlspecialchars($r['jsbeebbrowserkey'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
-  echo "<label>Game ID: <input type='text' name='gameid' size='80' autofocus='autofocus' style='border: 0' readonly='readonly' value='".htmlspecialchars($r['gameid'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
-  echo "<label>Game title: <input type='text' name='title' size='80' autofocus='autofocus' style='border: 0' readonly='readonly' value='".htmlspecialchars($r['title'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
+  echo "<label>Key ID: <input type='text' name='id' class='big-text' autofocus='autofocus' style='border: 0' readonly='readonly' value='".htmlspecialchars($r['id'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
+  echo "<label>Key order: <input type='text' name='rel_order' class='big-text' autofocus='autofocus' style='border: 0' readonly='readonly' value='".htmlspecialchars($r['rel_order'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
+  echo "<label>Key name: <input type='text' name='keyname' class='big-text' autofocus='autofocus' style='border: 0' readonly='readonly' value='".htmlspecialchars($r['keyname'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
+  echo "<label>Key function: <input type='text' name='keydescription' class='big-text' autofocus='autofocus' style='border: 0' readonly='readonly' value='".htmlspecialchars($r['keydescription'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
+  echo "<label>JSBeeb game key: <input type='text' name='jsbeebgamekey' class='big-text' autofocus='autofocus' style='border: 0' readonly='readonly' value='".htmlspecialchars($r['jsbeebgamekey'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
+  echo "<label>JSBeeb browser key: <input type='text' name='jsbeebbrowserkey' class='big-text' autofocus='autofocus' style='border: 0' readonly='readonly' value='".htmlspecialchars($r['jsbeebbrowserkey'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
+  echo "<label>Game ID: <input type='text' name='gameid' class='big-text' autofocus='autofocus' style='border: 0' readonly='readonly' value='".htmlspecialchars($r['gameid'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
+  echo "<label>Game title: <input type='text' name='title' class='big-text' autofocus='autofocus' style='border: 0' readonly='readonly' value='".htmlspecialchars($r['title'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
 
   if ($showdelete > 0) {
     echo '<br/><input type="submit" value="Delete"></form>';

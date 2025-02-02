@@ -9,7 +9,9 @@
 body { font-family: arial,helvetica,sans-serif; }
 table { border-collapse: collapse; }
 td { border: 1px solid black; padding: 10px; }
-tr:nth-child(even) {background: #eee}
+tr:nth-child(even) { background: #eee; }
+.big-text { width: 80ch; max-width: calc(100% - 20px); }
+hr { margin-bottom: 2em }
 	</style>
 </head>
 <body>

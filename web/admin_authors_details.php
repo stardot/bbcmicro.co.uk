@@ -87,7 +87,7 @@ make_form($r,$msg);
 
 function make_form($r,$msg) {
   echo "<br><b>".$r['name']."</b>";
-  if ( strlen($r['alias'])>0) {
+  if ( $r['alias'] && strlen($r['alias'])>0) {
     echo " (".$r['alias'].")";
   }
   echo "<hr>";
@@ -95,8 +95,8 @@ function make_form($r,$msg) {
   echo "<form name='frmGame' method='POST' action='admin_authors_details.php'>\n";
   echo "<input type='hidden' name='id' value='".$r['id']."'>\n";
 
-  echo "<label>Name: <input type='text' name='name' size='80' autofocus='autofocus' value='".htmlspecialchars($r['name'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
-  echo "<label>Alias: <input type='text' name='alias' size='80' value='".htmlspecialchars($r['alias'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
+  echo "<label>Name: <input type='text' name='name' class='big-text' autofocus='autofocus' value='".htmlspecialchars($r['name'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
+  echo "<label>Alias: <input type='text' name='alias' class='big-text' value='".htmlspecialchars($r['alias'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
  
   echo '<br/><input type="submit" value="Submit"></form>';
   echo '<hr/><a href="admin_authors.php">Back to the list</a>';

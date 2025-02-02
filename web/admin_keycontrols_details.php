@@ -97,12 +97,12 @@ function make_form($r,$msg) {
   echo "<form name='frmGame' method='POST' action='admin_keycontrols_details.php'>\n";
   echo "<input type='hidden' name='id' value='".$r['id']."'>\n";
 
-  echo "<label>Game ID: <input type='text' name='gameid' size='80' autofocus='autofocus' value='".htmlspecialchars($r['gameid'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
-  echo "<label>Key order: <input type='text' name='rel_order' size='80' autofocus='autofocus' value='".htmlspecialchars($r['rel_order'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
-  echo "<label>Key name: <input type='text' name='keyname' size='80' autofocus='autofocus' value='".htmlspecialchars($r['keyname'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
-  echo "<label>Key function: <input type='text' name='keydescription' size='80' autofocus='autofocus' value='".htmlspecialchars($r['keydescription'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
-  echo "<label>JSBeeb game key: <input type='text' name='jsbeebgamekey' size='80' autofocus='autofocus' value='".htmlspecialchars($r['jsbeebgamekey'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
-  echo "<label>JSBeeb browser key: <input type='text' name='jsbeebbrowserkey' size='80' autofocus='autofocus' value='".htmlspecialchars($r['jsbeebbrowserkey'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
+  echo "<label>Game ID: <input type='text' name='gameid' class='big-text' autofocus='autofocus' value='".htmlspecialchars($r['gameid'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
+  echo "<label>Key order: <input type='text' name='rel_order' class='big-text' autofocus='autofocus' value='".htmlspecialchars($r['rel_order'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
+  echo "<label>Key name: <input type='text' name='keyname' class='big-text' autofocus='autofocus' value='".htmlspecialchars($r['keyname'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
+  echo "<label>Key function: <input type='text' name='keydescription' class='big-text' autofocus='autofocus' value='".htmlspecialchars($r['keydescription'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
+  echo "<label>JSBeeb game key: <input type='text' name='jsbeebgamekey' class='big-text' autofocus='autofocus' value='".htmlspecialchars($r['jsbeebgamekey'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
+  echo "<label>JSBeeb browser key: <input type='text' name='jsbeebbrowserkey' class='big-text' autofocus='autofocus' value='".htmlspecialchars($r['jsbeebbrowserkey'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
  
   echo '<br/><input type="submit" value="Submit"></form>';
   echo '<hr/><a href="admin_keycontrols.php">Back to the list</a>';

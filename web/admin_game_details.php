@@ -568,20 +568,27 @@ function make_form($game_id,$r) {
 	echo "<input type='hidden' name='id' value='$game_id'>\n";
 
 	echo "<label> Article <input type='text' name='title_article' size='5' value='".htmlspecialchars($r['title_article'] ?? '',ENT_QUOTES)."'/></label>  ";
-	echo "<label> Title <input type='text' name='title' size='80' value='".htmlspecialchars($r['title'] ?? '',ENT_QUOTES)."'/></label>";
+
+	echo "<br/><br/>";
+
+	echo "<label> Title <input type='text' name='title' class='big-text' value='".htmlspecialchars($r['title'] ?? '',ENT_QUOTES)."'/></label>";
+
+	echo "<br/><br/>";
+
 	echo "<label> Parent ID <input type='text' name='parent' size='4' value='".$r['parent']."'/> ";
 	echo "</label><br/><br/>";
 	echo "<label> Year. 19XX if unknown. <input type='text' name='year' size='4' value='".$r['year']."'/></label>";
+	echo "<br/><br/>";
+
+	echo "<hr/>";
 
 	echo "<label> Primary Genre ";
 	echo make_dd($r['genre'], 'genre','Primary Genre',$known_genres);
-	echo "</label>";
+	echo "</label><br/><br/>";
 
 	echo "<label> Release Type ";
 	echo make_dd($r['reltype'], 'reltype','Release',$known_reltyps);
-	echo "</label>";
-
-	echo "<br/><br/>";
+	echo "</label><br/><br/>";
 
 	echo "<label> Number of players: Min: <input type='number' name='players_min' size='2' min='0' ";
 	echo "max='99' value='".$r['players_min']."'/>";
@@ -591,20 +598,20 @@ function make_form($game_id,$r) {
 	# Joystick
 	echo "<label>If a joystick is used, select whether it is optional or required.  ";
 	echo make_dd($r['joystick'], 'joystick','Joystick',$jopts);
-	echo "</label>";
+	echo "</label><br/><br/>";
 
 	# Save
 	echo "<label>If game state can be saved, select disc or tape as the target.  ";
 	echo make_dd($r['save'], 'save','Save',$sopts);
-	echo "</label>";
+	echo "</label><br/><br/>";
 
-	echo "<br/><br/>";
+	echo "<hr/>";
 
 	echo "<label>Any special hardware required ";
 	echo "<input type='text' name='hardware' size='20' value='".htmlspecialchars($r['hardware'] ?? '',ENT_QUOTES)."'/></label> ";
-	echo "</label>";
+	echo "</label><br/><br/>";
 
-	echo "<label> Electron conversion ";
+	echo "<label>Electron conversion ";
 //	echo make_dd($r['electron'], 'electron','if converted',$eopts);
         if ( $r['electron'] == 'Y' ) {
 		$checked='checked';
@@ -612,20 +619,22 @@ function make_form($game_id,$r) {
 		$checked='';
 	}
 	echo '<input type="checkbox" name="electron" '.$checked.' value="Y"/>';
-	echo "</label>";
+	echo "</label><br/><br/>";
 
 	echo "<label> Version <input type='text' name='version' size='5' value='".$r['version']."'/></label> ";
 	echo "<br/><br/>";
 
+	echo "<hr/>";
+
 	# Model A Compatibility
 	echo "<label>Model A Compatibility.  ";
 	echo make_dd($r['compat_a'], 'compat_a','Model A',$copts);
-	echo "</label>";
+	echo "</label><br/><br/>";
 
 	# Model B Compatibility
 	echo "<label>Model B Compatibility.  ";
 	echo make_dd($r['compat_b'], 'compat_b','Model B',$copts);
-	echo "</label>";
+	echo "</label><br/><br/>";
 
 	# Master Compatibility
 	echo "<label>Master Compatibility.  ";
@@ -637,13 +646,17 @@ function make_form($game_id,$r) {
 	echo make_dd($r['jsbeebplatform'], 'jsbeebplatform','Platform',$platopts);
 	echo "</label><br/><br/>";
 
+	echo "<hr/>";
+
 //	echo "<label> Compilation: <input type='text' name='compilation' size='20' value='".htmlspecialchars($r['compilation'] ?? '',ENT_QUOTES)."'/></label> ";
 	echo "<label> Series - must be identical for each game in series ";
 	echo "<input type='text' name='series' size='20' value='".htmlspecialchars($r['series'] ?? '',ENT_QUOTES)."'/></label> ";
-	echo "<label> Number in series <input type='text' name='series_no' size='15' value='".$r['series_no']."'/></label> ";
+	echo "<br/><br/><label> Number in series <input type='text' name='series_no' size='15' value='".$r['series_no']."'/></label> ";
 	echo "<br/><br/>";
 
-	echo "<label>Authors<br/>";
+	echo "<hr/>";
+
+	echo "</label><label>Authors<br/><br/>";
 	# Authors
 	$ac=1;
 	$authors=explode('@',$r['authors'] ?? '');
@@ -652,15 +665,16 @@ function make_form($game_id,$r) {
 		if (!(False === strpos($author,'|' ))) {
 			list($id,$name)=explode('|',$author);
 			echo make_dd($id,'author_'.sprintf("%02d",$ac++),'author',$known_authors);
+	        echo "<br/><br/>";
 		}
 	}
 	# Allow up to 4 authors per title
 	do {
 		echo make_dd(0,'author_'.sprintf("%02d",$ac++),'author',$known_authors);
+	    echo "<br/><br/>";
 	} while ($ac<=4);
 
-	echo "<br/><br/>";
-	echo "<label>Compilations<br/>";
+	echo "</label><hr /><label>Compilations<br/><br/>";
 	# Compilations
 	$ac=1;
 	if ($r['compilations']) {
@@ -673,14 +687,16 @@ function make_form($game_id,$r) {
 		if (!(False === strpos($compilation,'|' ))) {
 			list($id,$name)=explode('|',$compilation);
 			echo make_dd($id,'compilation_'.sprintf("%02d",$ac++),'compilation',$known_compilations);
+    	    echo "<br/><br/>";
 		}
 	}
 	# Allow up to 4 compilations per title
 	do {
 		echo make_dd(0,'compilation_'.sprintf("%02d",$ac++),'compilation',$known_compilations);
+	    echo "<br/><br/>";
 	} while ($ac<=2);
 
-	echo "</label><br/><br/><label>Secondary Genres<br/>";
+	echo "</label><hr /><label>Secondary Genres<br/><br/>";
 
 	$ac=1;
 	if ($r['genres']) {
@@ -693,14 +709,16 @@ function make_form($game_id,$r) {
 		if (!(False === strpos($genre,'|' ))) {
 			list($id,$name)=explode('|',$genre);
 			echo make_dd($id,'genre_'.sprintf("%02d",$ac++),'genre',$known_genres);
+    	    echo "<br/><br/>";
 		}
 	}
 	# Allow up to 4 genres per title
 	do {
 		echo make_dd(0,'genre_'.sprintf("%02d",$ac++),'genre',$known_genres);
+   	    echo "<br/><br/>";
 	} while ($ac<=4);
 
-	echo "</label><br/><br/>Publishers<br/>";
+	echo "</label><hr /><label>Publishers<br/><br/>";
 
 	$ac=1;
 
@@ -708,14 +726,16 @@ function make_form($game_id,$r) {
 		if (!(False === strpos($pub,'|' ))) {
 			list($id,$name)=explode('|',$pub);
 			echo make_dd($id,'publisher_'.sprintf("%02d",$ac++),'publisher',$known_publishers);
+       	    echo "<br/><br/>";
 		}
 	}
 	# Allow up to 4 publishers per title
 	do {
 		echo make_dd(0,'publisher_'.sprintf("%02d",$ac++),'publisher',$known_publishers);
+   	    echo "<br/><br/>";
 	} while ($ac<=4);
 
-	echo "<br/><br/><label> Notes: <textarea id='notes' name='notes' rows='20' cols='132' >".htmlspecialchars($r['notes'] ?? '')."</textarea></label><br/>";
+	echo "</label><hr /><label> Notes: <textarea id='notes' name='notes' rows='20' cols='132' >".htmlspecialchars($r['notes'] ?? '')."</textarea></label><br/>";
 	echo "<input type='submit' value='Save' style='margin-bottom: 20ch'>\n";
 
 	echo "</form>\n";

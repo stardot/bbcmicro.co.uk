@@ -77,11 +77,11 @@ function make_form($r,$gamecount,$msg) {
   echo "<p>$msg</p>\n";
   echo "<form name='frmGame' method='POST' action='admin_releasetypes_delete.php'>\n";
 
-  echo "<label>ID: <input type='text' name='id' size='80' readonly='readonly' style='border: 0' value='".htmlspecialchars($r['id'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
+  echo "<label>ID: <input type='text' name='id' class='big-text' readonly='readonly' style='border: 0' value='".htmlspecialchars($r['id'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
 
-  echo "<label>Name: <input type='text' name='name' size='80' autofocus='autofocus' readonly='readonly' style='border: 0' value='".htmlspecialchars($r['name'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
-  echo "<label>Selected (on homepage): <input type='text' name='selected' size='80' autofocus='autofocus' style='border: 0' readonly='readonly' value='".htmlspecialchars($r['selected'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
-  echo "<label>Sort order (on homepage): <input type='text' name='rel_order' size='80' autofocus='autofocus' style='border: 0' readonly='readonly' value='".htmlspecialchars($r['rel_order'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
+  echo "<label>Name: <input type='text' name='name' class='big-text' autofocus='autofocus' readonly='readonly' style='border: 0' value='".htmlspecialchars($r['name'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
+  echo "<label>Selected (on homepage): <input type='text' name='selected' class='big-text' autofocus='autofocus' style='border: 0' readonly='readonly' value='".htmlspecialchars($r['selected'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
+  echo "<label>Sort order (on homepage): <input type='text' name='rel_order' class='big-text' autofocus='autofocus' style='border: 0' readonly='readonly' value='".htmlspecialchars($r['rel_order'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
 
   if ($gamecount > 0) {
     $plural = ($gamecount > 1) ? "s" : "";

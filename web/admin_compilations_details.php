@@ -78,7 +78,7 @@ function make_form($r,$msg) {
   echo "<form name='frmGame' method='POST' action='admin_compilations_details.php'>\n";
   echo "<input type='hidden' name='id' value='".$r['id']."'>\n";
 
-  echo "<label>Name: <input type='text' name='name' size='80' autofocus='autofocus' value='".htmlspecialchars($r['name'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
+  echo "<label>Name: <input type='text' name='name' class='big-text' autofocus='autofocus' value='".htmlspecialchars($r['name'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
  
   echo '<br/><input type="submit" value="Submit"></form>';
   echo '<hr/><a href="admin_compilations.php">Back to the list</a>';
