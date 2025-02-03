@@ -45,6 +45,10 @@ if (isset($_GET['id']) && is_string($_GET['id'])) {
     $r['screenshot_url']=$_POST['screenshot_url'];
     $r['sort_order']=($_POST['sort_order'] == '') ? 0 : $_POST['sort_order'];
     $r['position']=($_POST['position'] == '') ? 0 : $_POST['position'];
+    $r['download_button']=($_POST['download_button'] == '') ? 0 : $_POST['download_button'];
+    $r['play_button']=($_POST['play_button'] == '') ? 0 : $_POST['play_button'];
+    $r['show_publisher']=($_POST['show_publisher'] == '') ? 0 : $_POST['show_publisher'];
+    $r['show_year']=($_POST['show_year'] == '') ? 0 : $_POST['show_year'];
     $r['action']=$_POST['action'];
 
     if ( $r['id'] == null || $r['id'] == '' ) {
@@ -72,6 +76,10 @@ if (isset($_GET['id']) && is_string($_GET['id'])) {
     $r['subtitle']='';
     $r['heading']='';
     $r['screenshot_url']='';
+    $r['download_button']='';
+    $r['play_button']='';
+    $r['show_publisher']='';
+    $r['show_year']='';
     $r['sort_order']='';
     $r['position']='';
     $msg="No ID set.";
@@ -95,7 +103,17 @@ function make_form($r,$showdelete,$msg) {
 
   echo "<label>Heading: <input type='text' name='heading' class='big-text' autofocus='autofocus' readonly='readonly' value='".htmlspecialchars($r['heading'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
   echo "<label>Show on site? <input type='text' name='visible' class='big-text' autofocus='autofocus' readonly='readonly' value='".($r['visible'] == 1 ? 'Y' : 'N')."'/></label><br/><br/>";
-  echo "<label>Show a random game? <input type='text' name='random' class='big-text' autofocus='autofocus' readonly='readonly' value='".($r['random'] == 1 ? 'Y' :'N')."'/></label><br/><br/>";
+
+  echo "<label>Show a random game? <input type='text' name='random' class='big-text' autofocus='autofocus' readonly='readonly' value='";
+  if ($r['random'] == 1) {
+      echo "Random game";
+  } elseif ($r['random'] == 2) {
+      echo "Lucky dip button";
+  } else {
+      echo "No";
+  }
+  echo "'/></label><br/><br/>";
+
   echo "<label>Sort order within search column: <input type='text' name='sort_order' size='10' autofocus='autofocus' readonly='readonly' value='".htmlspecialchars($r['sort_order'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
   echo "<label>Position within search column <input type='text' name='position' class='big-text' autofocus='autofocus' readonly='readonly' value='".($r['position'] == 1 ? 'Bottom' :'Top')."'/></label><br/><br/>";
   echo "<label>Background colour (CSS, e.g. #123456 or yellow): <input type='text' name='colour' size='10' autofocus='autofocus' readonly='readonly' value='".htmlspecialchars($r['colour'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
@@ -111,6 +129,11 @@ function make_form($r,$showdelete,$msg) {
   echo "<label>Subtitle: <input $disabled type='text' name='subtitle' class='big-text' autofocus='autofocus' value='".htmlspecialchars($r['subtitle'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
   echo "<label>Link URL override: <input $disabled type='text' name='url' class='big-text' autofocus='autofocus' value='".htmlspecialchars($r['url'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
   echo "<label>Screenshot URL override: <input $disabled type='text' name='screenshot_url' class='big-text' autofocus='autofocus' value='".htmlspecialchars($r['screenshot_url'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
+
+  echo "<label>Show download button? <input type='text' name='download_button' class='big-text' autofocus='autofocus' readonly='readonly' value='".($r['download_button'] == 1 ? 'Yes' :'No')."'/></label><br/><br/>";
+  echo "<label>Show play button? <input type='text' name='play_button' class='big-text' autofocus='autofocus' readonly='readonly' value='".($r['play_button'] == 1 ? 'Yes' :'No')."'/></label><br/><br/>";
+  echo "<label>Show publisher? <input type='text' name='show_publisher' class='big-text' autofocus='autofocus' readonly='readonly' value='".($r['show_publisher'] == 1 ? 'Yes' :'No')."'/></label><br/><br/>";
+  echo "<label>Show year? <input type='text' name='show_year' class='big-text' autofocus='autofocus' readonly='readonly' value='".($r['show_year'] == 1 ? 'Yes' :'No')."'/></label><br/><br/>";
 
   if ($showdelete > 0) {
     echo '<br/><input type="submit" value="Delete"></form>';

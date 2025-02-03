@@ -33,7 +33,7 @@ function getstate() {
 
 function get_highlights() {
   global $db;
-  $sql = 'select url, random, visible, colour, title, subtitle, heading, games_id, screenshot_url, position from highlights where visible = 1 order by sort_order';
+  $sql = 'select url, random, visible, colour, title, subtitle, heading, games_id, screenshot_url, position, download_button, play_button, show_publisher, show_year from highlights where visible = 1 order by sort_order';
   $sth = $db->prepare($sql,array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
   $sth->execute(); 
   $hs = $sth->fetchAll();

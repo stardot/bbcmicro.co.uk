@@ -312,5 +312,9 @@ CREATE TABLE `highlights` (
   `screenshot_url` varchar(1000) DEFAULT NULL,
   `sort_order` int(11) DEFAULT 0,
   `position` int(11) DEFAULT 0,
+  `download_button` tinyint(1) DEFAULT 0,
+  `play_button` tinyint(1) DEFAULT 0,
+  `show_publisher` tinyint(1) DEFAULT 0,
+  `show_year` tinyint(1) DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

@@ -44,9 +44,13 @@ if (isset($_GET['id']) && is_string($_GET['id'])) {
     $r['screenshot_url']=$_POST['screenshot_url'];
     $r['sort_order']=($_POST['sort_order'] == '') ? 0 : $_POST['sort_order'];
     $r['position']=($_POST['position'] == '') ? 0 : $_POST['position'];
+    $r['download_button']=($_POST['download_button'] == '') ? 0 : $_POST['download_button'];
+    $r['play_button']=($_POST['play_button'] == '') ? 0 : $_POST['play_button'];
+    $r['show_publisher']=($_POST['show_publisher'] == '') ? 0 : $_POST['show_publisher'];
+    $r['show_year']=($_POST['show_year'] == '') ? 0 : $_POST['show_year'];
     $r['action']=$_POST['action'];
     if ( $_POST['action'] == 'new' ) {
-      $s="insert into highlights (games_id, url, random, visible, colour, title, subtitle, heading, screenshot_url, sort_order, position) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+      $s="insert into highlights (games_id, url, random, visible, colour, title, subtitle, heading, screenshot_url, sort_order, position, download_button, play_button, show_publisher, show_year) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
       $sth = $dbh->prepare($s,array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
       $sth->bindParam(1, $r['games_id'], PDO::PARAM_STR);
       $sth->bindParam(2, $r['url'], PDO::PARAM_STR);
@@ -59,6 +63,10 @@ if (isset($_GET['id']) && is_string($_GET['id'])) {
       $sth->bindParam(9, $r['screenshot_url'], PDO::PARAM_STR);
       $sth->bindParam(10, $r['sort_order'], PDO::PARAM_STR);
       $sth->bindParam(11, $r['position'], PDO::PARAM_STR);
+      $sth->bindParam(12, $r['download_button'], PDO::PARAM_STR);
+      $sth->bindParam(13, $r['play_button'], PDO::PARAM_STR);
+      $sth->bindParam(14, $r['show_publisher'], PDO::PARAM_STR);
+      $sth->bindParam(15, $r['show_year'], PDO::PARAM_STR);
       if ( $sth->execute() ) {
         $id=$dbh->lastInsertId();
         $msg="New highlight added: ".$id.".";
@@ -66,7 +74,7 @@ if (isset($_GET['id']) && is_string($_GET['id'])) {
         $msg="Error adding highlight";
       }
     } else {
-      $s="update highlights set games_id=?, url=?, random=?, visible=?, colour=?, title=?, subtitle=?, heading=?, screenshot_url=?, sort_order=?, position=? where id = ?";
+      $s="update highlights set games_id=?, url=?, random=?, visible=?, colour=?, title=?, subtitle=?, heading=?, screenshot_url=?, sort_order=?, position=?, download_button=?, play_button=?, show_publisher=?, show_year=? where id = ?";
       $sth = $dbh->prepare($s,array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
       $sth->bindParam(1, $r['games_id'], PDO::PARAM_STR);
       $sth->bindParam(2, $r['url'], PDO::PARAM_STR);
@@ -79,7 +87,11 @@ if (isset($_GET['id']) && is_string($_GET['id'])) {
       $sth->bindParam(9, $r['screenshot_url'], PDO::PARAM_STR);
       $sth->bindParam(10, $r['sort_order'], PDO::PARAM_STR);
       $sth->bindParam(11, $r['position'], PDO::PARAM_STR);
-      $sth->bindParam(12, $r['id'], PDO::PARAM_STR);
+      $sth->bindParam(12, $r['download_button'], PDO::PARAM_STR);
+      $sth->bindParam(13, $r['play_button'], PDO::PARAM_STR);
+      $sth->bindParam(14, $r['show_publisher'], PDO::PARAM_STR);
+      $sth->bindParam(15, $r['show_year'], PDO::PARAM_STR);
+      $sth->bindParam(16, $r['id'], PDO::PARAM_STR);
       $sth->execute();
       if ( $sth->execute() ) {
         $msg="Highlight updated.";
@@ -98,6 +110,10 @@ if (isset($_GET['id']) && is_string($_GET['id'])) {
     $r['subtitle']='';
     $r['heading']='';
     $r['screenshot_url']='';
+    $r['download_button']='';
+    $r['play_button']='';
+    $r['show_publisher']='';
+    $r['show_year']='';
     $r['sort_order']='';
     $r['position']='';
     $r['action']='new';
@@ -122,7 +138,9 @@ function make_form($r,$msg) {
 
   echo "<label>Heading: <input type='text' name='heading' class='big-text' autofocus='autofocus' value='".htmlspecialchars($r['heading'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
   echo "<label>Show on site? <select name='visible'><option value='0'" . ($r['visible'] != 1 ? ' selected' : '') . ">No</option><option value='1'" . ($r['visible'] == 1 ? ' selected' : '') . ">Yes</option></select></label><br/><br/>";
-  echo "<label>Show a random game? <select name='random'><option value='0'" . ($r['random'] != 1 ? ' selected' : '') . ">No</option><option value='1'" . ($r['random'] == 1 ? ' selected' : '') . ">Yes</option></select></label><br/><br/>";
+  echo "<label>Show a random game? <select name='random'><option value='0'" . (($r['random'] != 1 && $r['random'] != 2) ? ' selected' : '') . ">No</option>";
+  echo "<option value='1'" . ($r['random'] == 1 ? ' selected' : '') . ">Random game</option>";
+  echo "<option value='2'" . ($r['random'] == 2 ? ' selected' : '') . ">Lucky dip button</option></select></label><br/><br/>";
   echo "<label>Sort order within search column: <input type='text' name='sort_order' size='10' autofocus='autofocus' value='".htmlspecialchars($r['sort_order'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
   echo "<label>Position within search column <select name='position'><option value='0'" . ($r['position'] != 1 ? ' selected' : '') . ">Top</option><option value='1'" . ($r['position'] == 1 ? ' selected' : '') . ">Bottom</option></select></label><br/><br/>";
   echo "<label>Background colour (CSS, e.g. #123456 or yellow): <input type='text' name='colour' size='10' autofocus='autofocus' value='".htmlspecialchars($r['colour'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
@@ -138,6 +156,12 @@ function make_form($r,$msg) {
   echo "<label>Subtitle: <input $disabled type='text' name='subtitle' class='big-text' autofocus='autofocus' value='".htmlspecialchars($r['subtitle'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
   echo "<label>Link URL override: <input $disabled type='text' name='url' class='big-text' autofocus='autofocus' value='".htmlspecialchars($r['url'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
   echo "<label>Screenshot URL override: <input $disabled type='text' name='screenshot_url' class='big-text' autofocus='autofocus' value='".htmlspecialchars($r['screenshot_url'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
+
+  echo "<label>Show download button? <select name='download_button'><option value='0'" . ($r['download_button'] != 1 ? ' selected' : '') . ">No</option><option value='1'" . ($r['download_button'] == 1 ? ' selected' : '') . ">Yes</option></select></label><br/><br/>";
+  echo "<label>Show play button? <select name='play_button'><option value='0'" . ($r['play_button'] != 1 ? ' selected' : '') . ">No</option><option value='1'" . ($r['play_button'] == 1 ? ' selected' : '') . ">Yes</option></select></label><br/><br/>";
+  echo "<label>Show publisher? <select name='show_publisher'><option value='0'" . ($r['download_button'] != 1 ? ' selected' : '') . ">No</option><option value='1'" . ($r['show_publisher'] == 1 ? ' selected' : '') . ">Yes</option></select></label><br/><br/>";
+  echo "<label>Show year? <select name='show_year'><option value='0'" . ($r['download_button'] != 1 ? ' selected' : '') . ">No</option><option value='1'" . ($r['show_year'] == 1 ? ' selected' : '') . ">Yes</option></select></label><br/><br/>";
+
   echo '<br/><input type="submit" value="Submit"></form>';
   echo '<hr/><a href="admin_highlights.php">Back to the list</a>';
 }

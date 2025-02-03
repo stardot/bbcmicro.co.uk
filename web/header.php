@@ -68,9 +68,6 @@ function sidebar($state, $highlights) {
   }
   searchbuttons();
   if (!array_key_exists('search',$state)) {
-    randomgame();
-  }
-  if (!array_key_exists('search',$state)) {
     highlights($highlights, 1);
   }
   echo "    </div>\r";
@@ -82,6 +79,11 @@ function highlights($highlights, $position) {
   foreach ($highlights as $h) {
 
     if ($h['position'] != $position) {
+      continue;
+    }
+
+    if ($h['random'] == 2) {
+      randomgame();
       continue;
     }
 
@@ -162,7 +164,7 @@ function highlightitem( $h, $id, $ta, $name, $image, $img, $publisher, $year, $k
   $jsbeeb=JB_LOC;
   $root=WS_ROOT;
 
-  if ($h['title'] && strlen($h['title'] && $h['random']) != 1) {
+  if ($h['title'] && strlen($h['title']) && $h['random'] != 1) {
     $title=$h['title'];
   } else {
     $split=explode('(',$name);
@@ -196,9 +198,9 @@ function highlightitem( $h, $id, $ta, $name, $image, $img, $publisher, $year, $k
        <a href="<?php echo $url; ?>"><img src="<?php echo $image; ?>" alt="<?php echo $image; ?>" class="pic"></a>
        <div class="row-title" style="height: auto; margin-bottom: 0.25em"><span class="row-title"><a href="<?php echo $url; ?>"><?php echo $title ?></a></span></div>
 <?php
-  if ($publisher != '' && $year != '') {
+  if (($publisher != '' && $h['show_publisher'] == 1) || ($year != '' && $h['show_year'] == 1)) {
 ?>
-       <div class="row-pub" style="height: auto; font-size: 0.85em; margin-bottom: 1em"><?php echo $publisher ?> (<?php echo $year; ?>)</div>
+       <div class="row-pub" style="height: auto; font-size: 0.85em; margin-bottom: 1em"><?php if ($h['show_publisher'] == 1) echo $publisher ?><?php if ($h['show_year'] == 1) echo " " . (($h['show_publisher'] == 1) ? "(" : "") . $year . (($h['show_publisher'] == 1) ? ")" : ""); ?></div>
 <?php
   }
   if ($h['subtitle'] && strlen($h['subtitle']) > 0) {
@@ -207,10 +209,10 @@ function highlightitem( $h, $id, $ta, $name, $image, $img, $publisher, $year, $k
 <?php
   }
   $playlink=get_playlink($img,$jsbeeb,$root,$keys,$platform);
-  if ($ssd != null && file_exists($ssd)) { ?>
+  if ($h['download_button'] == 1 && $ssd != null && file_exists($ssd)) { ?>
        <p><a href="<?php echo $ssd ?>" type="button" onmousedown="log(<?php echo $id; ?>);" class="btn btn-default">Download</a></p><?php
   }
-  if ((($img['probs'] ?? '') != 'N' and ($img['probs'] ?? '') != 'P') and $playlink != null) { ?>
+  if ($h['play_button'] == 1 && (($img['probs'] ?? '') != 'N' and ($img['probs'] ?? '') != 'P') and $playlink != null) { ?>
           <p><a id="plybtn" href="<?php echo $playlink ?>" type="button" onmousedown="logPlay(<?php echo $id; ?>);" class="btn btn-default">Play</a></p>
 <?php
   }
