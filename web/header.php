@@ -195,8 +195,12 @@ function highlightitem( $h, $id, $ta, $name, $image, $img, $publisher, $year, $k
        <h5 style="margin-top: 0"><?php echo $h['heading']; ?></h5>
        <a href="<?php echo $url; ?>"><img src="<?php echo $image; ?>" alt="<?php echo $image; ?>" class="pic"></a>
        <div class="row-title" style="height: auto; margin-bottom: 0.25em"><span class="row-title"><a href="<?php echo $url; ?>"><?php echo $title ?></a></span></div>
+<?php
+  if ($publisher != '' && $year != '') {
+?>
        <div class="row-pub" style="height: auto; font-size: 0.85em; margin-bottom: 1em"><?php echo $publisher ?> (<?php echo $year; ?>)</div>
 <?php
+  }
   if ($h['subtitle'] && strlen($h['subtitle']) > 0) {
 ?>
        <div class="row-subtitle" style="margin-bottom: 1em"><span class="row-subtitle"><?php echo $h['subtitle'] ?></span></div>
