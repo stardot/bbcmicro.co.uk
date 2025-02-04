@@ -78,6 +78,8 @@ function sidebar($state, $highlights) {
 function highlights($highlights, $position, $show_in_sidebar) {
   global $db;
 
+  $first = true;
+
   foreach ($highlights as $h) {
 
     if ($h['position'] != $position) {
@@ -158,13 +160,19 @@ function highlights($highlights, $position, $show_in_sidebar) {
 	    echo "$gamsql gave ".$db->errorCode()."<br>\n";
     }
 
-    highlightitem($h, $game["id"],htmlspecialchars($game["title_article"] ?? ''),htmlspecialchars($game["title"] ?? ''), $shot, $dnl ,$pubs,$game["year"],$keys,$game["jsbeebplatform"], $show_in_sidebar);
+    highlightitem($h, $game["id"],htmlspecialchars($game["title_article"] ?? ''),htmlspecialchars($game["title"] ?? ''), $shot, $dnl ,$pubs,$game["year"],$keys,$game["jsbeebplatform"], $show_in_sidebar, $first);
+
+    $first = false;
   }
 }
 
-function highlightitem( $h, $id, $ta, $name, $image, $img, $publisher, $year, $keys, $platform, $show_in_sidebar) {
+function highlightitem( $h, $id, $ta, $name, $image, $img, $publisher, $year, $keys, $platform, $show_in_sidebar, $first) {
   $jsbeeb=JB_LOC;
   $root=WS_ROOT;
+
+  if ($first && $show_in_sidebar == 0) {
+    echo "<div style='margin-bottom: 40px'></div>";
+  }
 
   $show_in_sidebar_class = ($show_in_sidebar == 0) ? "visible-xs" : "hidden-xs";
 
