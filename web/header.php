@@ -59,7 +59,7 @@ function sidebar($state, $highlights) {
 ?>   <div class="col-xs-3 col-sm-3 col-md-3 col-lg-2 sidebar-offcanvas" id="sidebar" style="margin-top: 20px">
 <?php
   if (!array_key_exists('search',$state)) {
-    highlights($highlights, 0);
+    highlights($highlights, 0, 0);
   }
   searchbox($state);
   if (array_key_exists('search',$state)) {
@@ -68,12 +68,12 @@ function sidebar($state, $highlights) {
   }
   searchbuttons();
   if (!array_key_exists('search',$state)) {
-    highlights($highlights, 1);
+    highlights($highlights, 1, 0);
   }
   echo "    </div>\r";
 }
 
-function highlights($highlights, $position) {
+function highlights($highlights, $position, $mobile) {
   global $db;
 
   foreach ($highlights as $h) {
@@ -156,13 +156,15 @@ function highlights($highlights, $position) {
 	    echo "$gamsql gave ".$db->errorCode()."<br>\n";
     }
 
-    highlightitem($h, $game["id"],htmlspecialchars($game["title_article"] ?? ''),htmlspecialchars($game["title"] ?? ''), $shot, $dnl ,$pubs,$game["year"],$keys,$game["jsbeebplatform"]);
+    highlightitem($h, $game["id"],htmlspecialchars($game["title_article"] ?? ''),htmlspecialchars($game["title"] ?? ''), $shot, $dnl ,$pubs,$game["year"],$keys,$game["jsbeebplatform"], $mobile);
   }
 }
 
-function highlightitem( $h, $id, $ta, $name, $image, $img, $publisher, $year, $keys, $platform) {
+function highlightitem( $h, $id, $ta, $name, $image, $img, $publisher, $year, $keys, $platform, $mobile) {
   $jsbeeb=JB_LOC;
   $root=WS_ROOT;
+
+  $mobile_class = ($mobile == 1) ? "visible-xs" : "hidden-xs";
 
   if ($h['title'] && strlen($h['title']) && $h['random'] != 1) {
     $title=$h['title'];
@@ -193,7 +195,7 @@ function highlightitem( $h, $id, $ta, $name, $image, $img, $publisher, $year, $k
   // Taken from gameitem()
   $ssd = get_discloc($img["filename"] ?? '',$img['subdir'] ?? '');
 ?>
-      <div class="thumbnail text-center" <?php echo $background; ?>>
+      <div class="thumbnail text-center <?php echo $mobile_class; ?>" <?php echo $background; ?>>
        <h5 style="margin-top: 0"><?php echo $h['heading']; ?></h5>
        <a href="<?php echo $url; ?>"><img src="<?php echo $image; ?>" alt="<?php echo $image; ?>" class="pic"></a>
        <div class="row-title" style="height: auto; margin-bottom: 0.25em"><span class="row-title"><a href="<?php echo $url; ?>"><?php echo $title ?></a></span></div>

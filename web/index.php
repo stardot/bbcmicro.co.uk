@@ -14,9 +14,19 @@ htmlhead();
 nav();
 containstart($state);
 
+if (!array_key_exists('search',$state)) {
+  highlights($highlights, 0, 1);
+}
+
 echo '    <div id="maingrid">'."\n";
 grid($state);
+
+if (!array_key_exists('search',$state)) {
+  highlights($highlights, 0, 1);
+}
+
 echo '    </div>';
+
 sidebar($state, $highlights);
 containend();
 htmlfoot();
