@@ -59,7 +59,7 @@ function sidebar($state, $highlights) {
 ?>   <div class="col-xs-3 col-sm-3 col-md-3 col-lg-2 sidebar-offcanvas" id="sidebar" style="margin-top: 20px">
 <?php
   if (!array_key_exists('search',$state)) {
-    highlights($highlights, 0, 0);
+    highlights($highlights, 0, 1);
   }
   searchbox($state);
   if (array_key_exists('search',$state)) {
@@ -68,12 +68,14 @@ function sidebar($state, $highlights) {
   }
   searchbuttons();
   if (!array_key_exists('search',$state)) {
-    highlights($highlights, 1, 0);
+    highlights($highlights, 1, 1);
   }
   echo "    </div>\r";
 }
 
-function highlights($highlights, $position, $mobile) {
+// $position = 0 for top, 1 for bottom
+// $show_in_sidebar = 0 for main body, 1 for sidebar
+function highlights($highlights, $position, $show_in_sidebar) {
   global $db;
 
   foreach ($highlights as $h) {
@@ -83,7 +85,7 @@ function highlights($highlights, $position, $mobile) {
     }
 
     if ($h['random'] == 2) {
-      randomgame();
+      if ($show_in_sidebar == 1) randomgame();
       continue;
     }
 
@@ -156,15 +158,15 @@ function highlights($highlights, $position, $mobile) {
 	    echo "$gamsql gave ".$db->errorCode()."<br>\n";
     }
 
-    highlightitem($h, $game["id"],htmlspecialchars($game["title_article"] ?? ''),htmlspecialchars($game["title"] ?? ''), $shot, $dnl ,$pubs,$game["year"],$keys,$game["jsbeebplatform"], $mobile);
+    highlightitem($h, $game["id"],htmlspecialchars($game["title_article"] ?? ''),htmlspecialchars($game["title"] ?? ''), $shot, $dnl ,$pubs,$game["year"],$keys,$game["jsbeebplatform"], $show_in_sidebar);
   }
 }
 
-function highlightitem( $h, $id, $ta, $name, $image, $img, $publisher, $year, $keys, $platform, $mobile) {
+function highlightitem( $h, $id, $ta, $name, $image, $img, $publisher, $year, $keys, $platform, $show_in_sidebar) {
   $jsbeeb=JB_LOC;
   $root=WS_ROOT;
 
-  $mobile_class = ($mobile == 1) ? "visible-xs" : "hidden-xs";
+  $show_in_sidebar_class = ($show_in_sidebar == 0) ? "visible-xs" : "hidden-xs";
 
   if ($h['title'] && strlen($h['title']) && $h['random'] != 1) {
     $title=$h['title'];
@@ -195,7 +197,7 @@ function highlightitem( $h, $id, $ta, $name, $image, $img, $publisher, $year, $k
   // Taken from gameitem()
   $ssd = get_discloc($img["filename"] ?? '',$img['subdir'] ?? '');
 ?>
-      <div class="thumbnail text-center <?php echo $mobile_class; ?>" <?php echo $background; ?>>
+      <div class="thumbnail text-center <?php echo $show_in_sidebar_class; ?>" <?php echo $background; ?>>
        <h5 style="margin-top: 0"><?php echo $h['heading']; ?></h5>
        <a href="<?php echo $url; ?>"><img src="<?php echo $image; ?>" alt="<?php echo $image; ?>" class="pic"></a>
        <div class="row-title" style="height: auto; margin-bottom: 0.25em"><span class="row-title"><a href="<?php echo $url; ?>"><?php echo $title ?></a></span></div>
@@ -239,8 +241,8 @@ function searchbox($state) {
 }
 
 function randomgame() {
-?>     <p>&nbsp;</p><h3>Random Game</h3>
-       <p style="margin-bottom: 3em"><a href="q/random.php" class="btn btn-default btn-lg btn-block">Lucky Dip</a></p>
+?>     <h3>Random Game</h3>
+       <p style="margin-bottom: 2em"><a href="q/random.php" class="btn btn-default btn-lg btn-block">Lucky Dip</a></p>
 <?php
 }
 
@@ -337,9 +339,10 @@ function searchbuttons() {
 <label style="font-weight: 400"><input type="radio" name="sort" value="u" <?php if ($s=="u") echo "checked"; ?>/> Last Updated</label><br/>
 <label style="font-weight: 400"><input type="radio" name="sort" value="b" <?php if ($s=="b") echo "checked"; ?>/> Release Date</label><br/>
 <br/>
-<div class="btn-group btn-block">
+<div class="btn-group btn-block" style="margin-bottom: 2em">
   <button type="submit" class="btn btn-default btn-lg btn-block">Search</button>
 </div> 
+</fieldset>
 <?php
 }
 

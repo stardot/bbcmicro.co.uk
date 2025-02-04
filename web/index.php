@@ -15,14 +15,14 @@ nav();
 containstart($state);
 
 if (!array_key_exists('search',$state)) {
-  highlights($highlights, 0, 1);
+  highlights($highlights, 0, 0);
 }
 
 echo '    <div id="maingrid">'."\n";
 grid($state);
 
 if (!array_key_exists('search',$state)) {
-  highlights($highlights, 0, 1);
+  highlights($highlights, 1, 0);
 }
 
 echo '    </div>';
