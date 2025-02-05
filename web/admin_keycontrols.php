@@ -14,12 +14,11 @@ if ($sth->execute()) {
 	if ($sth->rowCount()) {
 		echo "<table>\n";
 		echo "<tr><td><b>Game ID</b></td><td><b>Key order</b></td><td><b>Game title</b></td>";
-		echo "<td><b>Key name</b></td><td><b>Key function</b></td>";
-		echo "<td><b>JSBeeb game key</b></td><td><b>JSBeeb browser key</b></td><td><b>Delete</b></td></tr>\n";
+		echo "<td><b>Details</b></td><td><b>Delete</b></td></tr>\n";
 		while ($r=$sth->fetch()) {
 			echo "<tr><td>".$r['gameid']."</td><td>".$r['rel_order']."</td><td><a href=admin_keycontrols_details.php?id=".$r['keyid'].">".$r['title']."</a></td>";
-			echo "<td>".$r['keyname']."</td><td>".$r['keydescription']."</td>";
-			echo "<td>".$r['jsbeebgamekey']."</td><td>".$r['jsbeebbrowserkey']."</td>";
+			echo "<td><p>Key name: ".$r['keyname']."</p><p>Key function: ".$r['keydescription']."</p>";
+			echo "<p>JSBeeb game key: ".$r['jsbeebgamekey']."</p><p>JSBeeb browser key: ".$r['jsbeebbrowserkey']."</p></td>";
 			echo "<td><a href=admin_keycontrols_delete.php?id=".$r['keyid'].">Delete</a></td>";
 			echo "</tr>\n";
 		}

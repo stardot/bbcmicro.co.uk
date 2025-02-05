@@ -9,8 +9,8 @@ show_admin_menu();
 echo "<hr>";
 
 make_link('Edit Authors','admin_authors.php','authors');
-make_link('Edit Games including linking to authors','admin_games.php','games');
-make_link('Bulk Edit Games including linking to authors','admin_games_update.php','games');
+make_link('Edit Games','admin_games.php','games');
+make_link('Bulk Edit Games','admin_games_update.php','games');
 make_link('Edit Genres','admin_genres.php','genres');
 make_link('Edit Compilations','admin_compilations.php','compilations');
 make_link('Edit Publishers','admin_publishers.php','publishers');
@@ -40,9 +40,9 @@ function make_link($text,$url,$table) {
 		}
 		$sth->closeCursor();
 	} else {
-		echo "$s gave ".$dbh->errorCode()."<br>\n";
+		echo "$s gave ".$dbh->errorCode()."<br><br>\n";
 	}
 
-	echo "<a href='$url'>$text</a> $count<br>";
+	echo "<a href='$url'>$text</a> $count<br><br>";
 }
 ?>

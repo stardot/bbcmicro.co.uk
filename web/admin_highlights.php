@@ -16,7 +16,7 @@ if ($sth->execute()) {
 	if ($sth->rowCount()) {
 		echo '<p>'.$sth->rowCount()." highlights. <a href='admin_highlights_details.php'>New highlight</a></p><hr>";
 		echo "<table>\n";
-		echo "<tr><td><b>ID</b></td><td><b>Heading</b></td><td><b>Show on site?</b></td><td><b>Random?</b></td><td><b>Colour</b></td><td><b>Sort order</b></td><td><b>Position</b></td><td><b>Game ID</b></td><td><b>Title</b></td><td><b>Subtitle</b></td><td><b>Link</b></td><td><b>Screenshot</b></td><td><b>Download button?</b></td><td><b>Play button?</b></td><td><b>Show publisher?</b></td><td><b>Show date?</b></td><td><b>Delete</b></td></tr>\n";
+		echo "<tr><td><b>ID</b></td><td><b>Heading</b></td><td><b>Show on site?</b></td><td><b>Random?</b></td><td><b>Details</b></td><td><b>Delete</b></td></tr>\n";
 		while ($r=$sth->fetch()) {
 			echo "<tr><td>".$r['id']."</td><td><a href=admin_highlights_details.php?id=".$r['id'].">".$r['heading']."</a></td>";
 			echo "<td>".($r['visible'] == 1 ? 'Y' : 'N')."</td>";
@@ -27,18 +27,58 @@ if ($sth->execute()) {
             } else {
 			    echo "<td>No</td>";
             }
-			echo "<td>".$r['colour']."</td>";
-			echo "<td>".$r['sort_order']."</td>";
-			echo "<td>".($r['position'] == 1 ? 'Bottom' : 'Top')."</td>";
-			echo "<td>".$r['games_id']."</td>";
-			echo "<td>".$r['title']."</td>";
-			echo "<td>".$r['subtitle']."</td>";
-			echo "<td>".$r['url']."</td>";
-			echo "<td>".$r['screenshot_url']."</td>";
-			echo "<td>".($r['download_button'] == 1 ? 'Y' : 'N')."</td>";
-			echo "<td>".($r['play_button'] == 1 ? 'Y' : 'N')."</td>";
-			echo "<td>".($r['show_publisher'] == 1 ? 'Y' : 'N')."</td>";
-			echo "<td>".($r['show_year'] == 1 ? 'Y' : 'N')."</td>";
+			echo "<td><p>Background colour: ";
+			if (empty($r['colour'])){
+                echo "<i>White</i>";
+            } else {
+                echo $r['colour'];
+            }
+			echo "</p>";
+			echo "<p>Sort order: ".$r['sort_order']."</p>";
+			echo "<p>Position: ".($r['position'] == 1 ? 'Bottom' : 'Top')."</p>";
+			echo "<p>Game ID: ";
+			if (empty($r['games_id'])){
+                echo "<i>None</i>";
+            } else {
+                echo $r['games_id'];
+            }
+			echo "</p>";
+			echo "<p>Title override: ";
+			if (empty($r['title'])){
+                echo "<i>None</i>";
+            } else {
+                echo $r['title'];
+            }
+			echo "</p>";
+			echo "<p>Subtitle: ";
+			if (empty($r['subtitle'])){
+                echo "<i>None</i>";
+            } else {
+                echo $r['subtitle'];
+            }
+			echo "</p>";
+			echo "<p>Link override: ";
+			if (empty($r['url'])){
+                echo "<i>None</i>";
+            } else {
+                $url = $r['url'];
+                if (strlen($url) > 15) $url = substr($r['url'], 0, 15) . "...";
+                echo $url;
+            }
+			echo "</p>";
+			echo "<p>Screenshot override: ";
+			if (empty($r['screenshot_url'])){
+                echo "<i>None</i>";
+            } else {
+                $screenshot = $r['screenshot_url'];
+                if (strlen($screenshot_url) > 15) $screenshot = substr($r['screenshot_url'], 0, 15) . "...";
+                echo $screenshot;
+            }
+			echo "</p>";
+			echo "<p>Download button? ".($r['download_button'] == 1 ? 'Y' : 'N')."</p>";
+			echo "<p>Play button? ".($r['play_button'] == 1 ? 'Y' : 'N')."</p>";
+			echo "<p>Show publisher? ".($r['show_publisher'] == 1 ? 'Y' : 'N')."</p>";
+			echo "<p>Show date? ".($r['show_year'] == 1 ? 'Y' : 'N')."</p></td>";
 			echo "<td><a href=admin_highlights_delete.php?id=".$r['id'].">Delete</a></td>";
 		}
 		echo "</tr>\n</table>\n";

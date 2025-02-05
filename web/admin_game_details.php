@@ -562,7 +562,8 @@ function make_form($game_id,$r) {
 			if ($name) $names.="$name, ";
 		}
 	}
-	echo "<br><b>".$r['title']."</b> $names ".$r['year']."<hr>";
+	echo "<br><b>".$r['title']."</b> $names ".$r['year']."<br>";
+	echo "<br><b>ID: " . $game_id . "</b><hr>";
 
 	echo "<form name='frmGame' method='POST' action='admin_game_details.php'>\n";
 	echo "<input type='hidden' name='id' value='$game_id'>\n";
