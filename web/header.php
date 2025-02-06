@@ -171,7 +171,7 @@ function highlightitem( $h, $id, $ta, $name, $image, $img, $publisher, $year, $k
   $root=WS_ROOT;
 
   if ($first && $show_in_sidebar == 0) {
-    echo "<div style='margin-bottom: 40px'></div>";
+    echo "<div class='visible-xs' style='margin-bottom: 40px'></div>";
   }
 
   $show_in_sidebar_class = ($show_in_sidebar == 0) ? "visible-xs" : "hidden-xs";
