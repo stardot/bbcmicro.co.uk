@@ -208,11 +208,11 @@ function highlightitem( $h, $id, $ta, $name, $image, $img, $publisher, $year, $k
       <div class="thumbnail text-center <?php echo $show_in_sidebar_class; ?>" <?php echo $background; ?>>
        <h5 style="margin-top: 0"><?php echo $h['heading']; ?></h5>
        <a href="<?php echo $url; ?>"><img src="<?php echo $image; ?>" alt="<?php echo $image; ?>" class="pic"></a>
-       <div class="row-title" style="height: auto; margin-bottom: 0.25em"><span class="row-title"><a href="<?php echo $url; ?>"><?php echo $title ?></a></span></div>
+       <div class="row-title" style="height: 30px; margin-bottom: 0.25em"><span class="row-title"><a href="<?php echo $url; ?>"><?php echo $title ?></a></span></div>
 <?php
   if (($publisher != '' && $h['show_publisher'] == 1) || ($year != '' && $h['show_year'] == 1)) {
 ?>
-       <div class="row-pub" style="height: auto; font-size: 0.85em; margin-bottom: 1em"><?php if ($h['show_publisher'] == 1) echo $publisher ?><?php if ($h['show_year'] == 1) echo " " . (($h['show_publisher'] == 1) ? "(" : "") . $year . (($h['show_publisher'] == 1) ? ")" : ""); ?></div>
+       <div class="row-pub" style="font-size: 0.85em; margin-bottom: 1em"><?php if ($h['show_publisher'] == 1) echo $publisher ?><?php if ($h['show_year'] == 1) echo " " . (($h['show_publisher'] == 1) ? "(" : "") . $year . (($h['show_publisher'] == 1) ? ")" : ""); ?></div>
 <?php
   }
   if ($h['subtitle'] && strlen($h['subtitle']) > 0) {
