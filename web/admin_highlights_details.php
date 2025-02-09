@@ -70,6 +70,8 @@ if (isset($_GET['id']) && is_string($_GET['id'])) {
       if ( $sth->execute() ) {
         $id=$dbh->lastInsertId();
         $msg="New highlight added: ".$id.".";
+        $r['id']=$id;
+        $r['action']='edit';
       } else {
         $msg="Error adding highlight";
       }
@@ -129,7 +131,7 @@ function make_form($r,$msg) {
   echo "<p>$msg</p>\n";
   echo "<form name='frmGame' method='POST' action='admin_highlights_details.php'>\n";
 
-  if ($r['id']=='' || $r['action']=='new') {
+  if ($r['id']=='' || $r['id']==0 || $r['action']=='new') {
     echo '<input type="hidden" name="action" value="new">';
   } else {
     echo "<label>ID: <input type='text' name='id' class='big-text' readonly='readonly' style='border: 0' value='".htmlspecialchars($r['id'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
