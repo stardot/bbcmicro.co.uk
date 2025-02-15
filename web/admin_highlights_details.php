@@ -165,7 +165,7 @@ function make_form($r,$msg) {
   echo "<label>Show year? <select name='show_year'><option value='0'" . ($r['download_button'] != 1 ? ' selected' : '') . ">No</option><option value='1'" . ($r['show_year'] == 1 ? ' selected' : '') . ">Yes</option></select></label><br/><br/>";
 
   echo '<br/><input type="submit" value="Submit"></form>';
-  echo '<hr/><a href="admin_highlights.php">Back to the list</a>';
+  echo '<hr/><a href="admin_highlights.php" style="display: block; margin-bottom: 20ch">Back to the list</a>';
 }
 ?>
 </body>

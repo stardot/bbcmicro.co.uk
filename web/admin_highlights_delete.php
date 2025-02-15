@@ -139,7 +139,7 @@ function make_form($r,$showdelete,$msg) {
     echo '<br/><input type="submit" value="Delete"></form>';
   }
 
-  echo '<hr/><a href="admin_highlights.php">Back to the list</a>';
+  echo '<hr/><a href="admin_highlights.php" style="display: block; margin-bottom: 20ch">Back to the list</a>';
 }
 ?>
 </body>
