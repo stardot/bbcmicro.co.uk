@@ -99,16 +99,16 @@ if ($sth->execute()) {
 		echo "<tr><td><b>ID</b></td><td><b>Name</b></td><td><b>Email</b></td><td><b>Message</b></td><td><b>Date</b></td><td><b>Action</b></td></tr>\n";
 		while ($r=$sth->fetch()) {
 			echo "<tr><td>".$r['id']."</td>";
-			echo "<td>".$r['name']."</td>";
-			echo "<td>".$r['email']."</td>";
-			echo "<td>".$r['message']."</td>";
+			echo "<td id=\"name-".$r['id']."\">".$r['name']."</td>";
+			echo "<td id=\"email-".$r['id']."\">".$r['email']."</td>";
+			echo "<td id=\"message-".$r['id']."\">".$r['message']."</td>";
 			echo "<td>".$r['date']."</td>";
             if ($filter == 'a') {
                 echo "<td><a href=\"admin_contacts.php?action=i&id=".$r['id']."&filter=$filter\">Inbox</a></td></tr>\n";
             } else if ($filter == 'd') {
                 echo "<td><a href=\"admin_contacts.php?action=i&id=".$r['id']."&filter=$filter\">Inbox</a><br><br><a href=\"admin_contacts.php?action=d&id=".$r['id']."&filter=$filter\">Delete!</a></td></tr>\n";
             } else {
-                echo "<td><a href=\"admin_contacts.php?action=a&id=".$r['id']."&filter=$filter\">Archive</a><br><br><a href=\"admin_contacts.php?action=b&id=".$r['id']."&filter=$filter\">Bin</a></td></tr>\n";
+                echo "<td><a href=\"#\" onclick=\"copyEmail(".$r['id'].")\">Reply</a><br><br><a href=\"admin_contacts.php?action=a&id=".$r['id']."&filter=$filter\">Archive</a><br><br><a href=\"admin_contacts.php?action=b&id=".$r['id']."&filter=$filter\">Bin</a></td></tr>\n";
             }
 		}
 		echo "</table>\n";
@@ -117,4 +117,22 @@ if ($sth->execute()) {
 } else {
 	echo "$s gave ".$dbh->errorCode()."<br>\n";
 }
+
+?>
+<script>
+function copyEmail(id) {
+  event.preventDefault();
+  var name = document.getElementById("name-" + id).innerText;
+  var email = document.getElementById("email-" + id).innerText;
+  var message = document.getElementById("message-" + id).textContent;
+  var text = email + "\n\n" + name + "\n\nYou wrote:\n~~~\n" + message + "\n~~~\n";
+  navigator.clipboard.writeText(text).then(function() {
+    alert('Email reply copied to clipboard');
+  }, function(err) {
+    alert('Copy to clipboard failed');
+  });
+  return false;
+}
+</script>
+<?php
 ?>
