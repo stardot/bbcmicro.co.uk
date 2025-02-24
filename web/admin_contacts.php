@@ -126,7 +126,6 @@ function copyEmail(id) {
   var email = document.getElementById("email-" + id).innerText;
   var message = document.getElementById("message-" + id).textContent;
   var text = email + "\n\n" + name + "\n\nYou wrote:\n~~~\n" + message + "\n~~~\n";
-  text = text.replaceAll("\n\n", "\n");
   navigator.clipboard.writeText(text).then(function() {
     alert('Email reply copied to clipboard');
   }, function(err) {
