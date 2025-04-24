@@ -141,7 +141,9 @@ function make_form($r,$msg) {
   echo "<label>Heading: <input type='text' name='heading' class='big-text' autofocus='autofocus' value='".htmlspecialchars($r['heading'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
   echo "<label>Show on site? <select name='visible'><option value='0'" . ($r['visible'] != 1 ? ' selected' : '') . ">No</option><option value='1'" . ($r['visible'] == 1 ? ' selected' : '') . ">Yes</option></select></label><br/><br/>";
   echo "<label>Show a random game? <select name='random'><option value='0'" . (($r['random'] != 1 && $r['random'] != 2) ? ' selected' : '') . ">No</option>";
-  echo "<option value='1'" . ($r['random'] == 1 ? ' selected' : '') . ">Random game</option>";
+  echo "<option value='1'" . ($r['random'] == 1 ? ' selected' : '') . ">Random game (all games)</option>";
+  echo "<option value='3'" . ($r['random'] == 3 ? ' selected' : '') . ">Random game (no lost games)</option>";
+  echo "<option value='4'" . ($r['random'] == 4 ? ' selected' : '') . ">Random game (lost games only)</option>";
   echo "<option value='2'" . ($r['random'] == 2 ? ' selected' : '') . ">Lucky dip button</option></select></label><br/><br/>";
   echo "<label>Sort order within search column: <input type='text' name='sort_order' size='10' autofocus='autofocus' value='".htmlspecialchars($r['sort_order'] ?? '',ENT_QUOTES)."'/></label><br/><br/>";
   echo "<label>Position within search column <select name='position'><option value='0'" . ($r['position'] != 1 ? ' selected' : '') . ">Top</option><option value='1'" . ($r['position'] == 1 ? ' selected' : '') . ">Bottom</option></select></label><br/><br/>";

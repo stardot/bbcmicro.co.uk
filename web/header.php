@@ -87,12 +87,33 @@ function highlights($highlights, $position, $show_in_sidebar) {
     }
 
     if ($h['random'] == 2) {
+      // Lucky dip
       if ($show_in_sidebar == 1) randomgame();
       continue;
     }
 
     if ($h['random'] == 1) {
       $rndsql = 'select id from games order by rand() limit 1';
+      $rndpdo = $db->prepare($rndsql,array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+      if ($rndpdo->execute()) {
+        $random_game=$rndpdo->fetch(PDO::FETCH_ASSOC);
+        $game_id = $random_game['id'];
+      } else {
+        echo "Error:";
+      }
+    } else if ($h['random'] == 3) {
+      // No lost games
+      $rndsql = 'select g.id from games g left join game_genre gg on gg.gameid = g.id where gg.genreid <> 684 order by rand() limit 1';
+      $rndpdo = $db->prepare($rndsql,array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+      if ($rndpdo->execute()) {
+        $random_game=$rndpdo->fetch(PDO::FETCH_ASSOC);
+        $game_id = $random_game['id'];
+      } else {
+        echo "Error:";
+      }
+    } else if ($h['random'] == 4) {
+      // Lost games only
+      $rndsql = 'select g.id from games g left join game_genre gg on gg.gameid = g.id where gg.genreid = 684 order by rand() limit 1';
       $rndpdo = $db->prepare($rndsql,array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
       if ($rndpdo->execute()) {
         $random_game=$rndpdo->fetch(PDO::FETCH_ASSOC);
