@@ -456,8 +456,8 @@ function grid($state) {
   $ym=date("Ym",time()-90*24*60*60);
   $offset = $limit * ($page -1);
   $sql ='select SQL_CALC_FOUND_ROWS g.*, sum(d.downloads) as dl, sum(d.gamepages) as gp, sum(coalesce(d.downloads, 0) + coalesce(d.gamepages, 0)) as tt from games g'."\n";
-  $sql.=' left join game_downloads d on g.id = d.id and d.year > ' . $ym . ' where ' . implode(" AND ",$wc) . ' group by g.id '. $ob . ' LIMIT :limit OFFSET :offset';
-  $sql2 = 'select distinct upper(substring(title,1,1)) AS c1 from games g WHERE ' . implode(' AND ',$wc) . " order by c1"; 
+  $sql.=' left join game_downloads d on g.id = d.id and d.year > ' . $ym . " where IFNULL(g.hide,'N') <> 'Y' and " . implode(" AND ",$wc) . ' group by g.id '. $ob . ' LIMIT :limit OFFSET :offset';
+  $sql2 = "select distinct upper(substring(title,1,1)) AS c1 from games g WHERE IFNULL(g.hide,'N') <> 'Y' and " . implode(' AND ',$wc) . " order by c1"; 
 
   $sth = $db->prepare($sql,array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
   $sth2 = $db->prepare($sql2,array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
@@ -701,11 +701,11 @@ function filters($state) {
     $wc[]="reltype in (select id from reltype where selected = 'Y')\n";
   }
 
-  $sql3 ='select DISTINCT p.id, p.name from games g left join games_publishers gp on gp.gameid = g.id left join publishers p on gp.pubid = p.id where p.id is not null and ' . implode(" AND ",$wc) . ' order by p.name';
+  $sql3 ="select DISTINCT p.id, p.name from games g left join games_publishers gp on gp.gameid = g.id left join publishers p on gp.pubid = p.id where IFNULL(g.hide,'N') <> 'Y' p.id is not null and " . implode(" AND ",$wc) . ' order by p.name';
 
-  $sql4 ='select DISTINCT gr.id, gr.name from games g left join game_genre gg on gg.gameid = g.id left join genres gr on gg.genreid = gr.id where gr.id is not null and ' . implode(" AND ",$wc) . ' order by gr.name';
+  $sql4 ="select DISTINCT gr.id, gr.name from games g left join game_genre gg on gg.gameid = g.id left join genres gr on gg.genreid = gr.id where IFNULL(g.hide,'N') <> 'Y' and gr.id is not null and " . implode(" AND ",$wc) . ' order by gr.name';
 
-  $sql5 ='select DISTINCT g.year from games g where g.year not like \'%X%\' and ' . implode(" AND ",$wc) . ' order by g.year';
+  $sql5 ="select DISTINCT g.year from games g where IFNULL(g.hide,'N') <> 'Y' and g.year not like '%X%' and " . implode(" AND ",$wc) . ' order by g.year';
 
   $sth3 = $db->prepare($sql3,array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
   $sth4 = $db->prepare($sql4,array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));

@@ -102,6 +102,7 @@ CREATE TABLE `games` (
   `compat_b` char(1) DEFAULT 'Y' COMMENT 'Model B Compatibility',
   `compat_master` char(1) DEFAULT NULL COMMENT 'Master Compatibility',
   `jsbeebplatform` varchar(30) NULL,
+  `hide` char(1) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `reltype` (`reltype`),
   CONSTRAINT `reltype` FOREIGN KEY (`reltype`) REFERENCES `reltype` (`id`)

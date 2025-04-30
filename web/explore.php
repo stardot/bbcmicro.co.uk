@@ -10,11 +10,26 @@ if ( isset($_GET["id"])) {
   $id=intval($_GET["id"]);
 }
 
-$sql = "select g.id, g.title_article, g.title from games g where g.id  = ?";
+$sql = "select g.id, g.title_article, g.title, g.hide from games g where g.id  = ?";
 $sth = $db->prepare($sql,array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
 $sth->bindParam(1, $id, PDO::PARAM_INT);
 if ($sth->execute()) {
   $game = $sth->fetch();
+  if ($game['hide'] == 'Y') {
+    http_response_code(404);
+?>
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<html><head>
+<title>404 Not Found</title>
+</head><body>
+<h1>Not Found</h1>
+<p>The requested URL was not found on this server.</p>
+<hr>
+<address>Apache Server at <a href="mailto:hostmaster@stardot">www.bbcmicro.co.uk</a> Port 443</address>
+</body></html>
+<?php
+    exit();
+  }
 } else {
   echo "Error:";
   echo "\n";

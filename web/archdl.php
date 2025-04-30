@@ -16,7 +16,7 @@ require 'includes/extract_db.php';
 <p>
 <?php
 
-$sqla="select max(imgupdated) as dt from games";
+$sqla="select max(imgupdated) as dt from games where IFNULL(hide,'N') <> 'Y'";
 $asth = $db->prepare($sqla,array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
 $asth->execute();
 $ags=$asth->fetchAll();
@@ -25,7 +25,7 @@ $files="BBCMicroFiles.zip";
 $discs="BBCMicroDiscs.zip";
 $scrs="BBCMicroScShots.zip";
 
-$sql="select g.id, g.title, i.filename as ifile, i.subdir as idir, s.subdir as sdir, s.filename as sfile from games g left join images i on g.id = i.gameid left join screenshots s on g.id = s.gameid order by g.title";
+$sql="select g.id, g.title, i.filename as ifile, i.subdir as idir, s.subdir as sdir, s.filename as sfile from games g left join images i on g.id = i.gameid left join screenshots s on g.id = s.gameid where IFNULL(g.hide,'N') <> 'Y' order by g.title";
 
 $sth = $db->prepare($sql,array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
 if ($sth->execute()) {

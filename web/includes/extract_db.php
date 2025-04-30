@@ -39,7 +39,7 @@ function get_disc_fn($dname) {
 
 function get_data ($arch='N') {
 global $db;
-$sql="select g.parent, g.id, g.title_article, g.title, g.year, g.genre, g.reltype, g.players_max, g.players_min, g.joystick, i.filename, r.name, g.save, g.hardware, g.electron, g.version, g.series, g.series_no, g.notes, g.compat_a, g.compat_b, g.compat_master from games g left join images i on g.id = i.gameid left join genres r on g.genre = r.id order by g.id";
+$sql="select g.parent, g.id, g.title_article, g.title, g.year, g.genre, g.reltype, g.players_max, g.players_min, g.joystick, i.filename, r.name, g.save, g.hardware, g.electron, g.version, g.series, g.series_no, g.notes, g.compat_a, g.compat_b, g.compat_master from games g left join images i on g.id = i.gameid left join genres r on g.genre = r.id where IFNULL(g.hide,'N') <> 'Y' order by g.id";
 
 $sth = $db->prepare($sql,array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
 if ($sth->execute()) {

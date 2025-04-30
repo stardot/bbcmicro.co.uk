@@ -8,7 +8,7 @@ require_once('includes/admin_menu.php');
 show_admin_menu();
 
 
-$s="	SELECT 		id,title,year,
+$s="	SELECT 		id,title,year,hide,
 			(select filename from images where main=100 and gameid = games.id) as disc,
 			(select filename from screenshots where main=100 and gameid = games.id) as screenshot,";
 	if (defined('ST_FILES') && ST_FILES ) {
@@ -38,6 +38,8 @@ if ($sth->execute()) {
 			echo "<tr><td style='width: 50%; max-width: 50%; overflow: hidden;'><a href='admin_game_details.php?id=".$r['id']."'>".$title."</td>\n";
 
             echo "<td style='width: 50%; max-width: 50%'>";
+
+            if ($r['hide'] == 'Y') echo "<p><b>This game is hidden</b></p>";
 
             echo "<p><b>Year:</b> ".$r['year']."</p>";
 

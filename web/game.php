@@ -18,18 +18,34 @@ if($id == 0)
   exit();
 }
 
-$sql = "select g.id, g.title_article, g.title, g.parent, g.year, g.notes, g.joystick, g.players_min, g.players_max, g.save, g.hardware, g.version, 
+$sql = "select g.id, g.title_article, g.title, g.parent, g.year, g.notes, g.joystick, g.players_min, g.players_max, g.save, g.hide, g.hardware, g.version, 
 g.electron, g.series, g.series_no, n.name as genre, r.id as relid, r.name as reltype, g.compat_a, g.compat_b, g.compat_master, g.jsbeebplatform from games g left join genres n on n.id = g.genre left join reltype r on r.id = g.reltype where g.id  = ?";
 $sth = $db->prepare($sql,array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
 $sth->bindParam(1, $id, PDO::PARAM_INT);
 if ($sth->execute()) {
   $game = $sth->fetch();
+  if ($game['hide'] == 'Y') {
+    http_response_code(404);
+?>
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<html><head>
+<title>404 Not Found</title>
+</head><body>
+<h1>Not Found</h1>
+<p>The requested URL was not found on this server.</p>
+<hr>
+<address>Apache Server at <a href="mailto:hostmaster@stardot">www.bbcmicro.co.uk</a> Port 443</address>
+</body></html>
+<?php
+    exit();
+  }
 } else {
   echo "Error:";
   echo "\n";
   $sth->debugDumpParams ();
   $game=array();
 }
+
 
 $sql = "select * from screenshots where gameid  = ?";
 $sth = $db->prepare($sql,array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));

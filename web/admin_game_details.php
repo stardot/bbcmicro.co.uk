@@ -95,7 +95,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 
 		if ($game_id == null) {
 			# New entry
-			$s="INSERT INTO games ( parent, title_article, title, year, genre, reltype, notes, players_min, players_max, joystick, save, hardware, electron, version, series, series_no, lastupdater, lastupdated, created, creator, compat_a, compat_b, compat_master, jsbeebplatform) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,NOW(),NOW(),?,?,?,?,?)";
+			$s="INSERT INTO games ( parent, title_article, title, year, genre, reltype, notes, players_min, players_max, joystick, save, hide, hardware, electron, version, series, series_no, lastupdater, lastupdated, created, creator, compat_a, compat_b, compat_master, jsbeebplatform) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,NOW(),NOW(),?,?,?,?,?)";
 			if ($_POST['parent'] == '0' || $_POST['parent'] == '' ) {
 				$p_parent = null;
 			} else {
@@ -115,6 +115,11 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 				$p_save='';
 			} else {
 				$p_save=$_POST['save'];
+			}
+			if ($_POST['hide'] == '0') {
+				$p_hide='N';
+			} else {
+				$p_hide=$_POST['hide'];
 			}
 			if ($_POST['compat_a'] == '0') {
 				$p_compat_a='N';
@@ -157,6 +162,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 					array('value' => $_POST['players_max'],		'type' => PDO::PARAM_INT),
 					array('value' => $p_joystick, 			'type' => PDO::PARAM_STR),
 					array('value' => $p_save, 			'type' => PDO::PARAM_STR),
+					array('value' => $p_hide,			'type' => PDO::PARAM_STR),
 					array('value' => $_POST['hardware'],	 	'type' => PDO::PARAM_STR),
 					array('value' => $p_electron, 			'type' => PDO::PARAM_STR),
 					array('value' => $_POST['version'], 		'type' => PDO::PARAM_STR),
@@ -181,7 +187,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 			}
 		} else {
 			# An entry already exists. Compare it.
-			$s="SELECT id, parent, title_article, title, year, genre, reltype, notes, players_min, players_max, joystick, save, hardware, electron, version, series, series_no, compat_a, compat_b, compat_master, jsbeebplatform FROM games where id = ?";
+			$s="SELECT id, parent, title_article, title, year, genre, reltype, notes, players_min, players_max, joystick, save, hide, hardware, electron, version, series, series_no, compat_a, compat_b, compat_master, jsbeebplatform FROM games where id = ?";
 
 			$sth = $dbh->prepare($s,array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
 			$sth->bindParam(1, $game_id, PDO::PARAM_INT);
@@ -403,7 +409,7 @@ if ($sth->execute()) {
 }
 
 if ($game_id) {
-	$s="	SELECT 	id,title, parent, title_article, title, year, genre, reltype, notes, players_min, players_max, joystick, save,
+	$s="	SELECT 	id,title, parent, title_article, title, year, genre, reltype, notes, players_min, players_max, joystick, save, hide,
 			hardware, electron, version, series, series_no, compat_a, compat_b, compat_master, jsbeebplatform,
 			(SELECT GROUP_CONCAT(CONCAT(publishers.id,'|',publishers.name) SEPARATOR '@') 
 				FROM games_publishers LEFT JOIN publishers ON pubid=publishers.id WHERE gameid=games.id) AS publishers,
@@ -430,7 +436,7 @@ if ($game_id) {
 	# Make an empty form
 	$r=['id'=>'','title_article'=>'','title'=>'','parent'=>'','year'=>'19XX','genre'=>'',
             'reltype'=>'W','notes'=>'','players_min'=>'1', 'players_max'=>'1',
-            'joystick'=>'', 'save'=>'','hardware'=>'', 'electron'=>'',
+            'joystick'=>'', 'save'=>'', 'hide'=>'', 'hardware'=>'', 'electron'=>'',
             'version'=>'', 'compilation'=>'', 'series'=>'', 'series_no'=>'',
             'publishers'=>'','authors'=>'','compilations'=>'','genres'=>'', 'jsbeebplatform'=>'',
 			'compat_a'=>'','compat_b'=>'','compat_master'=>''];
@@ -580,6 +586,10 @@ function make_form($game_id,$r) {
 	echo "</label><br/><br/>";
 	echo "<label> Year. 19XX if unknown. <input type='text' name='year' size='4' value='".$r['year']."'/></label>";
 	echo "<br/><br/>";
+
+	echo "<label>Hide game from site ";
+	echo make_dd($r['hide'], 'hide','Whether Game is Hidden',$copts);
+	echo "</label><br/><br/>";
 
 	echo "<hr/>";
 

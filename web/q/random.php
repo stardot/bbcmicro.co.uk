@@ -5,7 +5,7 @@ require '../includes/db_connect.php';
 function randomgame() {
   global $db;
 
-  $sql = "select count(*) from games";
+  $sql = "select count(*) from games where IFNULL(hide,'N') <> 'Y'";
   $sth = $db->prepare($sql,array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
   if ($sth->execute()) {
     $res = $sth->fetchAll();
@@ -17,7 +17,7 @@ function randomgame() {
   }
   $n=rand(1,$res[0][0])-1;
 
-  $sql = "select id from games limit ?,1";
+  $sql = "select id from games where IFNULL(hide,'N') <> 'Y' limit ?,1";
   $sth = $db->prepare($sql,array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
   $sth->bindParam(1, $n, PDO::PARAM_INT);
   if ($sth->execute()) {
