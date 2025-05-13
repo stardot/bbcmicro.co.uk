@@ -701,7 +701,7 @@ function filters($state) {
     $wc[]="reltype in (select id from reltype where selected = 'Y')\n";
   }
 
-  $sql3 ="select DISTINCT p.id, p.name from games g left join games_publishers gp on gp.gameid = g.id left join publishers p on gp.pubid = p.id where IFNULL(g.hide,'N') <> 'Y' p.id is not null and " . implode(" AND ",$wc) . ' order by p.name';
+  $sql3 ="select DISTINCT p.id, p.name from games g left join games_publishers gp on gp.gameid = g.id left join publishers p on gp.pubid = p.id where IFNULL(g.hide,'N') <> 'Y' and p.id is not null and " . implode(" AND ",$wc) . ' order by p.name';
 
   $sql4 ="select DISTINCT gr.id, gr.name from games g left join game_genre gg on gg.gameid = g.id left join genres gr on gg.genreid = gr.id where IFNULL(g.hide,'N') <> 'Y' and gr.id is not null and " . implode(" AND ",$wc) . ' order by gr.name';
 
