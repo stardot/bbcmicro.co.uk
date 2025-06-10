@@ -64,7 +64,7 @@ function atoz_line($current,$chars,$margin) {
   echo "</div>";
 }
 
-function gameitem( $id, $ta, $name, $image, $img, $publisher, $year, $keys, $platform, $dl, $gp) {
+function gameitem( $id, $ta, $name, $image, $img, $publisher, $year, $keys, $platform, $dl, $gp, $dl_all, $gp_all) {
    global $sid;
 
    $jsbeeb=JB_LOC;
@@ -91,6 +91,14 @@ function gameitem( $id, $ta, $name, $image, $img, $publisher, $year, $keys, $pla
     if ($dl > 1) {
       $download_title .= "s";
     }
+    $download_title .= " in the last 90 days";
+    if ($dl_all != null && $dl_all > 0) {
+      $download_title .= " (" . $dl_all . " time";
+      if ($dl_all > 1) {
+        $download_title .= "s";
+      }
+      $download_title .= " since 2017)";
+    }
   } else {
     $download_title = "Not downloaded yet";
   }
@@ -98,6 +106,14 @@ function gameitem( $id, $ta, $name, $image, $img, $publisher, $year, $keys, $pla
     $played_title = "Played " . $gp . " time";
     if ($gp > 1) {
       $played_title .= "s";
+    }
+    $played_title .= " in the last 90 days";
+    if ($gp_all != null && $gp_all > 0) {
+      $played_title .= " (" . $gp_all . " time";
+      if ($gp_all > 1) {
+        $played_title .= "s";
+      }
+      $played_title .= " since 2017)";
     }
   } else {
     $played_title = "Not played yet";
@@ -455,7 +471,7 @@ function grid($state) {
   }
   $ym=date("Ym",time()-90*24*60*60);
   $offset = $limit * ($page -1);
-  $sql ='select SQL_CALC_FOUND_ROWS g.*, sum(d.downloads) as dl, sum(d.gamepages) as gp, sum(coalesce(d.downloads, 0) + coalesce(d.gamepages, 0)) as tt from games g'."\n";
+  $sql ='select SQL_CALC_FOUND_ROWS g.*, sum(d.downloads) as dl, sum(d.gamepages) as gp, (select sum(d1.downloads) from game_downloads d1 where d1.id = g.id) as dl_all, (select sum(d2.gamepages) from game_downloads d2 where d2.id = g.id) as gp_all, sum(coalesce(d.downloads, 0) + coalesce(d.gamepages, 0)) as tt from games g'."\n";
   $sql.=' left join game_downloads d on g.id = d.id and d.year > ' . $ym . " where IFNULL(g.hide,'N') <> 'Y' and " . implode(" AND ",$wc) . ' group by g.id '. $ob . ' LIMIT :limit OFFSET :offset';
   $sql2 = "select distinct upper(substring(title,1,1)) AS c1 from games g WHERE IFNULL(g.hide,'N') <> 'Y' and " . implode(' AND ',$wc) . " order by c1"; 
 
@@ -620,7 +636,7 @@ function grid($state) {
       }
       $pubs=trim($pubs,', ');
 
-      gameitem($game["id"],htmlspecialchars($game["title_article"] ?? ''),htmlspecialchars($game["title"] ?? ''), $shot, $dnl ,$pubs,$game["year"],$keys,$game["jsbeebplatform"], $game["dl"], $game["gp"]);
+      gameitem($game["id"],htmlspecialchars($game["title_article"] ?? ''),htmlspecialchars($game["title"] ?? ''), $shot, $dnl ,$pubs,$game["year"],$keys,$game["jsbeebplatform"], $game["dl"], $game["gp"], $game["dl_all"], $game["gp_all"]);
     }
   } else {
     echo '    <div class="row" style="display:flex; flex-wrap: wrap;">'."\n<h2>No games found!</h2>";
