@@ -103,7 +103,7 @@ function highlights($highlights, $position, $show_in_sidebar) {
       }
     } else if ($h['random'] == 3) {
       // No lost games
-      $rndsql = "select g.id from games g left join game_genre gg on gg.gameid = g.id where IFNULL(g.hide,'N') <> 'Y' and gg.genreid <> 684 order by rand() limit 1";
+      $rndsql = "select id from games where IFNULL(hide,'N') <> 'Y' and id not in (select g.id from games g left join game_genre gg on gg.gameid = g.id where gg.genreid = 684) order by rand() limit 1";
       $rndpdo = $db->prepare($rndsql,array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
       if ($rndpdo->execute()) {
         $random_game=$rndpdo->fetch(PDO::FETCH_ASSOC);
