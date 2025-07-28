@@ -77,6 +77,15 @@ function openDisk(diskName)
     .then(function ()
     {
 	  checkDiskType();
+	    ext=diskPath.substr(-3,3);
+	    console.log(diskPath+' ddd is '+ddd+' ext '+ext);
+	    if (ext=='ssd') {
+		    console.log('forcing ddd to false for ssd');
+		    ddd=false;
+	    } else {
+		    console.log('forcing ddd true for this file');
+		    ddd=true;
+	    }
       decodeDiskCatalog();
       displayDiskCatalog();
     });
@@ -309,6 +318,7 @@ function decimalToHex(d, padding)
 
 function getFileData(catalogIndex)
 {
+	console.log('getFileData '+catalogIndex);
 	var fileData;
 	var fileItem = catalog[catalogIndex];
 	var track=Math.floor(fileItem.startSector/10);
@@ -316,7 +326,7 @@ function getFileData(catalogIndex)
 	var startOffset;
 
 	fileData = new Uint8Array(fileItem.fileLength);
-	
+//ddd=false;	
 	if (ddd)
 	{
 		var currTrack = track;
