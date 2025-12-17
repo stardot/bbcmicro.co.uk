@@ -778,7 +778,7 @@ function filters($state) {
 
   echo "Publisher:<br /><select style='max-width:100%;margin-bottom: 2ch' name='f_pubid' id='f_pubid'>\n<option value='0'>All publishers</option>";
   foreach ($res3 as $pub ) {
-    $pid=$_GET['f_pubid'];
+    $pid=$_GET['f_pubid'] ?? '';
     $id=$pub['id'];
     $name=$pub['name'];
     $sel=($id==$pid)?' selected':'';
@@ -788,7 +788,7 @@ function filters($state) {
 
   echo "Genre:<br /><select style='max-width:100%;margin-bottom: 2ch' name='f_genreid' id='f_genreid'>\n<option value='0'>All genres</option>";
   foreach ($res4 as $gen ) {
-    $gid=$_GET['f_genreid'];
+    $gid=$_GET['f_genreid'] ?? '';
     $id=$gen['id'];
     $name=$gen['name'];
     $sel=($id==$gid)?' selected':'';
@@ -798,7 +798,7 @@ function filters($state) {
 
   echo "From year:<br /><select style='max-width:100%;margin-bottom: 2ch' name='f_year1' id='f_year1'>\n<option value='0'>Any start year</option>";
   foreach ($res5 as $year ) {
-    $y1=$_GET['f_year1'];
+    $y1=$_GET['f_year1'] ?? '';
     $y=$year["year"];
     $sel=($y==$y1)?' selected':'';
     echo "<option value='$y'$sel>$y</option>\n";
@@ -807,7 +807,7 @@ function filters($state) {
 
   echo "To year:<br /><select style='max-width:100%;margin-bottom: 3ch' name='f_year2' id='f_year2'>\n<option value='0'>Any end year</option>";
   foreach ($res5 as $year ) {
-    $y2=$_GET['f_year2'];
+    $y2=$_GET['f_year2'] ?? '';
     $y=$year["year"];
     $sel=($y==$y2)?' selected':'';
     echo "<option value='$y'$sel>$y</option>\n";
