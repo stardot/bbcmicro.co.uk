@@ -471,7 +471,8 @@ function grid($state) {
   }
   $ym=date("Ym",time()-90*24*60*60);
   $offset = $limit * ($page -1);
-  $sql ='select SQL_CALC_FOUND_ROWS g.*, sum(d.downloads) as dl, sum(d.gamepages) as gp, (select sum(d1.downloads) from game_downloads d1 where d1.id = g.id) as dl_all, (select sum(d2.gamepages) from game_downloads d2 where d2.id = g.id) as gp_all, sum(coalesce(d.downloads, 0) + coalesce(d.gamepages, 0)) as tt from games g'."\n";
+  # $sql ='select SQL_CALC_FOUND_ROWS g.*, sum(d.downloads) as dl, sum(d.gamepages) as gp, (select sum(d1.downloads) from game_downloads d1 where d1.id = g.id) as dl_all, (select sum(d2.gamepages) from game_downloads d2 where d2.id = g.id) as gp_all, sum(coalesce(d.downloads, 0) + coalesce(d.gamepages, 0)) as tt from games g'."\n";
+  $sql ='select SQL_CALC_FOUND_ROWS g.*, sum(d.downloads) as dl, sum(d.gamepages) as gp, sum(coalesce(d.downloads, 0) + coalesce(d.gamepages, 0)) as tt from games g'."\n";
   $sql.=' left join game_downloads d on g.id = d.id and d.year > ' . $ym . " where IFNULL(g.hide,'N') <> 'Y' and " . implode(" AND ",$wc) . ' group by g.id '. $ob . ' LIMIT :limit OFFSET :offset';
   $sql2 = "select distinct upper(substring(title,1,1)) AS c1 from games g WHERE IFNULL(g.hide,'N') <> 'Y' and " . implode(' AND ',$wc) . " order by c1"; 
 
@@ -636,7 +637,8 @@ function grid($state) {
       }
       $pubs=trim($pubs,', ');
 
-      gameitem($game["id"],htmlspecialchars($game["title_article"] ?? ''),htmlspecialchars($game["title"] ?? ''), $shot, $dnl ,$pubs,$game["year"],$keys,$game["jsbeebplatform"], $game["dl"], $game["gp"], $game["dl_all"], $game["gp_all"]);
+      # gameitem($game["id"],htmlspecialchars($game["title_article"] ?? ''),htmlspecialchars($game["title"] ?? ''), $shot, $dnl ,$pubs,$game["year"],$keys,$game["jsbeebplatform"], $game["dl"], $game["gp"], $game["dl_all"], $game["gp_all"]);
+      gameitem($game["id"],htmlspecialchars($game["title_article"] ?? ''),htmlspecialchars($game["title"] ?? ''), $shot, $dnl ,$pubs,$game["year"],$keys,$game["jsbeebplatform"], $game["dl"], $game["gp"], null, null);
     }
   } else {
     echo '    <div class="row" style="display:flex; flex-wrap: wrap;">'."\n<h2>No games found!</h2>";
