@@ -319,3 +319,19 @@ CREATE TABLE `highlights` (
   `show_year` tinyint(1) DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+--
+-- Table structure for table `game_stats`
+--
+
+DROP TABLE IF EXISTS `game_stats`;
+
+CREATE TABLE `game_stats` (
+  `game_id` int(11) NOT NULL,
+  `downloads` int(11) NOT NULL,
+  `downloads_all` int(11) NOT NULL,
+  `gamepages` int(11) NOT NULL,
+  `gamepages_all` int(11) NOT NULL,
+  PRIMARY KEY (`game_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
