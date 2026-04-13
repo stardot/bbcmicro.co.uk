@@ -33,5 +33,5 @@ foreach ($res as $game) {
 }
 
 $date=date('Y-m-d H:i:s');
-echo $date . ' Stats updated for '.$sth->rowCount().' games\n';
+echo $date . " Stats updated for ".$sth->rowCount()." games\n";
 ?>
