@@ -210,11 +210,11 @@ if (($probs != -1) && ($_GET['t'] == 'd')) {
     $sth->bindParam(2, $id, PDO::PARAM_INT);
 //    echo $s."<br/>";
     if ($sth->execute()) {
-      echo "<br/>Database updated with problems.";
+      echo "<br/>Database successfully updated with the specified JSBeeb issues.";
       $r['probs']=$probs;
       $fu=True;
     } else {
-      echo "<br/>DB Update of problems failed.";
+      echo "<br/>DB Update of JSBeeb issues failed.";
     }
   }
 }
