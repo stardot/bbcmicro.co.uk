@@ -189,17 +189,17 @@ function pager($limit, $rows, $page, $state) {
 
   $left_buttons = '<ul class="pagination">';
   if ( $page != 1 ) {
-    $left_buttons.= '     <li><a title="First page" onclick=\'$.get("getgrid.php", '. json_state($state,'page', 1).', function(data){ $("#maingrid").html(data); window.scrollTo(0,0); }); return false;\' href="?'. url_state($state,'page', 1). '">|&lt;</a></li>' . "\n";
+    $left_buttons.= '     <li><a title="First page" href="?'. url_state($state,'page', 1). '">|&lt;</a></li>' . "\n";
   }else{
     $left_buttons.= '     <li class="disabled"><span>|&lt;</span></li> '. "\n";
   }
   if ( $page != 1 ) {
-    $left_buttons.= '     <li><a title="Back ' . $skip . ' pages" onclick=\'$.get("getgrid.php", '. json_state($state,'page', max(1, $page - $skip)).', function(data){ $("#maingrid").html(data); window.scrollTo(0,0); }); return false;\' href="?'. url_state($state,'page', max(1, $page - $skip)). '">&lt;&lt;</a></li>' . "\n";
+    $left_buttons.= '     <li><a title="Back ' . $skip . ' pages" href="?'. url_state($state,'page', max(1, $page - $skip)). '">&lt;&lt;</a></li>' . "\n";
   }else{
     $left_buttons.= '     <li class="disabled"><span>&lt;&lt;</span></li> '. "\n";
   }
   if ( $page != 1 ) {
-    $left_buttons.= '     <li><a title="Previous page" onclick=\'$.get("getgrid.php", '. json_state($state,'page', ($page - 1)).', function(data){ $("#maingrid").html(data); window.scrollTo(0,0); }); return false;\' href="?'. url_state($state,'page', ($page - 1)). '">&lt;</a></li>' . "\n";
+    $left_buttons.= '     <li><a title="Previous page" href="?'. url_state($state,'page', ($page - 1)). '">&lt;</a></li>' . "\n";
   }else{
     $left_buttons.= '     <li class="disabled"><span>&lt;</span></li> '. "\n";
   }
@@ -210,19 +210,19 @@ function pager($limit, $rows, $page, $state) {
   $right_buttons = '<ul class="pagination">';
 
   if ( $page < $pages ) {
-      $right_buttons.= '     <li><a title="Next page" onclick=\'$.get("getgrid.php", '. json_state($state,'page', ($page + 1)).', function(data){ $("#maingrid").html(data); }); window.scrollTo(0,0); return false;\' href="?'. url_state($state,'page', ($page + 1)). '">&gt;</a></li>' . "\n";
+      $right_buttons.= '     <li><a title="Next page" href="?'. url_state($state,'page', ($page + 1)). '">&gt;</a></li>' . "\n";
   }else{
      $right_buttons.= '     <li class="disabled"><span>&gt;</span></li> '. "\n";
   }
 
   if ( $page < $pages ) {
-      $right_buttons.= '     <li><a title="Forward ' . $skip . ' pages" onclick=\'$.get("getgrid.php", '. json_state($state,'page', min($pages, $page + $skip)).', function(data){ $("#maingrid").html(data); }); window.scrollTo(0,0); return false;\' href="?'. url_state($state,'page', min($pages, $page + $skip)). '">&gt;&gt;</a></li>' . "\n";
+      $right_buttons.= '     <li><a title="Forward ' . $skip . ' pages" href="?'. url_state($state,'page', min($pages, $page + $skip)). '">&gt;&gt;</a></li>' . "\n";
   }else{
      $right_buttons.= '     <li class="disabled"><span>&gt;&gt;</span></li> '. "\n";
   }
 
   if ( $page < $pages ) {
-      $right_buttons.= '     <li><a title="Last page" onclick=\'$.get("getgrid.php", '. json_state($state,'page', $pages).', function(data){ $("#maingrid").html(data); }); window.scrollTo(0,0); return false;\' href="?'. url_state($state,'page', $pages). '">&gt;|</a></li>' . "\n";
+      $right_buttons.= '     <li><a title="Last page" href="?'. url_state($state,'page', $pages). '">&gt;|</a></li>' . "\n";
   }else{
      $right_buttons.= '     <li class="disabled"><span>&gt;|</span></li> '. "\n";
   }
@@ -274,7 +274,7 @@ function pager($limit, $rows, $page, $state) {
         $cla = ' class="page-first page-last"';
       }
     }
-    $pl.= '     <li' . $clli . '><a' . $cla . ' style="width: 48px; text-align: center" onclick=\'$.get("getgrid.php", '.json_state($state,'page', $i).', function(data){ $("#maingrid").html(data); }); window.scrollTo(0,0); return false;\' href="?'.url_state($state,'page', $i).'">' . $i . '</a></li>' . "\n";
+    $pl.= '     <li' . $clli . '><a' . $cla . ' style="width: 48px; text-align: center" href="?'.url_state($state,'page', $i).'">' . $i . '</a></li>' . "\n";
   }
 
   // Right ellipsis
