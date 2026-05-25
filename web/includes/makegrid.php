@@ -469,8 +469,12 @@ function grid($state) {
   $offset = $limit * ($page -1);
   $sql ='select SQL_CALC_FOUND_ROWS g.*, s.downloads as dl, s.downloads_all as dl_all, s.gamepages as gp, s.gamepages_all as gp_all, sum(coalesce(s.downloads, 0) + coalesce(s.gamepages, 0)) as tt from games g'."\n";
   $sql.=' left join game_stats s on g.id = s.game_id';
-  $sql.=" where IFNULL(g.hide,'N') <> 'Y' and " . implode(" AND ",$wc) . ' group by g.id '. $ob . ' LIMIT :limit OFFSET :offset';
-  $sql2 = "select distinct upper(substring(title,1,1)) AS c1 from games g WHERE IFNULL(g.hide,'N') <> 'Y' and " . implode(' AND ',$wc) . " order by c1"; 
+  $sql.=" where (g.hide is null or g.hide <> 'Y') and " . implode(" AND ",$wc) . ' group by g.id '. $ob . ' LIMIT :limit OFFSET :offset';
+  $sql2 = "select distinct upper(substring(title,1,1)) AS c1 from games g WHERE (g.hide is null or g.hide <> 'Y') and " . implode(' AND ',$wc) . " order by c1"; 
+
+  $cacheID = $sql;
+  $cacheID2 = $sql2;
+  $cacheparams = "";
 
   $sth = $db->prepare($sql,array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
   $sth2 = $db->prepare($sql2,array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
@@ -479,12 +483,14 @@ function grid($state) {
     $search=prepare_search($state['search'], $state);
     $sth->bindParam(':search', $search, PDO::PARAM_STR);
     $sth2->bindParam(':search', $search, PDO::PARAM_STR);
+    $cacheparams .= $search;
   }
   if (array_key_exists ('f_pubid',$state)) {
     $pubid=$state['f_pubid'];
     if($pubid > 0) {
       $sth->bindParam(':pubid', $pubid, PDO::PARAM_STR);
       $sth2->bindParam(':pubid', $pubid, PDO::PARAM_STR);
+      $cacheparams .= $publid;
     }
   }
   if (array_key_exists ('f_genreid',$state)) {
@@ -492,6 +498,7 @@ function grid($state) {
     if($genreid > 0) {
       $sth->bindParam(':genreid', $genreid, PDO::PARAM_STR);
       $sth2->bindParam(':genreid', $genreid, PDO::PARAM_STR);
+      $cacheparams .= $genreid;
     }
   }
   if (array_key_exists ('f_year1',$state)) {
@@ -499,6 +506,7 @@ function grid($state) {
     if($year1 > 0) {
       $sth->bindParam(':year1', $year1, PDO::PARAM_STR);
       $sth2->bindParam(':year1', $year1, PDO::PARAM_STR);
+      $cacheparams .= $year1;
     }
   }
   if (array_key_exists ('f_year2',$state)) {
@@ -506,29 +514,48 @@ function grid($state) {
     if($year2 > 0) {
       $sth->bindParam(':year2', $year2, PDO::PARAM_STR);
       $sth2->bindParam(':year2', $year2, PDO::PARAM_STR);
+      $cacheparams .= $year2;
     }
   }
   if (array_key_exists('atoz',$state)) {
     $sth->bindParam(':atoz',$atoz, PDO::PARAM_STR);
     $sth2->bindParam(':atoz',$atoz2, PDO::PARAM_STR);
+    $cacheparams .= $atoz . $atoz2;
   }
   if (array_key_exists('rtype',$state)) {
     $t=implode(',',$state['rtype']);
     $sth->bindParam(':array',$t);
     $sth2->bindParam(':array',$t);
+    $cacheparams .= $t;
   }
 
   $sth->bindParam(':limit',$limit, PDO::PARAM_INT);
   $sth->bindParam(':offset',$offset, PDO::PARAM_INT);
-  if ($sth->execute()) {
-    $res = $sth->fetchAll();
+
+  $cacheparams .= $limit . $offset;
+
+  // Chris example of caching a big query. Hope it works!
+  $queryIdentifier = md5($cacheID . $cacheparams);
+  $queryIdentifier2 = md5($cacheID2 . $cacheparams);
+
+  // Check Redis cache. If it exists, use it. Expiry is handled automatically.
+
+  if(cache_exists($queryIdentifier)) {
+    $res = cache_obj_get($queryIdentifier);
+    echo "<!-- $res Cache expires in " . cache_obj_expiry_get($queryIdentifier) . " seconds -->";
   } else {
-    echo "<pre>Error:";
-    echo "\n";
-    $sth->debugDumpParams ();
-    $res=array();
-    print_r($sth->ErrorInfo());
-    echo "</pre>";
+    if ($sth->execute()) {
+      $res = $sth->fetchAll();
+      // If we got here, Redis cache didn't exist for this query, or the cache had expired. Set the cache contents again.
+      cache_obj_set($queryIdentifier, $res);
+    } else {
+      echo "<pre>Error:";
+      echo "\n";
+      $sth->debugDumpParams ();
+      $res=array();
+      print_r($sth->ErrorInfo());
+      echo "</pre>";
+    }
   }
 
   $sfr = $db->prepare("SELECT FOUND_ROWS();");
@@ -540,17 +567,24 @@ function grid($state) {
     $sfr->debugDumpParams ();
   }
 
-  if ($sth2->execute()) {
-    $res2 = $sth2->fetchAll();
-  } else {
-    echo "<pre>Error2:";
-    echo "\n";
-    $sth2->debugDumpParams ();
-    $res2=array();
-    print_r($sth2->ErrorInfo());
-    echo "</pre>";
-  }
+  // Check Redis cache. If it exists, use it. Expiry is handled automatically.
 
+  if(cache_exists($queryIdentifier2)) {
+    $res2 = cache_obj_get($queryIdentifier2);
+  } else {
+    if ($sth2->execute()) {
+      $res2 = $sth2->fetchAll();
+      // If we got here, Redis cache didn't exist for this query, or the cache had expired. Set the cache contents again.
+      cache_obj_set($queryIdentifier2, $res2);
+    } else {
+      echo "<pre>Error2:";
+      echo "\n";
+      $sth2->debugDumpParams ();
+      $res2=array();
+      print_r($sth2->ErrorInfo());
+      echo "</pre>";
+    }
+  }
   $scrsql = 'select filename, subdir from screenshots where gameid = :gameid order by main, id limit 1';
   $dscsql = 'select filename, subdir, customurl, probs from images where gameid = :gameid order by main, id limit 1';
   $pubsql = 'select id,name from publishers where id in (select pubid from games_publishers where gameid = :gameid)';
@@ -714,11 +748,11 @@ function filters($state) {
     $wc[]="reltype in (select id from reltype where selected = 'Y')\n";
   }
 
-  $sql3 ="select DISTINCT p.id, p.name from games g left join games_publishers gp on gp.gameid = g.id left join publishers p on gp.pubid = p.id where IFNULL(g.hide,'N') <> 'Y' and p.id is not null and " . implode(" AND ",$wc) . ' order by p.name';
+  $sql3 ="select DISTINCT p.id, p.name from games g left join games_publishers gp on gp.gameid = g.id left join publishers p on gp.pubid = p.id where (g.hide is null or g.hide <> 'Y') and p.id is not null and " . implode(" AND ",$wc) . ' order by p.name';
 
-  $sql4 ="select DISTINCT gr.id, gr.name from games g left join game_genre gg on gg.gameid = g.id left join genres gr on gg.genreid = gr.id where IFNULL(g.hide,'N') <> 'Y' and gr.id is not null and " . implode(" AND ",$wc) . ' order by gr.name';
+  $sql4 ="select DISTINCT gr.id, gr.name from games g left join game_genre gg on gg.gameid = g.id left join genres gr on gg.genreid = gr.id where (g.hide is null or g.hide <> 'Y') and gr.id is not null and " . implode(" AND ",$wc) . ' order by gr.name';
 
-  $sql5 ="select DISTINCT g.year from games g where IFNULL(g.hide,'N') <> 'Y' and g.year not like '%X%' and " . implode(" AND ",$wc) . ' order by g.year';
+  $sql5 ="select DISTINCT g.year from games g where (g.hide is null or g.hide <> 'Y') and g.year not like '%X%' and " . implode(" AND ",$wc) . ' order by g.year';
 
   $sth3 = $db->prepare($sql3,array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
   $sth4 = $db->prepare($sql4,array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));

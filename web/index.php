@@ -2,6 +2,7 @@
 
 require 'includes/config.php';
 require 'includes/db_connect.php';
+require 'includes/rediscache.php';
 require 'includes/menu.php';
 require 'includes/makegrid.php';
 require 'header.php';

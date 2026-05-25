@@ -16,6 +16,7 @@ function make_menu_bar($active_tab,$lprefix='') {
 		if (array_key_exists('bbcmicro',$_SESSION) && isset($_GET["id"])) {
 			echo "<li><a href=\"/admin_game_details.php?id=" . $_GET["id"] . "\">Edit</a></li>\n";
 		}
+		session_write_close();
 	}
 	echo "</ul>\n";
 	echo "<a href=\"" . $lprefix . "about.php\"><img src=\"/css/BBC_Micro.png\" class=\"bbc-micro-button\" alt=\"BBC Micro\"></a>";
